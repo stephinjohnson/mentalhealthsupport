@@ -44,3 +44,7 @@ def LoginPage(request):
 def logoutPage(request):
     logout(request)
     return redirect('login')
+
+
+def ThreapistReg(request):
+    return render (request,"thrpreg.html")

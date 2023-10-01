@@ -22,4 +22,5 @@ urlpatterns = [
     path('',views.LoginPage,name='login'),
     path('home/',views.HomePage,name='home'),
     path('logout/',views.logoutPage,name='logout'),
+    path('thrpreg/',views.ThreapistReg,name='thrpreg'),
 ]
