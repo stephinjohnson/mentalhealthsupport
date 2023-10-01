@@ -1,7 +1,8 @@
 from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-
+from django.contrib import messages
+from .models import TherapistProfile
 
 
 # Create your views here.
@@ -21,6 +22,7 @@ def SignupPage(request):
 
         if pass1!=pass2:
             return HttpResponse("your password is not same as confirm password")
+       
         else:
             my_user=User.objects.create_user(uname,email,pass1)
             my_user.save()
@@ -36,9 +38,11 @@ def LoginPage(request):
         if user is not None:
             login(request,user)
             return redirect('home')
+        
         else:
-            return HttpResponse("username or password is incorrect")
- 
+           
+           return HttpResponse("username or password is incorrect")
+            
 
     
     return render (request,"login.html")
@@ -65,6 +69,12 @@ def ThreapistReg(request):
 
         if tpass1!=tpass2:
             return HttpResponse("your password is not same as confirm password")
+         #new oct1
+        if TherapistProfile.objects.filter(email=temail).exists():
+                    messages.success(request,("Email is already registered."))
+        elif TherapistProfile.objects.filter(username=tuname).exists():
+                   messages.success(request,("Username is already registered."))
+         #end oct1
         else:
             my_user=User.objects.create_user(tuname,temail,tpass1)
             my_user.save()
