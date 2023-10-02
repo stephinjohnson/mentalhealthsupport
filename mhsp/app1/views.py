@@ -13,6 +13,24 @@ def HomePage(request):
 
 # this is users signup 
 
+"""def SignupPage(request):
+      if request.method=='POST':
+        fname=request.POST.get('firstname')
+        lname=request.POST.get('lastname')
+        nuname=request.POST.get('username')
+        nemail=request.POST.get('email')
+        npass1=request.POST.get('password')
+        npass2=request.POST.get('confirm-password')
+
+        #if npass1!=npass2:
+        #    return HttpResponse("your password is not same as confirm password")
+        if UserProfile.objects.filter(username=nuname).exists() or TherapistProfile.objects.filter(username=tuname).exists():
+        #else:
+         my_user=UserProfile.objects.create_user(nuname,nemail,npass1)
+         my_user.save()
+         return redirect('login')
+      return render(request,"signup.html") """
+
 def SignupPage(request):
     if request.method=='POST':
         uname=request.POST.get('username')
@@ -27,7 +45,7 @@ def SignupPage(request):
             my_user=User.objects.create_user(uname,email,pass1)
             my_user.save()
         return redirect('login')
-    return render(request,"signup.html")  
+    return render(request,"signup.html")
         
 # user
 def LoginPage(request):
