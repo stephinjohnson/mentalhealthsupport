@@ -70,6 +70,7 @@ def login(request):
         if user is not None:
             auth_login(request,user)
             if user.role=='USER':
+               request.session['username'] = username
                messages.success(request,"Login Success!!!")
                return redirect('home')
             elif user.role=='THERAPIST':
@@ -87,7 +88,6 @@ def login(request):
 def logoutPage(request):
     logout(request)
     return redirect('login')
-
 
 def ThreapistReg(request):
     return render (request,"thrpreg.html")
