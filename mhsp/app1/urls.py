@@ -12,6 +12,8 @@ urlpatterns=[
     path('logout/',views.logoutPage,name='logout'),
     path('thrpreg/',views.ThreapistReg,name='thrpreg'),
     path('demo/',views.TherapHome,name='demo'),
+    path('edit/',views.EditProfile,name='edit'),
+    
     
     path('password_reset', PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),

@@ -38,7 +38,6 @@ def signup(request):
             email=request.POST['email']
             username=request.POST['username']
             password=request.POST['password']
-        
             confirm_password=request.POST['confirm-password']
             if password!=confirm_password:
                     messages.warning(request,"password is not matching")
@@ -103,4 +102,7 @@ def ThreapistReg(request):
 def TherapHome(request):
     return render(request,"demo.html")
 
-#oct3 edit.....
+#oct5 edit.....
+def EditProfile(request):
+     return render(request,"edit.html")
+
