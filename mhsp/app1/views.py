@@ -1,6 +1,5 @@
 from django.shortcuts import render,redirect,HttpResponse
-from .models import User 
-
+from .models import User
 from django.contrib.auth import authenticate ,login as auth_login,logout
 from django.contrib import messages
 
@@ -39,6 +38,7 @@ def signup(request):
             email=request.POST['email']
             username=request.POST['username']
             password=request.POST['password']
+        
             confirm_password=request.POST['confirm-password']
             if password!=confirm_password:
                     messages.warning(request,"password is not matching")
@@ -47,9 +47,12 @@ def signup(request):
                       if User.objects.get(username=username):
                              messages.warning(request,"Username is already taken")
                              return render(request,'signup.html')
+                      if User.objects.get(email=email):
+                             messages.warning(request,"email ID is already taken")
+                             return render(request,'signup.html')
             except Exception as identifiers:
                       pass
-            print(first_name,last_name,username,email,password)
+           # print(first_name,last_name,username,email,password)
             user=User.objects.create_user(first_name=first_name,last_name=last_name,username=username,email=email,password=password,role='USER')
               #make the user inactive  user.is_active=False
             user.save()
@@ -75,7 +78,7 @@ def login(request):
                return redirect('home')
             elif user.role=='THERAPIST':
                messages.success(request,"Login Success!!!")
-               return HttpResponse("seller login")
+               return HttpResponse('demo')
             elif user.role=='ADMIN':
                messages.success(request,"Login Success!!!")
                return HttpResponse("Admin login ")
@@ -92,7 +95,12 @@ def logoutPage(request):
 def ThreapistReg(request):
     return render (request,"thrpreg.html")
 
-# oct 1 updations
+# oct 1 updations TherapHome
 
 def ThreapistReg(request):
     return render(request,"thrpreg.html") 
+
+def TherapHome(request):
+    return render(request,"demo.html")
+
+#oct3 edit.....
