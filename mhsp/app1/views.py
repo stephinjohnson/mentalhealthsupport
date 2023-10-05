@@ -1,12 +1,15 @@
 from django.shortcuts import render,redirect,HttpResponse
 from .models import User
 from django.contrib.auth import authenticate ,login as auth_login,logout
+from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 
 
 
 # Create your views here.
-
+@login_required
 def home(request):
     return render (request,"home.html")
 
@@ -46,11 +49,12 @@ def signup(request):
                       if User.objects.get(username=username):
                              messages.warning(request,"Username is already taken")
                              return render(request,'signup.html')
-                      if User.objects.get(email=email):
+                      if User.objects.get(email=email):   #email id goes to database...
                              messages.warning(request,"email ID is already taken")
                              return render(request,'signup.html')
             except Exception as identifiers:
                       pass
+            
            # print(first_name,last_name,username,email,password)
             user=User.objects.create_user(first_name=first_name,last_name=last_name,username=username,email=email,password=password,role='USER')
               #make the user inactive  user.is_active=False
@@ -59,44 +63,44 @@ def signup(request):
    return render(request,'signup.html')
             
 # user
-def login(request):
-    
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import render, redirect
+
+def user_login(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
-        print(username, password)
         
         # Use the model class to query the database
-        user = authenticate(request,username=username, password=password)
+        user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            auth_login(request,user)
-            if user.role=='USER':
-               request.session['username'] = username
-               messages.success(request,"Login Success!!!")
-               return redirect('home')
-            elif user.role=='THERAPIST':
-               messages.success(request,"Login Success!!!")
-               return HttpResponse('demo')
-            elif user.role=='ADMIN':
-               messages.success(request,"Login Success!!!")
-               return HttpResponse("Admin login ")
-                          
+            auth_login(request, user)
+            if user.role == 'USER':
+                request.session['username'] = username
+                messages.success(request, "Login Success!!!")
+                return redirect('home')
+            elif user.role == 'THERAPIST':
+                messages.success(request, "Login Success!!!")
+                return HttpResponse('demo')
+            elif user.role == 'ADMIN':
+                auth_login(request, user)  # You had a login() call here, which was causing the error
+                return redirect('custom_admin_page')
         else:
-            messages.error(request,"Some thing went wrong")
+            messages.error(request, "Something went wrong")
             return redirect('login')
-    return render(request,'login.html')
+    return render(request, 'login.html')
 
 def logoutPage(request):
     logout(request)
     return redirect('login')
 
-def ThreapistReg(request):
-    return render (request,"thrpreg.html")
+def adminpage(request):
+    return render (request,"demo.html")
 
 # oct 1 updations TherapHome
 
-def ThreapistReg(request):
+def ThreapistReg(request): #no use
     return render(request,"thrpreg.html") 
 
 def TherapHome(request):
@@ -106,3 +110,13 @@ def TherapHome(request):
 def EditProfile(request):
      return render(request,"edit.html")
 
+def custom_admin_page(request):
+    # Query all User objects (using the custom user model) from the database
+    User = get_user_model()
+    user_profiles = User.objects.all()
+    
+    # Pass the data to the template
+    context = {'user_profiles': user_profiles}
+    
+    # Render the HTML template
+    return render(request, 'demo.html', context)
