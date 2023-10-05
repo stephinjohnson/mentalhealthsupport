@@ -85,7 +85,10 @@ def user_login(request):
                 return HttpResponse('demo')
             elif user.role == 'ADMIN':
                 auth_login(request, user)  # You had a login() call here, which was causing the error
-                return redirect('custom_admin_page')
+                user_profiles = User.objects.exclude(id=user.id)
+                # Pass the data to the template
+                context = {'user_profiles': user_profiles}
+                return render(request, 'demo.html', context)
         else:
             messages.error(request, "Something went wrong")
             return redirect('login')
@@ -112,11 +115,11 @@ def EditProfile(request):
 
 def custom_admin_page(request):
     # Query all User objects (using the custom user model) from the database
-    User = get_user_model()
-    user_profiles = User.objects.all()
-    
-    # Pass the data to the template
-    context = {'user_profiles': user_profiles}
-    
     # Render the HTML template
-    return render(request, 'demo.html', context)
+    return render(request, 'demo.html')
+
+def removeUser(request):
+    if request.method == 'GET':
+        user = User.objects.get(id=request.GET['id'])
+        user.delete()
+        return redirect('custom_admin_page')
