@@ -123,3 +123,21 @@ def removeUser(request):
         user = User.objects.get(id=request.GET['id'])
         user.delete()
         return redirect('custom_admin_page')
+    
+#deactivate user
+
+def deactivateUser(request):
+    if request.method == 'GET':
+        user = User.objects.get(id=request.GET['id'])
+        user.is_active = False
+        user.save()
+        return redirect('custom_admin_page')
+    
+#activate user
+
+def activateUser(request):
+    if request.method == 'GET':
+        user = User.objects.get(id=request.GET['id'])
+        user.is_active = True
+        user.save()
+        return redirect('custom_admin_page')
