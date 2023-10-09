@@ -65,11 +65,18 @@
 </head>
 <body>
     <div class="navbar">
-        <a href="{% url 'signup' %}">Registration</a>
+        
         <a href="{% url 'logout' %}">Logout</a>
+       
+
     </div>
 
     <h1>User Profiles</h1>
+    {% if user.is_authenticated %}
+    <h3 class="font-weight-bold">Welcome Admin-{{ user.username }}</h3>
+    {% else %}
+    <h3 class="font-weight-bold">Welcome, Please Log in</h3>
+    {% endif %}
     <table>
         <thead>
             <tr>
@@ -78,6 +85,8 @@
                 <th>Username</th>
                 <th>Email</th>
                 <th>Delete</th>
+                <th>Deactivate user</th>
+                <th>Activate User</th>
             </tr>
         </thead>
         <tbody>
@@ -88,7 +97,10 @@
                 <td>{{ user_profile.username }}</td>
                 <td>{{ user_profile.email }}</td>
                 <td align="center"><a href="{% url 'removeUser' %}?id={{user_profile.id}}"><button class="btn btn-danger">Remove User</button></a></td>
-            </tr>
+
+                <td align="center"><a href="{% url 'deactivateUser' %}?id={{user_profile.id}}"><button class="btn btn-danger">Deactivate User</button></a></td>
+                <td align="center"><a href="{% url 'activateUser' %}?id={{user_profile.id}}"><button class="btn btn-danger">Activate User</button></a></td>
+                
             {% endfor %}
         </tbody>
     </table>

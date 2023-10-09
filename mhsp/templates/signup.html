@@ -172,6 +172,10 @@
         } else if (/[A-Z]/.test(value)) {
             username.classList.add("is-invalid");
             usernameError.textContent = "Username cannot contain uppercase letters.";
+        }
+        else if (/[0-9]/.test(value)) {
+            username.classList.add("is-invalid");
+            usernameError.textContent = "Username cannot contain numericals.";
         } else {
             clearErrorMessage(username, usernameError);
         }
@@ -231,6 +235,7 @@
               firstNameError.textContent ||
               lastNameError.textContent ||
               emailError.textContent ||
+              usernameError.textContent ||
               passwordError.textContent ||
               confirmPasswordError.textContent
             ) {
