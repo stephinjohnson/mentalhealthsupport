@@ -17,10 +17,20 @@ urlpatterns=[
     path('password_reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
-    path('removeUser/', views.removeUser, name='removeUser'),
-    path('deactivateUser/', views.deactivateUser, name='deactivateUser'),
-    path('activateUser/', views.activateUser, name='activateUser'),
-    
+    path('toggleUserStatus/', views.toggleUserStatus, name='toggleUserStatus'),
+    path('update_profile/', views.update_profile, name='update_profile'),
+    #path('product/', views.product, name='product'),
+    path('add_product/', views.add_product, name='add_product'),
+    path('product_list/', views.product_list, name='product_list'),
+
+    path('product/edit/<int:pk>/', views.edit_product, name='edit_product'),
+    path('product/delete/<int:pk>/', views.delete_product, name='delete_product'),
+
+    path('ProductForUser/', views.ProductForUser, name='ProductForUser'), # this is build for showing items to users
+    path('product_list_view/', views.product_list_view, name='product_list_view'), #remove
+    path('product/buy/<int:pk>/', views.buy_product, name='buy_product'),
+    path('product/add_to_cart/<int:pk>/', views.add_to_cart, name='add_to_cart'),
+
 
 
 ]

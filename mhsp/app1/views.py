@@ -118,7 +118,7 @@ def custom_admin_page(request):
     # Render the HTML template
     return render(request, 'demo.html')
 
-def removeUser(request):
+"""def removeUser(request):
     if request.method == 'GET':
         user = User.objects.get(id=request.GET['id'])
         user.delete()
@@ -140,4 +140,131 @@ def activateUser(request):
         user = User.objects.get(id=request.GET['id'])
         user.is_active = True
         user.save()
+        return redirect('custom_admin_page')"""
+
+def toggleUserStatus(request):
+    if request.method == 'GET':
+        user_id = request.GET.get('id')
+        user = User.objects.get(id=user_id)
+        user.is_active = not user.is_active  # Toggle the user's status
+        user.save()
         return redirect('custom_admin_page')
+    
+
+
+from datetime import datetime
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .models import User
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        phone_number = request.POST.get('phone_number')
+        dob = request.POST.get('dob')
+        location = request.POST.get('location')
+
+        # Parse and format the date
+        try:
+            dob_date = datetime.strptime(dob, '%Y-%m-%d').date()
+        except ValueError:
+            # Handle invalid date format here
+            return render(request, 'update.html', {'error': 'Invalid date format. Please use YYYY-MM-DD.'})
+
+        # Get the user object
+        user = request.user
+
+        # Update user profile fields
+        user.first_name = first_name
+        user.last_name = last_name
+        user.username = username
+        user.phone_number = phone_number
+        user.dob = dob_date
+        user.location = location
+        user.save()
+
+        return redirect('/home')  # Redirect to the user's profile page after successful update
+
+    return render(request, 'update.html')
+
+
+
+def product(request):
+     return render(request,"merchand.html")
+
+
+from django.shortcuts import render, redirect
+from .forms import ProductForm
+from .models import Product
+
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')  # Redirect to a page displaying the list of products
+    else:
+        form = ProductForm()
+    return render(request, 'add_product.html', {'form': form})
+
+def product_list(request):
+    products = Product.objects.all()
+    return render(request, 'product_list.html', {'products': products})
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Product
+from .forms import ProductForm
+
+def edit_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')  # Redirect to the product list page
+    else:
+        form = ProductForm(instance=product)
+    return render(request, 'edit_product.html', {'form': form})
+
+def delete_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.method == 'POST':
+        product.delete()
+        return redirect('product_list')  # Redirect to the product list page
+    return render(request, 'delete_product.html', {'product': product})
+
+
+def ProductForUser(request):
+    return render(request, 'listforuser.html')# not necessaryy
+
+
+from django.shortcuts import render
+from .models import Product
+
+def product_list_view(request):
+    products = Product.objects.all()
+    return render(request, 'product_list_user.html', {'products': products})
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import Product
+
+def buy_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    
+    return redirect('product_list_user')
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import Product
+
+def add_to_cart(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    
+    return redirect('product_list_user')
+
+
+
