@@ -43,6 +43,7 @@
         tr:hover {
             background-color: #ddd;
         }
+
         .navbar {
             overflow: hidden;
             background-color: #333;
@@ -61,14 +62,15 @@
             background-color: #ddd;
             color: black;
         }
+
+        .btn-success {
+            background-color: green !important;
+        }
     </style>
 </head>
 <body>
     <div class="navbar">
-        
         <a href="{% url 'logout' %}">Logout</a>
-       
-
     </div>
 
     <h1>User Profiles</h1>
@@ -84,9 +86,8 @@
                 <th>Last Name</th>
                 <th>Username</th>
                 <th>Email</th>
-                <th>Delete</th>
-                <th>Deactivate user</th>
-                <th>Activate User</th>
+                <th>Activate/Deactivate</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -96,13 +97,12 @@
                 <td>{{ user_profile.last_name }}</td>
                 <td>{{ user_profile.username }}</td>
                 <td>{{ user_profile.email }}</td>
-                <td align="center"><a href="{% url 'removeUser' %}?id={{user_profile.id}}"><button class="btn btn-danger">Remove User</button></a></td>
-
-                <td align="center"><a href="{% url 'deactivateUser' %}?id={{user_profile.id}}"><button class="btn btn-danger">Deactivate User</button></a></td>
-                <td align="center"><a href="{% url 'activateUser' %}?id={{user_profile.id}}"><button class="btn btn-danger">Activate User</button></a></td>
-                
+               
+                <td align="center"><a href="{% url 'toggleUserStatus' %}?id={{user_profile.id}}"><button class="btn btn-success">Status User</button></a></td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
+    <p class="registration-link"><a href="add_product">Add Mental Health Related Products</a></p>
 </body>
 </html>
