@@ -10,7 +10,7 @@ urlpatterns=[
     path('', views.user_login, name='login'),
     path('home/',views.home,name='home'),
     path('logout/',views.logoutPage,name='logout'),
-    path('thrpreg/',views.ThreapistReg,name='thrpreg'),
+   # path('thrpreg/',views.ThreapistReg,name='thrpreg'),
     path('custom_admin_page/',views.custom_admin_page,name='custom_admin_page'),
     path('edit/',views.EditProfile,name='edit'),
     path('password_reset', PasswordResetView.as_view(), name='password_reset'),
@@ -30,7 +30,8 @@ urlpatterns=[
     path('product_list_view/', views.product_list_view, name='product_list_view'), #remove
     path('product/buy/<int:pk>/', views.buy_product, name='buy_product'),
     path('product/add_to_cart/<int:pk>/', views.add_to_cart, name='add_to_cart'),
-
-
+    path('Tdash/',views.TherapistHome,name='Tdash'),
+    path('thrpreg/',views.signupnew,name='thrpreg'),
+    
 
 ]

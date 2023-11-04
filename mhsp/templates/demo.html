@@ -86,6 +86,7 @@
                 <th>Last Name</th>
                 <th>Username</th>
                 <th>Email</th>
+                <th>Type</th>
                 <th>Activate/Deactivate</th>
                 
             </tr>
@@ -97,6 +98,7 @@
                 <td>{{ user_profile.last_name }}</td>
                 <td>{{ user_profile.username }}</td>
                 <td>{{ user_profile.email }}</td>
+                <td>{{ user_profile.role }}</td>
                
                 <td align="center"><a href="{% url 'toggleUserStatus' %}?id={{user_profile.id}}"><button class="btn btn-success">Status User</button></a></td>
             </tr>

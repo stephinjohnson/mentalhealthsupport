@@ -90,8 +90,8 @@
 <body>
     <div class="registration-container">
         <div class="brand-text">MindEase</div>
-        <h2>Registration</h2>
-        <form class="registration-form" action="#" method="POST" onsubmit="return validateForm()">
+        <h2>Registration for Therapist</h2>
+        <form class="registration-form" action="/thrpreg/" method="POST" onsubmit="return validateForm()">
             {% csrf_token %}
             <input class="form-input" type="text" name="first_name" id="first_name" placeholder="First Name" required>
             <span class="error-message" id="first-name-error"></span>
@@ -106,7 +106,10 @@
             <span class="error-message" id="password-error"></span>
             <input class="form-input" type="password" name="confirm-password" id="confirm-password" placeholder="Confirm Password" required>
             <span class="error-message" id="confirm-password-error"></span>
+            <input type="text" name="role" id="role">
             <button class="register-button" type="submit">SignUp</button>
+                
+            
         </form>
         <p class="login-link">Already have an account? <a href="/">Login here</a></p>
     </div>
