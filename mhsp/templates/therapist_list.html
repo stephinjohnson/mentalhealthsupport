@@ -167,33 +167,94 @@
                   {% endif %}
         <!-- Your dashboard content goes here -->
     </main>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Therapist List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
 
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #4CAF50;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        td:last-child {
+            text-align: center;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <h1>Therapist List</h1>
+    <table>
+        <tr>
+            <th>Therapist</th>
+            <th>Phone Number</th>
+            
+            <th>Location</th>
+            <th>Qualification</th>
+            <th>Description</th>
+            <th>Specialization</th>
+        </tr>
+        {% for therapist in therapists %}
+            <tr>
+                <td>{{ therapist.username }}</td>
+                <td>{{ therapist.phone_number }}</td>
+                
+                <td>{{ therapist.location }}</td>
+                <td>{{ therapist.qualification }}</td>
+                <td>{{ therapist.description }}</td>
+                <td>{{ therapist.specialization }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="7" class="no-results">No therapists found.</td>
+            </tr>
+        {% endfor %}
+    </table>
     <footer>
         <p><b>MindEase</b> <i> Mental Health Support Platform</i></p>
         <p><i>2023</i></p>
     </footer>
-
-
 
 </body>
 </html>

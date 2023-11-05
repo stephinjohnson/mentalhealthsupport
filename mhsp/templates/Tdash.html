@@ -56,15 +56,33 @@
     <nav>
         <a href="#">Home</a>
         <a href="#">About</a>
-        <a href="#">Services</a>
-        <a href="#">Contact</a>
+        <a href='#'>Services</a>
+        <a href='/update_profile'>Add Profile</a>
+        
     </nav>
 
     <main>
-        <h2>About Us</h2>
-        <p>This is a sample HTML page. You can modify and build upon it to create your own website.</p>
+        
+        {% if user.is_authenticated %}
+        <h2 class="font-weight-bold">Welcome {{ user.username }}(Therapist)</h2>
+        {% else %}
+        <h3 class="font-weight-bold">Welcome, Please Log in</h3>
+        {% endif %}
+
+        <h1>Welcome, {{ therapist.username }}!</h1>
+        <p>Phone Number: {{ therapist.phone_number }}</p>
+        <p>Date of Birth: {{ therapist.dob }}</p>
+        <p>Location: {{ therapist.location }}</p>
+        <p>Qualification: {{ therapist.qualification }}</p>
+        <p>Description: {{ therapist.description }}</p>
+        <p>Specialization: {{ therapist.specialization }}</p>
+        
+        <a href="{% url 'update_therapist' therapist.id %}">Update</a><br>
+
+      
+        
   
-        <h2>Therapists</h2>
+      
 
     </main>
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Therapist Details</title>
+</head>
+<body>
+    <h1>Update Therapist Details</h1>
+    <form method="post" action="{% url 'update_therapist' therapist.id %}">
+        {% csrf_token %}
+        <label for="qualification">Qualification:</label>
+        <input type="text" id="qualification" name="qualification" value="{{ therapist.qualification }}"><br>
+        
+        <label for="description">Description:</label>
+        <textarea id="description" name="description">{{ therapist.description }}</textarea><br>
+        
+        <label for="specialization">Specialization:</label>
+        <input type="text" id="specialization" name="specialization" value="{{ therapist.specialization }}"><br>
+        
+        <input type="submit" value="Update">
+    </form>
+</body>
+</html>

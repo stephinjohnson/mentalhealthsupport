@@ -11,6 +11,10 @@ class User(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     dob = models.DateField(blank=True, null=True)
     location = models.CharField(max_length=255, blank=True, null=True)
+    qualification = models.CharField(max_length=255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    specialization = models.CharField(max_length=255, blank=True, null=True)
+   
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')

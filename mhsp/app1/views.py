@@ -276,8 +276,7 @@ def add_to_cart(request, pk):
     
     return redirect('product_list_user')
 
-def Tdash(request):
-     return render(request,"Tdash.html")
+
 
 #new updates
 
@@ -327,3 +326,41 @@ def ThreapistReg(request):
     return render(request, 'thrpreg.html')
 
 
+#new updations on Therapist profile update
+
+
+from django.shortcuts import render
+from .models import User
+
+def therapist_list(request):
+    therapists = User.objects.filter(role=User.Role.THERAPIST)
+    return render(request, 'therapist_list.html', {'therapists': therapists})
+
+
+#new
+
+from django.shortcuts import render, get_object_or_404
+from .models import User
+
+def update_therapist(request, therapist_id):
+    therapist = get_object_or_404(User, id=therapist_id, role=User.Role.THERAPIST)
+    
+    if request.method == 'POST':
+        therapist.qualification = request.POST.get('qualification')
+        therapist.description = request.POST.get('description')
+        therapist.specialization = request.POST.get('specialization')
+        therapist.save()
+        return render(request, 'success.html', {'message': 'Therapist details updated successfully!'})
+    
+    return render(request, 'therapist_update.html', {'therapist': therapist})
+
+#testing
+
+from django.shortcuts import render
+from .models import User
+
+def Tdash(request):
+    # Assuming you have a way to get the therapist object for the current user
+    therapist = User.objects.get(id=request.user.id, role=User.Role.THERAPIST) #if any error is encouter please add  that Tdash on above
+    print(f'Therapist ID: {therapist.id}') 
+    return render(request, 'Tdash.html', {'therapist': therapist})

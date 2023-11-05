@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta tags and title here... -->
+</head>
+
+<body>
+    <h1>Update Profile</h1>
+
+    <form method="post" action="{% url 'update_profile' %}">
+        {% csrf_token %}
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}"><br>
+
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}"><br>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ user.username }}"><br>
+
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" id="phone_number" name="phone_number" value="{{ user.phone_number }}"><br>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" value="{{ user.dob }}"><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" value="{{ user.location }}"><br>
+
+        <label for="qualification">Qualification:</label>
+        <input type="text" id="qualification" name="qualification" value="{{ user.qualification }}"><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description">{{ user.description }}</textarea><br>
+
+        <label for="specialization">Specialization:</label>
+        <input type="text" id="specialization" name="specialization" value="{{ user.specialization }}"><br>
+
+        <!-- Add any other fields you want to update -->
+
+        <button type="submit">Update</button>
+    </form>
+
+</body>
+
+</html>
