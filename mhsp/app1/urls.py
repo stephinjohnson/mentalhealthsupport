@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import display_image
 from django.contrib.auth import views as auth_views
 
 from django.contrib.auth.views import PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
@@ -35,5 +36,7 @@ urlpatterns=[
     path('Tdash/',views.Tdash,name='Tdash'),
     path('therapists/', views.therapist_list, name='therapist_list'),
     path('therapists/<int:therapist_id>/update/', views.update_therapist, name='update_therapist'),
+    path('image/', display_image, name='display_image'),
+    
 
 ]
