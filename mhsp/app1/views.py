@@ -364,3 +364,9 @@ def Tdash(request):
     therapist = User.objects.get(id=request.user.id, role=User.Role.THERAPIST) #if any error is encouter please add  that Tdash on above
     print(f'Therapist ID: {therapist.id}') 
     return render(request, 'Tdash.html', {'therapist': therapist})
+
+
+from django.shortcuts import render
+
+def display_image(request):
+    return render(request, 'image.html')
