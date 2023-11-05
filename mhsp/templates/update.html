@@ -11,39 +11,51 @@
             font-family: Arial, sans-serif;
             background-color: #f7f7f7;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        form {
+        .form-container {
             max-width: 400px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
+            background-color: #ffffff;
+            padding: 30px;
             border-radius: 10px;
             box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
         }
 
-        label {
-            font-weight: bold;
-            margin-bottom: 10px;
-            display: block;
+        .form-container h1 {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        input[type="text"],
-        input[type="date"] {
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group textarea {
             width: 100%;
             padding: 10px;
-            margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
         }
 
-        button[type="submit"] {
+        .form-group textarea {
+            resize: vertical;
+        }
+
+        .form-group button[type="submit"] {
             background-color: #4caf50;
             color: white;
             padding: 12px 20px;
@@ -51,43 +63,71 @@
             border-radius: 5px;
             cursor: pointer;
             font-size: 16px;
+            transition: background-color 0.3s;
         }
 
-        button[type="submit"]:hover {
+        .form-group button[type="submit"]:hover {
             background-color: #45a049;
         }
     </style>
 </head>
 
 <body>
-    <h1>Update Profile</h1>
+    <div class="form-container">
+        <h1>Update Profile</h1>
 
-    <form method="post" action="{% url 'update_profile' %}">
-        {% csrf_token %}
-        <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}"><br>
+        <form method="post" action="{% url 'update_profile' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}">
+            </div>
 
-        <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}"><br>
+            <div class="form-group">
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}">
+            </div>
 
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value="{{ user.username }}"><br>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="{{ user.username }}">
+            </div>
 
+            <div class="form-group">
+                <label for="phone_number">Phone Number:</label>
+                <input type="text" id="phone_number" name="phone_number" value="{{ user.phone_number }}">
+            </div>
 
-        <label for="phone_number">Phone Number:</label>
-        <input type="text" id="phone_number" name="phone_number" value="{{ user.phone_number }}"><br>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" id="dob" name="dob" value="{{ user.dob }}">
+            </div>
 
-        <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" name="dob" value="{{ user.dob }}"><br>
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" value="{{ user.location }}">
+            </div>
 
-        <label for="location">Location:</label>
-        <input type="text" id="location" name="location" value="{{ user.location }}"><br>
+            <div class="form-group">
+                <label for="qualification">Qualification:</label>
+                <input type="text" id="qualification" name="qualification" value="{{ user.qualification }}">
+            </div>
 
-        <!-- Add any other fields you want to update -->
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description">{{ user.description }}</textarea>
+            </div>
 
-        <button type="submit">Update</button>
-    </form>
+            <div class="form-group">
+                <label for="specialization">Specialization:</label>
+                <input type="text" id="specialization" name="specialization" value="{{ user.specialization }}">
+            </div>
 
+            <div class="form-group">
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
 </body>
 
 </html>

@@ -31,9 +31,9 @@ urlpatterns=[
     path('product/buy/<int:pk>/', views.buy_product, name='buy_product'),
     path('product/add_to_cart/<int:pk>/', views.add_to_cart, name='add_to_cart'),
     
+    #path('Tdash/',views.Tdash,name='Tdash'),
     path('Tdash/',views.Tdash,name='Tdash'),
-    
-
-
+    path('therapists/', views.therapist_list, name='therapist_list'),
+    path('therapists/<int:therapist_id>/update/', views.update_therapist, name='update_therapist'),
 
 ]
