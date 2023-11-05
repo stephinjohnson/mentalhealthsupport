@@ -1,0 +1,19 @@
+<!-- therapist_registration.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Include necessary styles and scripts -->
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Therapist Registration</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+
+</body>
+</html>

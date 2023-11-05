@@ -62,60 +62,14 @@ def signup(request):
             return redirect('login')
    return render(request,'signup.html')
 
+#therapist registration
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
-def signupnew(request):
-    if request.method == "POST":
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
-        username = request.POST['username']
-        password = request.POST['password']
-        confirm_password = request.POST['confirm-password']
-        role = request.POST['role']  # Assuming you have a field named 'role' in your form
 
-        user = User.objects.create_user(username=username, email=email, password=password, role=role, phone_number=phone_number, dob=dob, location=location)
-        
-        # Check if the user is a therapist and create a therapist instance
-        
-        
-        
-        if password != confirm_password:
-            messages.warning(request, "Password is not matching")
-            return render(request, 'thrpreg.html')
-        
-        try:
-            if User.objects.get(username=username):
-                messages.warning(request, "Username is already taken")
-                return render(request, 'thrpreg.html')
-            if User.objects.get(email=email):
-                messages.warning(request, "Email ID is already taken")
-                return render(request, 'thrpreg.html')
-        except User.DoesNotExist:
-            pass
 
-        if role == 'THERAPIST':
-            # Logic specific to therapist registration can go here
-            # For example, you can create a Therapist model and save additional therapist-related information
-            pass
-        
-            user = User.objects.create_user(username=username, email=email, password=password)# NO NEED
-        
-        if is_therapist:
-            user.is_staff = True  # Set is_staff to True for therapists
-            user.save()   # NO NEED
-        else:
-            # Regular user registration logic
-            user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=email, password=password,role='THERAPIST')
-            user.save()
-            return redirect('login')
-        
-        
-    
-    return render(request, 'thrpreg.html')
-
+            
             
 # user
 from django.contrib.auth import authenticate, login as auth_login
@@ -153,7 +107,6 @@ def user_login(request):
     
     return render(request, 'login.html')
 
-
 def logoutPage(request):
     logout(request)
     return redirect('login')
@@ -163,7 +116,7 @@ def adminpage(request):
 
 # oct 1 updations TherapHome
 
-
+ 
 
 def TherapHome(request):
     return render(request,"demo.html")
@@ -249,8 +202,6 @@ def update_profile(request):
 
     return render(request, 'update.html')
 
-
-
 def product(request):
      return render(request,"merchand.html")
 
@@ -325,24 +276,54 @@ def add_to_cart(request, pk):
     
     return redirect('product_list_user')
 
+def Tdash(request):
+     return render(request,"Tdash.html")
 
-def ThreapistReg(request): #no use
-    return render(request,"thrpreg.html") 
+#new updates
 
-def TherapistHome(request): #no use
-    return render(request,"Tdash.html") 
+def ThreapistReg(request):
+    if request.method == "POST":
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        username = request.POST['username']
+        password = request.POST['password']
+        confirm_password = request.POST['confirm-password']
+        role =  "THERAPIST"  # Assuming you have a field named 'role' in your form
+        print(first_name)
+        # user = User.objects.create_user(username=username, email=email, password=password, role=role)
+        
+        # Check if the user is a therapist and create a therapist instance
 
+        if password != confirm_password:
+            messages.warning(request, "Password is not matching")
+            return render(request, 'thrpreg.html')
+        
+        try:
+            if User.objects.get(username=username):
+                messages.warning(request, "Username is already taken")
+                return render(request, 'thrpreg.html')
+            if User.objects.get(email=email):
+                messages.warning(request, "Email ID is already taken")
+                return render(request, 'thrpreg.html')
+        except User.DoesNotExist:
+            pass
 
-from django.contrib.auth.models import User  # this is fo separate user and therapist
-
-def get_users():
-    return User.objects.filter(is_staff=False)
-
-def get_therapists():
-    return User.objects.filter(is_staff=True)
-
-
-
-
+        if role == 'THERAPIST':
+            # Logic specific to therapist registration can go here
+            # For example, you can create a Therapist model and save additional therapist-related information
+            pass
+        
+            # user = User.objects.create_user(username=username, email=email, password=password, role=role)# NO NEED
+            user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=email, password=password,role=role)
+            print(user)
+       
+        else:
+            # Regular user registration logic
+            user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username, email=email, password=password,role=role)
+            user.save()
+        return redirect('login')  
+     
+    return render(request, 'thrpreg.html')
 
 
