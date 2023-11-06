@@ -1,110 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>User Profiles</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f4f4f4;
+    }
 
-        h1 {
-            text-align: center;
-            background-color: #007bff;
-            color: #fff;
-            padding: 20px;
-        }
+    .navbar {
+      background-color: #007bff;
+      color: #ffffff;
+    }
 
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            background-color: #fff;
-        }
+    .container {
+      margin-top: 30px;
+    }
 
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #ddd;
-        }
-
-        .navbar {
-            overflow: hidden;
-            background-color: #333;
-        }
-
-        .navbar a {
-            float: right;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        .btn-success {
-            background-color: green !important;
-        }
-    </style>
+    .footer {
+      background-color: #333;
+      color: #ffffff;
+      text-align: center;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
 </head>
-<body>
-    <div class="navbar">
-        <a href="{% url 'logout' %}">Logout</a>
-    </div>
 
-    <h1>User Profiles</h1>
-    {% if user.is_authenticated %}
-    <h3 class="font-weight-bold">Welcome Admin-{{ user.username }}</h3>
-    {% else %}
-    <h3 class="font-weight-bold">Welcome, Please Log in</h3>
-    {% endif %}
-    <table>
-        <thead>
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Type</th>
-                <th>Activate/Deactivate</th>
-                
-            </tr>
-        </thead>
-        <tbody>
-            {% for user_profile in user_profiles %}
-            <tr>
-                <td>{{ user_profile.first_name }}</td>
-                <td>{{ user_profile.last_name }}</td>
-                <td>{{ user_profile.username }}</td>
-                <td>{{ user_profile.email }}</td>
-                <td>{{ user_profile.role }}</td>
-               
-                <td align="center"><a href="{% url 'toggleUserStatus' %}?id={{user_profile.id}}"><button class="btn btn-success">Status User</button></a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <p class="registration-link"><a href="add_product">Add Mental Health Related Products</a></p>
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#"><strong>MindEase</strong></a>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="normal_user.html">Normal User</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="therapist.html">Therapist</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="add_books.html">Add Books</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="feedback.html">Feedback</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Normal User</h5>
+            <a href="normal_user.html" class="btn btn-primary">Normal Users</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Therapist</h5>
+            <a href="therapists/" class="btn btn-primary">Therapist</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Add Books/Resources Section -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card mt-4">
+          <div class="card-body">
+            <h5 class="card-title">Add Books/Resources</h5>
+            <a href="add_books.html" class="btn btn-primary">Add</a>
+            <!-- Add your content for Add Books/Resources here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>&copy; 2023 MindEase. All rights reserved.</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
