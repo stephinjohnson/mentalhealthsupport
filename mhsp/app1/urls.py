@@ -37,6 +37,6 @@ urlpatterns=[
     path('therapists/', views.therapist_list, name='therapist_list'),
     path('therapists/<int:therapist_id>/update/', views.update_therapist, name='update_therapist'),
     path('image/', display_image, name='display_image'),
-    
+    path('displayTherapist/',views.displayTherapist, name='displayTherapist'),
 
 ]
