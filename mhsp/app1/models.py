@@ -14,6 +14,8 @@ class User(AbstractUser):
     qualification = models.CharField(max_length=255, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     specialization = models.CharField(max_length=255, blank=True, null=True)
+    is_approved = models.BooleanField(default=False)
+    is_therapist = models.BooleanField(default=False)
    
 
 class UserProfile(models.Model):
@@ -32,5 +34,15 @@ class Product(models.Model):
         return self.name
 
 
+class Appointment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_appointments')
+    therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='therapist_appointments')
+    appointment_date = models.DateTimeField()
+    is_confirmed = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False)
+    is_therapist = models.BooleanField(default=False)
+    
 
+    def __str__(self):
+        return f"Appointment between {self.user.username} and {self.therapist.username} on {self.appointment_date}"
     
