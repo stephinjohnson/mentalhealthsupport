@@ -1,7 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Add your head content here -->
+    <style>
+        /* Styles for therapist items */
+        .therapist-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Styles for the "Book Appointment" button */
+        .book-appointment-btn {
+            display: block;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .book-appointment-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Styles for the no results message */
+        .no-results {
+            font-weight: bold;
+            color: #FF0000;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -19,7 +48,7 @@
                 <p><strong>Specialization:</strong> {{ therapist.specialization }}</p>
                 <!-- Additional content for booking appointment -->
                 {% if user.is_authenticated and user.role == 'USER' %}
-                    <a href="{% url 'book_appointment' therapist.id %}">Book Appointment</a>
+                    <a class="book-appointment-btn" href="{% url 'book_appointment' therapist.id %}">Book Appointment</a>
                 {% endif %}
             </div>
         {% empty %}
