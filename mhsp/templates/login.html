@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <style>
-        /* Your CSS styles here */
-
+        /* Your existing CSS styles for body and other elements */
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
@@ -18,24 +17,48 @@
             height: 100vh;
         }
 
+        .left-panel {
+            background-color: #4158d0;
+            color: #fff;
+            padding: 40px;
+            width: 40%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            text-align: center;
+        }
+
+        .left-panel h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        .left-panel p {
+            font-size: 18px;
+            animation: slideInLeft 1s ease-in-out;
+        }
+
         .login-container {
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.1); /* Transparent white background */
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             padding: 20px;
             max-width: 400px;
             width: 90%;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
 
         .login-container h2 {
             font-size: 24px;
             margin-bottom: 20px;
-        }
-
-        .login-form {
-            display: flex;
-            flex-direction: column;
         }
 
         .form-input {
@@ -51,53 +74,61 @@
             background-color: #4158d0;
             color: #fff;
             border: none;
-            border-radius: 5px;
-            padding: 12px 0;
-            font-size: 18px;
+            width:100px;
+            border-radius: 20px; /* Slightly larger border radius */
+            padding: 14px 0; /* Larger padding */
+            font-size: 20px; /* Slightly larger font size */
             cursor: pointer;
             margin-top: 10px;
+            transition: background-color 0.3s ease; /* Smooth hover transition */
         }
 
         .login-button:hover {
             background-color: #3146a7;
         }
 
-        .password-error {
-            color: red;
+        .forgot-pwd,
+        .registration-link {
+            margin-top: 10px;
             font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .username-error {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .logo {
-            width: 100px; /* Adjust the width as needed */
-            height: auto; /* Maintains aspect ratio */
-            margin-bottom: 20px; /* Adds spacing between the logo and form */
         }
 
         .brand-text {
             font-size: 20px;
             color: #4158d0;
-            text-align: left;
-            margin-left: 10px;
-            margin-top: 10px;
-            font-weight: bold;
-            font-style: italic; /* Italic style */
+            font-style: italic;
+            margin-bottom: 10px;
         }
 
-        @media screen and (max-width: 480px) {
-            .login-container {
-                width: 100%;
+        /* Keyframe animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
             }
         }
     </style>
 </head>
 <body>
+    <div class="left-panel">
+        <h1>Welcome to MindEase</h1>
+        <p>Experience peace of mind with our innovative solutions.</p>
+    </div>
     <div class="login-container">
         <div class="brand-text">MindEase</div>
         <h2>Login</h2>
@@ -109,12 +140,10 @@
             <span class="password-error" id="password-error"></span>
             <button class="login-button" type="submit">Login</button>
         </form>
-        <p class="forgot-pwd"><a href= "{% url 'password_reset' %}" >Forgot your password?</a></p>
+        <p class="forgot-pwd"><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
         <p class="registration-link">Don't have an account? <a href="signup">Register here</a></p>
-        <p class="registration-link">Not a Member at MindEase join here<a href="thrpreg">Register here</a></p>
-        
+        <p class="registration-link">Not a Member at MindEase join here <a href="thrpreg">Register here</a></p>
     </div>
-    
 
     <script>
         function validateForm() {

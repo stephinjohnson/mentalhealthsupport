@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Appointments</title>
+
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Pending Appointments</h2>
+        <ul class="list-group mt-3">
+            {% for appointment in appointments %}
+            <li class="list-group-item">
+                <strong>User:</strong> {{ appointment.user.username }}<br>
+                <strong>Appointment Date:</strong> {{ appointment.appointment_date }}<br>
+                <a href="{% url 'approve_appointment' appointment.id %}" class="btn btn-primary mt-2">Approve
+                    Appointment</a>
+            </li>
+            {% empty %}
+            <li class="list-group-item">No pending appointments.</li>
+            {% endfor %}
+        </ul>
+
+
+        
+
+
+
+
+
+
+
+    </div>
+
+    <!-- Add Bootstrap JS and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

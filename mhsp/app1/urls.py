@@ -18,7 +18,7 @@ urlpatterns=[
     path('password_reset/done/', PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', PasswordResetCompleteView.as_view(), name='password_reset_complete'),
-    path('toggleUserStatus/', views.toggleUserStatus, name='toggleUserStatus'),
+    #path('toggleUserStatus/', views.toggleUserStatus, name='toggleUserStatus'),
     path('update_profile/', views.update_profile, name='update_profile'),
     #path('product/', views.product, name='product'),
     path('add_product/', views.add_product, name='add_product'),
@@ -38,5 +38,14 @@ urlpatterns=[
     path('therapists/<int:therapist_id>/update/', views.update_therapist, name='update_therapist'),
     path('image/', display_image, name='display_image'),
     path('displayTherapist/',views.displayTherapist, name='displayTherapist'),
+    path('user-list/', views.user_list, name='user_list'),
+    path('activate-user/<int:user_id>/', views.activate_user, name='activate_user'),
+    path('deactivate-user/<int:user_id>/', views.deactivate_user, name='deactivate_user'),
+    path('therapist_list_new/', views.therapist_list_new, name='therapist_list_new'),
+    path('approve-therapist/<int:therapist_id>/', views.approve_therapist, name='approve_therapist'),
+    path('book_appointment/<int:therapist_id>/', views.book_appointment, name='book_appointment'),
+    path('therapist_appointments/', views.therapist_appointments, name='therapist_appointments'),
+    path('approve_appointment/<int:appointment_id>/', views.approve_appointment, name='approve_appointment'),
+    path('successappo/',views.successappo,name='successappo'),
 
 ]

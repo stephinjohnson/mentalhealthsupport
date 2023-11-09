@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+</head>
+<body>
+    <header>
+        <h1>Book Appointment</h1>
+    </header>
+
+    <div class="container">
+        <h2>Book Appointment with {{ therapist.username }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            <label for="appointment_date">Select Appointment Date and Time:</label>
+            <input type="datetime-local" id="appointment_date" name="appointment_date" required><br><br>
+            <input type="submit" value="Book Appointment">
+        </form>
+    </div>
+
+    <footer>
+        <p>Copyright © 2023 Your Company Name. All rights reserved.</p>
+    </footer>
+</body>
+</html>

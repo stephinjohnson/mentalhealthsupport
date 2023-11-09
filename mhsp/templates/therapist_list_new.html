@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Therapist List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .approval-status {
+            font-weight: bold;
+            color: green;
+        }
+
+        .pending-approval {
+            color: orange;
+        }
+
+        .action-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-button:hover {
+            background-color: #45a049;
+        }
+
+        .no-therapists {
+            text-align: center;
+            padding: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Therapist List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Date of Birth</th>
+                <th>Location</th>
+                <th>Qualification</th>
+                <th>Description</th>
+                <th>Specialization</th>
+                <th>Approval Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for therapist in therapists %}
+            <tr>
+                <td>{{ therapist.username }}</td>
+                <td>{{ therapist.email }}</td>
+                <td>{{ therapist.phone_number }}</td>
+                <td>{{ therapist.dob }}</td>
+                <td>{{ therapist.location }}</td>
+                <td>{{ therapist.qualification }}</td>
+                <td>{{ therapist.description }}</td>
+                <td>{{ therapist.specialization }}</td>
+                <td class="{% if therapist.is_approved %}approval-status{% else %}pending-approval{% endif %}">
+                    {% if therapist.is_approved %}
+                        Approved
+                    {% else %}
+                        Pending Approval
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not therapist.is_approved %}
+                        <form method="post" action="{% url 'approve_therapist' therapist.id %}">
+                            {% csrf_token %}
+                            <button class="action-button" type="submit">Approve</button>
+                        </form>
+                    {% else %}
+                        <!-- Additional actions for approved therapists, if any -->
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="10" class="no-therapists">No therapists found with the role 'THERAPIST'.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

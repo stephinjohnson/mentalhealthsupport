@@ -1,277 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    
-    <!-- Add Bootstrap CSS link -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
-    <style>
-        /* Reset some default styles */
-        body, h1, h2, ul, li {
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7; /* Light grey background color */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
-        }
-
-        header {
-            background-color: #477BE4;
-            color: #fff;
-            padding: 10px 0;
-            text-align: right; /* Align content to the right */
-            position: relative; /* Add position relative to the header */
-        }
-
-        header h1 {
-            font-size: 24px;
-        }
-
-        .brand-text {
-            font-size: 24px;
-            font-weight: bold;
-            font-style: italic;
-            color: #fff;
-            position: absolute; /* Position absolute for top-left corner */
-            top: 15px; /* Adjust as needed */
-            left: 10px; /* Adjust as needed */
-        }
-
-        .search-bar {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .search-bar input[type="text"] {
-            padding: 10px;
-            border: none;
-            border-radius: 25px; /* Increase border-radius for a rounded look */
-            width: 250px;
-            margin-right: 10px;
-            outline: none; /* Remove input outline */
-        }
-
-        .search-bar button {
-            padding: 10px 20px; /* Increase padding for a larger button */
-            background-color: #675cfd;
-            color: #fff;
-            border: none;
-            border-radius: 25px; /* Match the input's border-radius */
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-bar button:hover {
-            background-color: #4158d0; /* Change background color on hover */
-        }
-
-        nav ul {
-            list-style: none;
-            text-align: right; /* Align navigation links to the right */
-        }
-
-        nav ul li {
-            display: inline;
-            margin-left: 20px; /* Adjust margin to separate links */
-        }
-
-        nav ul li:first-child {
-            margin-left: 0; /* Remove margin from the first link */
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: #fff; /* Set link text color to white */
-            font-weight: normal; /* Remove bold font weight */
-        }
-
-        nav ul li a:hover {
-            text-decoration: underline; /* Add underline on hover */
-        }
-
-        /* Add the Logout link */
-        header nav ul {
-            margin-right: 20px;
-        }
-
-        header nav ul li:last-child {
-            margin-left: 0;
-        }
-
-        header nav ul li:last-child a {
-            background-color: #fff;
-            color: #030824;
-            border: 1px solid #4158d0;
-            border-radius: 25px;
-            padding: 10px 20px;
-            transition: background-color 0.3s ease;
-        }
-
-        header nav ul li:last-child a:hover {
-            background-color: #4158d0;
-            color: #fff;
-            text-decoration: none;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        footer {
-            background-color: #477BE4;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-        }
-                /* Add this CSS to your style section or external stylesheet */
-/* Add this CSS to your style section or external stylesheet */
-
-    </style>
-    
-    <!-- Add Bootstrap JS and jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Add your head content here -->
 </head>
 <body>
     <header>
-        <div class="brand-text">MindEase</div>
-        <div class="search-bar">
-            <input type="text" placeholder="Search">
-            <button type="submit">Search</button>
-        </div>
-        <nav>
-            <ul>
-                <li><a href='/therapists'>Find Therapist</a></li>
-                <li><a href="#">Get Help</a></li>
-                <li><a href='/product_list_view/'>Shop</a></li>
-                <li><a href='/update_profile'>update Profile</a></li>
-                <li><a href="/logout">Logout</a></li>
-                <!-- Add the Logout link -->
-            </ul>
-        </nav>
+        <!-- Add your header content here -->
     </header>
 
-    <main>
-        {% if user.is_authenticated %}
-                  <h3 class="font-weight-bold">Welcome {{ user.username }}</h3>
-                  {% else %}
-                  <h3 class="font-weight-bold">Welcome, Please Log in</h3>
-                  {% endif %}
-        <!-- Your dashboard content goes here -->
-    </main>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Therapist List</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            text-align: center;
-            margin-top: 20px;
-            color: #4CAF50;
-        }
-
-        table {
-            width: 100%;
-            margin: 20px 0;
-            border-collapse: collapse;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 15px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #1f56a7;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 20px;
-            color: #888;
-        }
-
-        /* Style for the header */
-        header {
-            background-color: #4060d3;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-        }
-
-        /* Style for the footer */
-        footer {
-            background-color: #4060d3;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Therapist List</h1>
-    </header>
-
-    <table>
-        <tr>
-            <th>Therapist</th>
-            <th>Phone Number</th>
-            <th>Location</th>
-            <th>Qualification</th>
-            <th>Description</th>
-            <th>Specialization</th>
-        </tr>
+    <div class="therapist-list">
         {% for therapist in therapists %}
-            <tr>
-                <td>{{ therapist.username }}</td>
-                <td>{{ therapist.phone_number }}</td>
-                <td>{{ therapist.location }}</td>
-                <td>{{ therapist.qualification }}</td>
-                <td>{{ therapist.description }}</td>
-                <td>{{ therapist.specialization }}</td>
-            </tr>
+            <div class="therapist-item">
+                <h2>{{ therapist.username }}</h2>
+                <p><strong>Phone Number:</strong> {{ therapist.phone_number }}</p>
+                <p><strong>Location:</strong> {{ therapist.location }}</p>
+                <p><strong>Qualification:</strong> {{ therapist.qualification }}</p>
+                <p><strong>Description:</strong> {{ therapist.description }}</p>
+                <p><strong>Specialization:</strong> {{ therapist.specialization }}</p>
+                <!-- Additional content for booking appointment -->
+                {% if user.is_authenticated and user.role == 'USER' %}
+                    <a href="{% url 'book_appointment' therapist.id %}">Book Appointment</a>
+                {% endif %}
+            </div>
         {% empty %}
-            <tr>
-                <td colspan="6" class="no-results">No therapists found.</td>
-            </tr>
+            <p class="no-results">No therapists found.</p>
         {% endfor %}
-    </table>
+    </div>
 
     <footer>
-        <p><b>MindEase</b> <i> Mental Health Support Platform</i></p>
-        <p><i>2023</i></p>
+        <!-- Add your footer content here -->
     </footer>
-
 </body>
 </html>

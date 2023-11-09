@@ -152,7 +152,7 @@ def activateUser(request):
         user = User.objects.get(id=request.GET['id'])
         user.is_active = True
         user.save()
-        return redirect('custom_admin_page')"""
+        return redirect('custom_admin_page')
 
 def toggleUserStatus(request):
     if request.method == 'GET':
@@ -160,7 +160,7 @@ def toggleUserStatus(request):
         user = User.objects.get(id=user_id)
         user.is_active = not user.is_active  # Toggle the user's status
         user.save()
-        return redirect('custom_admin_page')
+        return redirect('custom_admin_page')"""
     
 
 
@@ -346,6 +346,9 @@ def update_therapist(request, therapist_id):
     therapist = get_object_or_404(User, id=therapist_id, role=User.Role.THERAPIST)
     
     if request.method == 'POST':
+        therapist.phone =request.POST.get('phone')
+        therapist.dob =request.POST.get('dob')
+        therapist.location =request.POST.get('location')
         therapist.qualification = request.POST.get('qualification')
         therapist.description = request.POST.get('description')
         therapist.specialization = request.POST.get('specialization')
@@ -360,7 +363,6 @@ from django.shortcuts import render
 from .models import User
 
 def Tdash(request):
-    # Assuming you have a way to get the therapist object for the current user
     therapist = User.objects.get(id=request.user.id, role=User.Role.THERAPIST) #if any error is encouter please add  that Tdash on above
     print(f'Therapist ID: {therapist.id}') 
     return render(request, 'Tdash.html', {'therapist': therapist})
@@ -373,3 +375,125 @@ def display_image(request):
 
 def displayTherapist(request):
     return render(request, 'therapistData.html')
+
+
+
+# Fetch data from User table only the data of USER
+from django.shortcuts import render
+from .models import User
+
+def user_list(request):
+    users = User.objects.filter(role=User.Role.USER)
+    return render(request, 'user_list.html', {'users': users})
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+def activate_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.is_active = True
+    user.save()
+    return redirect('user_list')
+
+def deactivate_user(request, user_id):
+    user = User.objects.get(id=user_id)
+    user.is_active = False
+    user.save()
+    return redirect('user_list')
+
+
+
+
+from django.shortcuts import render
+from .models import User
+
+def therapist_list_new(request):
+    therapists = User.objects.filter(role=User.Role.THERAPIST)
+    return render(request, 'therapist_list_new.html', {'therapists': therapists})
+
+
+
+
+from django.shortcuts import render, redirect
+from .models import User
+
+def approve_therapist(request, therapist_id):
+    therapist = User.objects.get(id=therapist_id)
+    therapist.is_approved = True
+    therapist.save()
+    return redirect('therapist_list_new')
+
+
+
+
+#book appointment
+
+
+# views.py
+
+from django.shortcuts import render, redirect
+from .models import User, Appointment
+from django.contrib.auth.decorators import login_required
+from datetime import datetime
+
+@login_required
+def book_appointment(request, therapist_id):
+    therapist = User.objects.get(pk=therapist_id, role=User.Role.THERAPIST)
+    if request.method == 'POST':
+        appointment_date = request.POST['appointment_date']
+        appointment_date = datetime.strptime(appointment_date, '%Y-%m-%dT%H:%M')
+        appointment = Appointment(user=request.user, therapist=therapist, appointment_date=appointment_date)
+        appointment.save()
+        return render(request, 'successappo.html', {'message': 'Appointment booked successfully!'})
+    return render(request, 'book_appointment.html', {'therapist': therapist})
+
+
+"""from django.shortcuts import render
+from .models import User, Appointment 
+from django.contrib.auth.decorators import login_required
+
+
+@login_required
+def therapist_appointments(request):
+    if request.user.is_authenticated and request.user.is_therapist:
+        pending_appointments = Appointment.objects.filter(therapist=request.user, is_approved=False)
+        return render(request, 'therapist_appointments.html', {'appointments': pending_appointments})
+    else:
+        # Handle unauthorized access or redirect to login page
+        pass"""
+
+from django.shortcuts import render
+from .models import User, Appointment 
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def therapist_appointments(request):
+    if request.user.is_authenticated and request.user.role == User.Role.THERAPIST:
+        pending_appointments = Appointment.objects.filter(therapist=request.user, is_approved=False)
+        return render(request, 'therapist_appointments.html', {'appointments': pending_appointments})
+    else:
+        # Handle unauthorized access or redirect to login page
+        pass
+
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import Appointment
+
+def approve_appointment(request, appointment_id):
+    appointment = get_object_or_404(Appointment, pk=appointment_id)
+    appointment.is_approved = True
+    appointment.save()
+    return redirect('successappo') 
+
+
+def successappo(request):
+    return render(request, 'successappo.html')
+
+
+
+
+

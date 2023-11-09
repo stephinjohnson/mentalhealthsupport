@@ -7,6 +7,24 @@
     <h1>Update Therapist Details</h1>
     <form method="post" action="{% url 'update_therapist' therapist.id %}">
         {% csrf_token %}
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname" value="{{ therapist.firstname }}"><br>
+        
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname" value="{{ therapist.lastname }}"><br>
+        
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ therapist.username }}"><br>
+        
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" value="{{ therapist.phone }}"><br>
+        
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" value="{{ therapist.dob }}"><br>
+        
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" value="{{ therapist.location }}"><br>
+        
         <label for="qualification">Qualification:</label>
         <input type="text" id="qualification" name="qualification" value="{{ therapist.qualification }}"><br>
         
