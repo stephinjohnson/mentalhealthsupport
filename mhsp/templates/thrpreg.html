@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Page</title>
     <style>
+        /* Your CSS styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
@@ -32,7 +33,7 @@
             margin-left: 10px;
             margin-top: 10px;
             font-weight: bold;
-            font-style: italic; /* Italic style */
+            font-style: italic;
         }
 
         .registration-container h2 {
@@ -97,7 +98,6 @@
             <span class="error-message" id="first-name-error"></span>
             <input class="form-input" type="text" name="last_name" id="last_name" placeholder="Last Name" required>
             <span class="error-message" id="last-name-error"></span>
-            
             <input class="form-input" type="text" name="username" id="username" placeholder="Username" required>
             <span class="error-message" id="username-error"></span>
             <input class="form-input" type="email" name="email" id="email" placeholder="Email" required>
@@ -106,41 +106,64 @@
             <span class="error-message" id="password-error"></span>
             <input class="form-input" type="password" name="confirm-password" id="confirm-password" placeholder="Confirm Password" required>
             <span class="error-message" id="confirm-password-error"></span>
-            <!-- <input type="text" name="role" id="role"> -->
             <button class="register-button" type="submit">SignUp</button>
-                
-            
         </form>
         <p class="login-link">Already have an account? <a href="/">Login here</a></p>
     </div>
 
     <script>
-        function validateForm() {
+        const nameRegex = /^[A-Za-z]+$/;
+        const usernameRegex = /^[A-Za-z0-9]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        document.getElementById("first_name").addEventListener("input", validateFirstName);
+        document.getElementById("last_name").addEventListener("input", validateLastName);
+        document.getElementById("username").addEventListener("input", validateUsername);
+        document.getElementById("email").addEventListener("input", validateEmail);
+
+        function validateFirstName() {
             const firstName = document.getElementById("first_name").value;
-            const lastName = document.getElementById("last_name").value;
-            const username = document.getElementById("username").value;
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirm-password").value;
-
-            // Validation rules
-            // Add your validation logic here for first name, last name, and license number
-
-            let isValid = true;
-
-            // Example validation for first name (minimum length of 2 characters)
-            if (firstName.length < 2) {
-                document.getElementById("first-name-error").innerText = "First name should be at least 2 characters.";
-                isValid = false;
+            const errorElement = document.getElementById("first-name-error");
+            if (!nameRegex.test(firstName) || firstName.length < 2) {
+                errorElement.innerText = "First name should contain only alphabets and be at least 2 characters.";
             } else {
-                document.getElementById("first-name-error").innerText = "";
+                errorElement.innerText = "";
             }
+        }
 
-            // Similar validation can be added for last name and license number
+        function validateLastName() {
+            const lastName = document.getElementById("last_name").value;
+            const errorElement = document.getElementById("last-name-error");
+            if (!nameRegex.test(lastName) || lastName.length < 2) {
+                errorElement.innerText = "Last name should contain only alphabets and be at least 2 characters.";
+            } else {
+                errorElement.innerText = "";
+            }
+        }
 
-            // Rest of your validation logic for other fields...
+        function validateUsername() {
+            const username = document.getElementById("username").value;
+            const errorElement = document.getElementById("username-error");
+            if (!usernameRegex.test(username)) {
+                errorElement.innerText = "Username should contain only alphabets and numbers, no spaces allowed.";
+            } else {
+                errorElement.innerText = "";
+            }
+        }
 
-            return isValid;
+        function validateEmail() {
+            const email = document.getElementById("email").value;
+            const errorElement = document.getElementById("email-error");
+            if (!emailRegex.test(email)) {
+                errorElement.innerText = "Invalid email format.";
+            } else {
+                errorElement.innerText = "";
+            }
+        }
+
+        function validateForm() {
+            // Your existing form validation logic
+            // ...
         }
     </script>
 </body>
