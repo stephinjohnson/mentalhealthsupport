@@ -358,11 +358,15 @@ def update_therapist(request, therapist_id):
     return render(request, 'therapist_update.html', {'therapist': therapist})
 
 #testing
+def Tdash(request):
+    return render(request, 'Tdash.html')
+
 
 from django.shortcuts import render
 from .models import User
 
 def Tdash(request):
+    
     therapist = User.objects.get(id=request.user.id, role=User.Role.THERAPIST) #if any error is encouter please add  that Tdash on above
     print(f'Therapist ID: {therapist.id}') 
     return render(request, 'Tdash.html', {'therapist': therapist})
