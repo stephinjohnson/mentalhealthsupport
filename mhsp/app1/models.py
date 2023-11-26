@@ -16,6 +16,7 @@ class User(AbstractUser):
     specialization = models.CharField(max_length=255, blank=True, null=True)
     is_approved = models.BooleanField(default=False)
     is_therapist = models.BooleanField(default=False)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
    
 
 class UserProfile(models.Model):
