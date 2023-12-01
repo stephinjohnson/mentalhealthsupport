@@ -178,6 +178,7 @@ def update_profile(request):
         phone_number = request.POST.get('phone_number')
         dob = request.POST.get('dob')
         location = request.POST.get('location')
+        profile_picture =request.POST.GET('profile_picture')
 
         # Parse and format the date
         try:
@@ -196,6 +197,7 @@ def update_profile(request):
         user.phone_number = phone_number
         user.dob = dob_date
         user.location = location
+
         user.save()
 
         return redirect('/home')  # Redirect to the user's profile page after successful update
@@ -337,6 +339,8 @@ def therapist_list(request):
     return render(request, 'therapist_list.html', {'therapists': therapists})
 
 
+
+
 #new
 
 from django.shortcuts import render, get_object_or_404
@@ -346,16 +350,22 @@ def update_therapist(request, therapist_id):
     therapist = get_object_or_404(User, id=therapist_id, role=User.Role.THERAPIST)
     
     if request.method == 'POST':
-        therapist.phone =request.POST.get('phone')
-        therapist.dob =request.POST.get('dob')
-        therapist.location =request.POST.get('location')
+        therapist.phone = request.POST.get('phone')
+        therapist.dob = request.POST.get('dob')
+        therapist.location = request.POST.get('location')
         therapist.qualification = request.POST.get('qualification')
         therapist.description = request.POST.get('description')
         therapist.specialization = request.POST.get('specialization')
+
+        # Handling profile_picture upload
+        if 'profile_picture' in request.FILES:
+            therapist.profile_picture = request.FILES['profile_picture']
+
         therapist.save()
         return render(request, 'success.html', {'message': 'Therapist details updated successfully!'})
     
     return render(request, 'therapist_update.html', {'therapist': therapist})
+
 
 #testing
 def Tdash(request):
@@ -500,4 +510,74 @@ def successappo(request):
 
 
 
+from django.shortcuts import render, redirect
+from .models import User, Feedback
+
+def therapist_list(request):
+    therapists = User.objects.filter(role=User.Role.THERAPIST)
+
+    context = {
+        'therapists': therapists,
+        'user': request.user,
+    }
+
+    return render(request, 'therapist_list.html', context)
+
+def feedback_form(request, therapist_id):
+    if request.method == 'POST':
+        therapist = User.objects.get(id=therapist_id)
+        user = request.user
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+
+        feedback = Feedback.objects.create(therapist=therapist, user=user, rating=rating, comment=comment)
+        # Optionally, you can redirect to the therapist profile page after submitting feedback
+        return redirect('therapist_list')
+
+    return render(request, 'feedback_form.html', {'therapist_id': therapist_id})
+
+#
+
+from django.shortcuts import render, get_object_or_404
+from .models import User
+
+def therapist_feedback(request, therapist_id):
+    therapist = get_object_or_404(User, id=therapist_id, role=User.Role.THERAPIST)
+    feedback = therapist.profile.therapist_feedback.all()
+
+    context = {
+        'therapist': therapist,
+        'feedback': feedback,
+    }
+
+    return render(request, 'therapist_feedback.html', context)
+
+
+
+# views.py
+from django.shortcuts import render, redirect
+from .forms import ArticleForm
+
+def add_article(request):
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('article_list')  # Redirect to the list of articles
+    else:
+        form = ArticleForm()
+    return render(request, 'add_article.html', {'form': form})
+
+
+
+# views.py
+from django.shortcuts import render
+from .models import Article
+
+def article_list(request):
+    articles = Article.objects.all()
+    return render(request, 'article_list.html', {'articles': articles})
+
+
+from django.shortcuts import render, redirect
 

@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from .views import display_image
 from django.contrib.auth import views as auth_views
+from .views import therapist_list, feedback_form, therapist_feedback
 
 from django.contrib.auth.views import PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
 
@@ -48,4 +49,10 @@ urlpatterns=[
     path('approve_appointment/<int:appointment_id>/', views.approve_appointment, name='approve_appointment'),
     path('successappo/',views.successappo,name='successappo'),
 
+
+    path('therapist-list/', therapist_list, name='therapist_list'),
+    path('feedback/<int:therapist_id>/',feedback_form, name='feedback_form'),
+    path('therapist-feedback/<int:therapist_id>/', therapist_feedback, name='therapist_feedback'),
+    path('add_article/', views.add_article, name='add_article'),
+    path('article_list/', views.article_list, name='article_list'),
 ]

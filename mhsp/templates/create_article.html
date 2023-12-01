@@ -1,0 +1,43 @@
+<!-- base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Django Project{% endblock %}</title>
+    <!-- Add your CSS styles or links to external stylesheets here -->
+</head>
+<body>
+
+    <header>
+        <h1>My Django Project</h1>
+        <!-- Add navigation links or other header content here -->
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <!-- Add footer content here -->
+        <p>&copy; 2023 My Django Project. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
+
+<!-- create_article.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Create Article{% endblock %}
+
+{% block content %}
+  <h2>Create Article</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}

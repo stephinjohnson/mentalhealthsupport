@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include necessary CSS and JS files as needed -->
+</head>
+
+<body>
+    <h2>Feedback for {{ therapist.username }}</h2>
+
+    {% for feedback in feedback %}
+        <div class="feedback-item">
+            <p><strong>User:</strong> {{ feedback.user.username }}</p>
+            <p><strong>Rating:</strong> {{ feedback.rating }}</p>
+            <p><strong>Comment:</strong> {{ feedback.comment }}</p>
+            <p><strong>Created at:</strong> {{ feedback.created_at }}</p>
+        </div>
+    {% empty %}
+        <p>No feedback yet.</p>
+    {% endfor %}
+</body>
+
+</html>

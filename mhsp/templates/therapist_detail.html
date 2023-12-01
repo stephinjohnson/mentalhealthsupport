@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        /* Add your styles here if needed */
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Add your header content here if needed -->
+    </header>
+
+    <div class="therapist-details">
+        <h2>{{ therapist.username }} - Therapist Details</h2>
+        {% if therapist.profile_picture %}
+            <img src="{{ therapist.profile_picture.url }}" alt="Profile Picture">
+        {% endif %}
+        <p><strong>Phone Number:</strong> {{ therapist.phone_number }}</p>
+        <p><strong>Date of Birth:</strong> {{ therapist.dob }}</p>
+        <p><strong>Location:</strong> {{ therapist.location }}</p>
+        <p><strong>Qualification:</strong> {{ therapist.qualification }}</p>
+        <p><strong>Description:</strong> {{ therapist.description }}</p>
+        <p><strong>Specialization:</strong> {{ therapist.specialization }}</p>
+
+        <!-- Add more details as needed -->
+
+        <!-- Add a link to update the therapist details -->
+        <a href="{% url 'update_therapist' therapist.id %}">Update Therapist Details</a>
+    </div>
+
+    <footer>
+        <!-- Add your footer content here if needed -->
+    </footer>
+</body>
+
+</html>

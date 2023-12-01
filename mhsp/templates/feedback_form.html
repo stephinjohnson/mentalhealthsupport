@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Include necessary CSS and JS files as needed -->
+</head>
+
+<body>
+    <h2>Feedback Form</h2>
+
+    <form method="post" action="{% url 'feedback_form' therapist_id %}">
+        {% csrf_token %}
+        <!-- Add fields for rating and comment -->
+        <label for="rating">Rating:</label>
+        <input type="number" name="rating" min="0" max="5" required>
+
+        <label for="comment">Comment:</label>
+        <textarea name="comment" rows="4" cols="50"></textarea>
+
+        <button type="submit">Submit Feedback</button>
+    </form>
+</body>
+
+</html>
