@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Update Therapist Details</h1>
-    <form method="post" action="{% url 'update_therapist' therapist.id %}">
+    <form method="post" action="{% url 'update_therapist' therapist.id %}" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="firstname">First Name:</label>
         <input type="text" id="firstname" name="firstname" value="{{ therapist.firstname }}"><br>
@@ -34,6 +34,9 @@
         <label for="specialization">Specialization:</label>
         <input type="text" id="specialization" name="specialization" value="{{ therapist.specialization }}"><br>
         
+        <label for="Profile Picture:">Profile Picture::</label>
+        <input type="file" id="profile_picture" name="profile_picture" value="{{ user.profile_picture }}">
+
         <input type="submit" value="Update">
     </form>
 </body>

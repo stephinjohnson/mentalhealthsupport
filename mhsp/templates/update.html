@@ -7,68 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Profile</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .form-container {
-            max-width: 400px;
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-container h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="date"],
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-        }
-
-        .form-group button[type="submit"] {
-            background-color: #4caf50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-
-        .form-group button[type="submit"]:hover {
-            background-color: #45a049;
-        }
+        /* Your CSS styles here... */
     </style>
 </head>
 
@@ -76,7 +15,7 @@
     <div class="form-container">
         <h1>Update Profile</h1>
 
-        <form method="post" action="{% url 'update_profile' %}">
+        <form method="post" action="{% url 'update_profile' %}" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
                 <label for="first_name">First Name:</label>
@@ -121,6 +60,11 @@
             <div class="form-group">
                 <label for="specialization">Specialization:</label>
                 <input type="text" id="specialization" name="specialization" value="{{ user.specialization }}">
+            </div>
+
+            <div class="form-group">
+                <label for="profile_picture">Profile Picture:</label>
+                <input type="file" id="profile_picture" name="profile_picture">
             </div>
 
             <div class="form-group">

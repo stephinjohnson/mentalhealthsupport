@@ -81,6 +81,14 @@
         <li><a href="/therapist_appointments">view your pending appointments</a></li>
       
         
+
+        <a href="{% url 'therapist_feedback' therapist.id %}">View Feedback</a>
+
+<!-- Additional content for booking appointment -->
+{% if user.is_authenticated and user.role == 'USER' %}
+    <a class="book-appointment-btn" href="{% url 'book_appointment' therapist.id %}">Book Appointment</a>
+{% endif %}
+        
   
       
 

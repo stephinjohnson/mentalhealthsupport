@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 class User(AbstractUser):
     class Role(models.TextChoices):
         ADMIN = "ADMIN", "Admin"
@@ -47,3 +47,21 @@ class Appointment(models.Model):
     def __str__(self):
         return f"Appointment between {self.user.username} and {self.therapist.username} on {self.appointment_date}"
     
+
+
+class Feedback(models.Model):
+    therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='therapist_feedback')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_feedback')
+    rating = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} feedback for {self.therapist.username}"
+
+
+
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    image = models.ImageField(upload_to='article_images/')

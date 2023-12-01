@@ -159,37 +159,78 @@
         </nav>
     </header>
 
-    <main>
-        {% if user.is_authenticated %}
-                  <h3 class="font-weight-bold">Welcome {{ user.username }}</h3>
-                  {% else %}
-                  <h3 class="font-weight-bold">Welcome, Please Log in</h3>
-                  {% endif %}
-        <!-- Your dashboard content goes here -->
-        
 
-        
+<!-- base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+        }
+
+        main {
+            margin: 20px;
+        }
+
+        .article-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+        }
+
+        footer {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    
+    <main>
+        <div class="container">
+            
+
+            {% if articles %}
+            <div class="row">
+                {% for article in articles %}
+                <div class="col-md-6">
+                    <div class="card article-card">
+                        <img src="{{ article.image.url }}" alt="{{ article.title }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ article.title }}</h5>
+                            <p class="card-text">{{ article.description }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No articles available.</p>
+            {% endif %}
+
+        </div>
     </main>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
 
     <footer>
         <p><b>MindEase</b> <i> Mental Health Support Platform</i></p>
@@ -197,6 +238,12 @@
     </footer>
 
 
+    
 
+    <!-- Add Bootstrap JS and Popper.js scripts (required for Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
