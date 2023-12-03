@@ -65,3 +65,13 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     image = models.ImageField(upload_to='article_images/')
+
+
+
+class Schedule(models.Model):  # Changed from Appointment to Schedule
+    therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='therapist_schedules')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_schedules')
+    date_time = models.DateTimeField()
+    duration = models.PositiveIntegerField()
+
+

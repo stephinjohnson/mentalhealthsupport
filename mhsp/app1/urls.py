@@ -55,4 +55,8 @@ urlpatterns=[
     path('therapist-feedback/<int:therapist_id>/', therapist_feedback, name='therapist_feedback'),
     path('add_article/', views.add_article, name='add_article'),
     path('article_list/', views.article_list, name='article_list'),
+
+
+    path('schedule_appointment/',views.schedule_appointment, name='schedule_appointment'),
+    path('appointment_list/',views.appointment_list, name='appointment_list'),
 ]
