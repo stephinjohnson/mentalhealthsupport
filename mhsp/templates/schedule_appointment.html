@@ -1,0 +1,29 @@
+<!-- schedule_appointment.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Appointment</title>
+</head>
+<body>
+    <h2>Schedule an Appointment</h2>
+    <form method="post" action="{% url 'schedule_appointment' %}">
+        {% csrf_token %}
+        <label for="therapist">Select Therapist:</label>
+        <select name="therapist_id" id="therapist">
+            {% for therapist in therapists %}
+                <option value="{{ therapist.id }}">{{ therapist.username }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="date_time">Date and Time:</label>
+        <input type="datetime-local" name="date_time" required><br>
+
+        <label for="duration">Duration (in minutes):</label>
+        <input type="number" name="duration" required><br>
+
+        <button type="submit">Schedule</button>
+    </form>
+</body>
+</html>

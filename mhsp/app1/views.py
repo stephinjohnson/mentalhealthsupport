@@ -581,3 +581,39 @@ def article_list(request):
 
 from django.shortcuts import render, redirect
 
+
+
+# views.py
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import User, Schedule
+
+@login_required
+def schedule_appointment(request):
+    if request.method == 'POST':
+        therapist_id = request.POST.get('therapist_id')
+        date_time = request.POST.get('date_time')
+        duration = request.POST.get('duration')
+
+        therapist = User.objects.get(id=therapist_id)
+        user = request.user
+
+        Schedule.objects.create(
+            therapist=therapist,
+            user=user,
+            date_time=date_time,
+            duration=duration
+        )
+
+        return redirect('appointment_list')
+
+    therapists = User.objects.filter(role=User.Role.USER)
+    return render(request, 'schedule_appointment.html', {'therapists': therapists})
+
+@login_required
+def appointment_list(request):
+    user = request.user
+    appointments = Schedule.objects.filter(user=user)
+    return render(request, 'appointment_list.html', {'appointments': appointments})
+
+
