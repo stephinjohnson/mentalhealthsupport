@@ -30,8 +30,15 @@ urlpatterns=[
 
     path('ProductForUser/', views.ProductForUser, name='ProductForUser'), # this is build for showing items to users
     path('product_list_view/', views.product_list_view, name='product_list_view'), #remove
-    path('product/buy/<int:pk>/', views.buy_product, name='buy_product'),
-    path('product/add_to_cart/<int:pk>/', views.add_to_cart, name='add_to_cart'),
+    
+    #path('buy_product/<int:product_id>/',views.buy_product, name='buy_product'),
+    path('add_to_cart/<int:product_id>/',views.add_to_cart, name='add_to_cart'),
+    path('cart/',views.add_to_cart_page, name='add_to_cart_page'),
+    path('update_cart_quantity/<int:cart_id>/<str:action>/',views.update_cart_quantity, name='update_cart_quantity'),
+
+
+    #path('product/buy/<int:pk>/', views.buy_product, name='buy_product'),
+    #path('product/add_to_cart/<int:pk>/', views.add_to_cart, name='add_to_cart'),
     
     #path('Tdash/',views.Tdash,name='Tdash'),
     path('Tdash/',views.Tdash,name='Tdash'),
@@ -59,4 +66,12 @@ urlpatterns=[
 
     path('schedule_appointment/',views.schedule_appointment, name='schedule_appointment'),
     path('appointment_list/',views.appointment_list, name='appointment_list'),
+
+    path('write_experience/',views.write_experience, name='write_experience'),
+    path('experience_list/',views.experience_list, name='experience_list'),
+
+    path('edit_experience/<int:experience_id>/',views.edit_experience, name='edit_experience'),
+    path('delete_experience/<int:experience_id>/',views.delete_experience, name='delete_experience'),
+    path('supportplatform/', views.supportplatform, name='supportplatform'),
+
 ]
