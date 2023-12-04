@@ -220,8 +220,8 @@
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">{{ product.description }}</p>
                     <p class="card-text"><strong>${{ product.price }}</strong></p>
-                    <a href="{% url 'buy_product' product.id %}" class="btn btn-primary btn-sm">Buy Now</a>
-                    <button class="btn btn-success btn-sm add-to-cart" data-product-id="{{ product.id }}">Add to Cart</button>
+                    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-sm">Add to Cart</a>
+                    <button class="btn btn-success btn-sm add-to-cart" data-product-id="{{ product.id }}">Buy now</button>
                 </div>
             </div>
         </div>

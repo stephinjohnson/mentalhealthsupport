@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Your Site{% endblock %}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        div {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: #3498db;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            transition: transform 0.3s;
+        }
+
+        li:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+
+        p {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #3498db;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <header>
+            <h1>Your Site</h1>
+        </header>
+        <main>
+            {% block content %}
+            <h2>Your Experiences</h2>
+            {% if experiences %}
+                <ul>
+                    {% for experience in experiences %}
+                        <li>
+                            <h3>{{ experience.title }}</h3>
+                            <p>{{ experience.content }}</p>
+                            <p>Created at: {{ experience.created_at }}</p>
+                            <p>~{{ experience.user }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No experiences yet.</p>
+            {% endif %}
+            {% endblock %}
+        </main>
+        <footer>
+            <!-- Add footer content here -->
+        </footer>
+    </div>
+    <!-- Add your JavaScript scripts or links here -->
+</body>
+</html>

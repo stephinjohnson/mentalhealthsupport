@@ -265,18 +265,7 @@ def product_list_view(request):
 from django.shortcuts import get_object_or_404, redirect
 from .models import Product
 
-def buy_product(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    
-    return redirect('product_list_user')
 
-from django.shortcuts import get_object_or_404, redirect
-from .models import Product
-
-def add_to_cart(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    
-    return redirect('product_list_user')
 
 
 
@@ -615,5 +604,135 @@ def appointment_list(request):
     user = request.user
     appointments = Schedule.objects.filter(user=user)
     return render(request, 'appointment_list.html', {'appointments': appointments})
+
+
+
+
+from django.shortcuts import render, redirect
+from .models import UserExperience
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def write_experience(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+
+        # Create a new UserExperience instance and associate it with the current user
+        UserExperience.objects.create(user=request.user, title=title, content=content)
+
+        return redirect('experience_list')  # Redirect to the page displaying all experiences
+    else:
+        return render(request, 'write_experience.html')
+
+@login_required
+def experience_list(request):# this is only for one user
+    experiences = UserExperience.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'experience_list.html', {'experiences': experiences})
+
+
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import UserExperience
+
+def edit_experience(request, experience_id):
+    # Retrieve the experience to edit or return a 404 error if not found
+    experience = get_object_or_404(UserExperience, id=experience_id)
+
+    if request.method == 'POST':
+        # Handle form submission for editing the experience
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+
+        # Update the experience with new data
+        experience.title = title
+        experience.content = content
+        experience.save()
+
+        return redirect('experience_list')  # Redirect to the page displaying all experiences
+    else:
+        return render(request, 'edit_experience.html', {'experience': experience})
+
+def delete_experience(request, experience_id):
+    # Retrieve the experience to delete or return a 404 error if not found
+    experience = get_object_or_404(UserExperience, id=experience_id)
+
+    if request.method == 'POST':
+        # Handle form submission for deleting the experience
+        experience.delete()
+
+        return redirect('experience_list')  # Redirect to the page displaying all experiences
+    else:
+        return render(request, 'delete_experience.html', {'experience': experience})
+    
+
+
+
+def supportplatform(request):
+    experiences = UserExperience.objects.all().order_by('-created_at')
+    return render(request, 'supportplatform.html', {'experiences': experiences})
+
+
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import Product
+
+
+# views.py
+from django.shortcuts import render, redirect
+from .models import Product, Cart
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+
+@login_required
+# views.py
+
+
+def add_to_cart(request, product_id):
+    product = Product.objects.get(pk=product_id)
+    user_cart, created = Cart.objects.get_or_create(user=request.user, product=product)
+    if not created:
+        user_cart.quantity += 1
+        user_cart.save()
+    return redirect('add_to_cart_page')
+
+
+
+# views.py
+from django.shortcuts import render
+from .models import Cart
+
+def add_to_cart_page(request):
+    user_carts = Cart.objects.filter(user=request.user)
+    return render(request, 'add_to_cart_page.html', {'user_carts': user_carts})
+
+# views.py
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from .models import Cart
+
+def add_to_cart_page(request):
+    user_carts = Cart.objects.filter(user=request.user)
+    return render(request, 'add_to_cart_page.html', {'user_carts': user_carts})
+
+def update_cart_quantity(request, cart_id, action):
+    if request.method == 'POST' and action in ['increment', 'decrement']:
+        cart_item = Cart.objects.get(pk=cart_id, user=request.user)
+
+        if action == 'increment':
+            cart_item.quantity += 1
+        elif action == 'decrement':
+            if cart_item.quantity > 1:
+                cart_item.quantity -= 1
+            else:
+                cart_item.delete()
+
+        cart_item.save()
+
+        return JsonResponse({'success': True, 'new_quantity': cart_item.quantity})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
 
 
