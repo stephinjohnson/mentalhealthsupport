@@ -120,6 +120,8 @@
         document.getElementById("last_name").addEventListener("input", validateLastName);
         document.getElementById("username").addEventListener("input", validateUsername);
         document.getElementById("email").addEventListener("input", validateEmail);
+        document.getElementById("password").addEventListener("input", validatePassword);
+        document.getElementById("confirm-password").addEventListener("input", validateConfirmPassword);
 
         function validateFirstName() {
             const firstName = document.getElementById("first_name").value;
@@ -156,6 +158,28 @@
             const errorElement = document.getElementById("email-error");
             if (!emailRegex.test(email)) {
                 errorElement.innerText = "Invalid email format.";
+            } else {
+                errorElement.innerText = "";
+            }
+        }
+
+        function validatePassword() {
+            const password = document.getElementById("password").value;
+            const errorElement = document.getElementById("password-error");
+            if (password.length < 8) {
+                errorElement.innerText = "Password should be at least 8 characters long.";
+            } else {
+                errorElement.innerText = "";
+            }
+        }
+
+        function validateConfirmPassword() {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+            const errorElement = document.getElementById("confirm-password-error");
+
+            if (confirmPassword !== password) {
+                errorElement.innerText = "Passwords do not match.";
             } else {
                 errorElement.innerText = "";
             }
