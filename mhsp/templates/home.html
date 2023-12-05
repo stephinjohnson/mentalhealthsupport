@@ -168,6 +168,90 @@
         <!-- Your dashboard content goes here -->
         
         <a href="/write_experience">ecperence sharee</a><br>
+
+        <!DOCTYPE html>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Card Example</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              background-color: #f4f4f4;
+              margin: 0;
+              padding: 20px;
+              align-items: center;
+            }
+        
+            .card {
+              border-radius: 8px;
+              overflow: hidden;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+              margin-bottom: 20px;
+              background-color: #fff;
+              width: 45%; /* Adjusted width to make two cards fit in one row */
+              display: inline-block; /* Display cards in the same line */
+              margin-right: 2.5%; /* Add some space between cards */
+            }
+        
+            .card img {
+              width: 70%;
+              height: auto;
+            }
+        
+            .card-content {
+              padding: 20px;
+            }
+        
+            h2 {
+              color: #333;
+            }
+        
+            p {
+              color: #666;
+            }
+        
+            @media (max-width: 600px) {
+              .card {
+                width: 100%; /* Make cards take full width on smaller screens */
+                margin-right: 0; /* Remove margin between cards on smaller screens */
+              }
+            }
+          </style>
+        </head>
+        <body>
+            {% load static %}
+        <div class="card">
+          <center><img src="{% static 'mh1.jpg' %}" alt="Card Image"></center>
+          <div class="card-content">
+            <h2>Growth Mindset</h2>
+            <p>Mental health refers to a person's emotional, psychological, and social well-being.
+            <br> It involves the individual's ability to handle stress, relate to others, make decisions, 
+            <br>and cope with the challenges of life. Mental health is crucial at every stage of life, <br>from childhood and adolescence through adulthood.</p>
+          </div>
+        </div>
+        
+        <div class="card">
+            <center><img src="{% static 'mh2.jpg' %}" alt="Card Image"></center>
+          <div class="card-content">
+            <h2>Healthy Mindset</h2>
+            <p>Mental health refers to a person's emotional, psychological, and social well-being.
+                <br> It involves the individual's ability to handle stress, relate to others, make decisions, 
+                <br>and cope with the challenges of life. Mental health is crucial at every stage of life, <br>from childhood and adolescence through adulthood.</p>
+                <p>Mental health refers to a person's emotional, psychological, and social well-being.
+                    <br> It involves the individual's ability to handle stress, relate to others, make decisions, 
+                    <br>.</p>
+          </div>
+        </div>
+        
+        
+        
+        </body>
+        </html>
+        
+
         
     </main>
     <br>
