@@ -73,5 +73,6 @@ urlpatterns=[
     path('edit_experience/<int:experience_id>/',views.edit_experience, name='edit_experience'),
     path('delete_experience/<int:experience_id>/',views.delete_experience, name='delete_experience'),
     path('supportplatform/', views.supportplatform, name='supportplatform'),
+    path('payment/', views.rentnxt, name='payment'),
 
 ]

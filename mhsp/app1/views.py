@@ -736,3 +736,42 @@ def update_cart_quantity(request, cart_id, action):
     return JsonResponse({'success': False, 'error': 'Invalid request'})
 
 
+
+
+from django.views.decorators.csrf import csrf_exempt
+from razorpay import Client
+from django.conf import settings
+
+
+razorpay_api_key = settings.RAZORPAY_API_KEY
+razorpay_secret_key = settings.RAZORPAY_API_SECRET
+
+razorpay_client = Client(auth=(razorpay_api_key, razorpay_secret_key))
+
+
+@csrf_exempt
+def rentnxt(request):
+    # Amount to be paid (in paisa), you can change this dynamically based on your logic
+    amount = 1000
+
+    # Create a Razorpay order (you need to implement this based on your logic)
+    order_data = {
+        'amount': amount,
+        'currency': 'INR',
+        'receipt': 'order_rcptid_11',
+        'payment_capture': '1',  # Auto-capture payment
+    }
+
+    # Create an order
+    order = razorpay_client.order.create(data=order_data)
+
+    context = {
+        'razorpay_api_key': razorpay_api_key,
+        'amount': order_data['amount'],
+        'currency': order_data['currency'],
+        'order_id': order['id'],
+    }
+
+    return render(request, 'payment.html', context)
+
+

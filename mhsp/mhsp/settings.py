@@ -153,3 +153,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'stephinjohnsonk@gmail.com'
 EMAIL_HOST_PASSWORD = 'hnzbkzfaydvpytlz'
+
+
+RAZORPAY_API_KEY = 'rzp_test_bdkAwxZfmcyBkq'
+RAZORPAY_API_SECRET = 'J1kz1CZLZXKC6kRbaoukoPLT'
