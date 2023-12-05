@@ -7,7 +7,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Profile</title>
     <style>
-        /* Your CSS styles here... */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
@@ -19,17 +77,17 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="first_name">First Name:</label>
-                <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}">
+                <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required>
             </div>
 
             <div class="form-group">
                 <label for="last_name">Last Name:</label>
-                <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}">
+                <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required>
             </div>
 
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="{{ user.username }}">
+                <input type="text" id="username" name="username" value="{{ user.username }}" required>
             </div>
 
             <div class="form-group">
