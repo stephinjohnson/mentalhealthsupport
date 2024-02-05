@@ -26,7 +26,13 @@
             background-color: #3498db;
             color: #fff;
             text-align: center;
-            padding: 10px 0;
+            padding: 20px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        header:hover {
+            background-color: #2c82c9;
         }
 
         main {
@@ -63,20 +69,26 @@
 
         footer {
             text-align: center;
-            padding: 10px 0;
+            padding: 20px 0;
             background-color: #3498db;
             color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        footer:hover {
+            background-color: #2c82c9;
         }
     </style>
 </head>
 <body>
     <div>
         <header>
-            <h1>Your Site</h1>
+            <h1><i>MindEase</i></h1>
         </header>
         <main>
             {% block content %}
-            <h2>Your Experiences</h2>
+            <h2>MindEase</h2>
             {% if experiences %}
                 <ul>
                     {% for experience in experiences %}
@@ -94,7 +106,7 @@
             {% endblock %}
         </main>
         <footer>
-            <!-- Add footer content here -->
+            <p>MindEase Mental Health Support Platform</p>
         </footer>
     </div>
     <!-- Add your JavaScript scripts or links here -->

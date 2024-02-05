@@ -775,3 +775,6 @@ def rentnxt(request):
     return render(request, 'payment.html', context)
 
 
+
+
+

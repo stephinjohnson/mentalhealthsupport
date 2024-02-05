@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Site{% endblock %}</title>
+    <!-- Add your CSS links or other head content here -->
+</head>
+<body>
+    <header>
+        <h1>{% block header %}My Site Header{% endblock %}</h1>
+        <!-- Add any navigation or header content here -->
+    </header>
+
+    <main>
+        {% block content %}
+  <h2>Therapist Profile</h2>
+  <p>Hello, {{ request.user.username }}!</p>
+
+  {% if time_slots %}
+    <h3>Your Time Slots:</h3>
+    <ul>
+      {% for time_slot in time_slots %}
+        <li>{{ time_slot.start_time }} - {{ time_slot.end_time }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You haven't added any time slots yet.</p>
+  {% endif %}
+{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My Site. All rights reserved.</p>
+        <!-- Add any footer content or scripts here -->
+    </footer>
+</body>
+</html>

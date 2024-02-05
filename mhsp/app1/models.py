@@ -100,3 +100,6 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Cart"
+
+
+
