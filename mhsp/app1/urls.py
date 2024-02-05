@@ -75,4 +75,6 @@ urlpatterns=[
     path('supportplatform/', views.supportplatform, name='supportplatform'),
     path('payment/', views.rentnxt, name='payment'),
 
+    #path('therapist_profile/', views.therapist_profile, name='therapist_profile'),
+    
 ]
