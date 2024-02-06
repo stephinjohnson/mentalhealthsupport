@@ -93,6 +93,20 @@
 {% endif %}
         
 
+
+<h1>Welcome to the Therapy App</h1>
+
+{% if user.is_authenticated %}
+    {% if user.role == 'THERAPIST' %}
+        <p><a href="{% url 'add_time_slot' %}">Add Time Slot</a></p>
+    {% endif %}
+    <p><a href="{% url 'view_time_slots' %}">View Time Slots</a></p>
+    <!-- Add other user-specific links as needed -->
+{% else %}
+    <p><a href="{% url 'login' %}">Login</a></p>
+    <p><a href="{% url 'register' %}">Register</a></p>
+{% endif %}
+
     
 
     </main>

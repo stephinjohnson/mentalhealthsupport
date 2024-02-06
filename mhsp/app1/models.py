@@ -103,3 +103,11 @@ class Cart(models.Model):
 
 
 
+# time slot
+class TimeSlot(models.Model):
+    therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='available_time_slots')
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.therapist.username}'s Time Slot {self.start_time} - {self.end_time}"
