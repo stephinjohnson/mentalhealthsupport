@@ -76,5 +76,9 @@ urlpatterns=[
     path('payment/', views.rentnxt, name='payment'),
 
     #path('therapist_profile/', views.therapist_profile, name='therapist_profile'),
-    
+    path('add_time_slot/', views.add_time_slot, name='add_time_slot'),
+    path('view_time_slots/', views.view_time_slots, name='view_time_slots'),
+    path('new_view_time_slots/', views.new_view_time_slots, name='new_view_time_slots'),
+    path('edit_time_slot/<int:time_slot_id>/', views.edit_time_slot, name='edit_time_slot'),
+    path('delete_time_slot/<int:time_slot_id>/', views.delete_time_slot, name='delete_time_slot'),
 ]

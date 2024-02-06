@@ -776,5 +776,64 @@ def rentnxt(request):
 
 
 
+# time slot
+
+# views.py
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import TimeSlot
+
+@login_required
+def add_time_slot(request):
+    if request.user.role != 'THERAPIST':
+        return redirect('home')  # Redirect to the home page if the user is not a therapist
+
+    if request.method == 'POST':
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        TimeSlot.objects.create(therapist=request.user, start_time=start_time, end_time=end_time)
+        return redirect('new_view_time_slots')  # Redirect to the home page after adding the time slot
+
+    return render(request, 'add_time_slot.html')
+
+def view_time_slots(request):
+    if request.user.role != 'USER':
+        return redirect('home')  # Redirect to the home page if the user is not a regular user
+
+    time_slots = TimeSlot.objects.all()
+    return render(request, 'view_time_slots.html', {'time_slots': time_slots})
 
 
+#new timeslotview
+
+def new_view_time_slots(request):
+    if request.user.role != 'THERAPIST':
+        return redirect('home')  # Redirect to the home page if the user is not a therapist
+
+    time_slots = TimeSlot.objects.filter(therapist=request.user)
+    return render(request, 'new_view_time_slots.html', {'time_slots': time_slots})
+
+
+@login_required
+def edit_time_slot(request, time_slot_id):
+    time_slot = get_object_or_404(TimeSlot, id=time_slot_id, therapist=request.user)
+
+    if request.method == 'POST':
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+        time_slot.start_time = start_time
+        time_slot.end_time = end_time
+        time_slot.save()
+        return redirect('new_view_time_slots')  # Redirect to view_time_slots after editing the time slot
+
+    return render(request, 'edit_time_slot.html', {'time_slot': time_slot})
+
+@login_required
+def delete_time_slot(request, time_slot_id):
+    time_slot = get_object_or_404(TimeSlot, id=time_slot_id, therapist=request.user)
+
+    if request.method == 'POST':
+        time_slot.delete()
+        return redirect('new_view_time_slots')  # Redirect to view_time_slots after deleting the time slot
+
+    return render(request, 'delete_time_slot.html', {'time_slot': time_slot})
