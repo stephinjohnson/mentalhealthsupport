@@ -4,116 +4,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample HTML Page</title>
+    <title>Dashboard Template</title>
+    <!-- Include Bootstrap CSS file -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
             margin: 0;
             padding: 0;
+            background-color: #f4f4f4;
+            overflow-x: hidden; /* Hide horizontal scrollbar */
         }
 
         header {
-            background-color: #333;
+            background-color: #081978;
             color: #fff;
-            padding: 10px 0;
-            text-align: center;
+            padding: 15px;
+            text-align: left;
+        }
+
+        header h1 {
+            margin: 0;
         }
 
         nav {
-            background-color: #444;
-            padding: 10px 0;
-            text-align: center;
+            background-color: #081978;
+            padding: 10px;
+            position: fixed;
+            width: 200px;
+            height: 100%;
+            overflow: auto;
         }
 
         nav a {
-            color: #fff;
+            display: block;
+            padding: 15px;
             text-decoration: none;
-            margin: 0 15px;
+            color: #fefefe;
+            border-bottom: 1px solid #ddd;
+            font-size: 16px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: background-color 0.3s ease;
         }
 
-        main {
+        nav a:hover {
+            background-color: #1c1a1a;
+        }
+
+        section {
+            margin-left: 220px;
             padding: 20px;
         }
 
+        .profile-picture {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Add Time Slot and View Time Slots button styles */
+        .btn-section {
+            margin-top: 15px;
+        }
+
+        .btn-section a {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        /* Footer styles */
         footer {
-            background-color: #333;
+            background-color: #081978;
             color: #fff;
+            padding: 10px;
             text-align: center;
-            padding: 10px 0;
             position: fixed;
             bottom: 0;
             width: 100%;
+        }
+
+        @media screen and (max-width: 600px) {
+            nav {
+                width: 100%;
+                position: relative;
+                height: auto;
+            }
+
+            nav a {
+                width: 100%;
+            }
+
+            section {
+                margin-left: 0;
+            }
+
+            .btn-section a {
+                display: block;
+                margin-bottom: 10px;
+                width: 100%;
+            }
         }
     </style>
 </head>
 
 <body>
-    <header>
-        <h1>Welcome to My Website</h1>
-    </header>
 
+    <header>
+        <i><h1>MindEase</h1></i><br>
+    </header> 
     <nav>
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href='/update_profile'>Add Profile</a>
-        <a href='/logout'>logout</a>
-      
+        <a href="#">Button 1</a>
+        <a href="#">Button 2</a>
+        <a href="#">Button 3</a>
+        <a href="#">Button 4</a>
     </nav>
 
-    <main>
-        
+    <section>
+        <!-- Content goes here -->
         {% if user.is_authenticated %}
-        <h2 class="font-weight-bold">Welcome {{ user.username }}(Therapist)</h2>
+        <div class="card">
+            <div class="card-body">
+                <i><h2 class="card-title font-weight-bold" style="color: rgb(22, 22, 94);">Welcome to MindEase, {{ user.username }} (Therapist)</h2></i>
+            </div>
+        </div>
         {% else %}
-        <h3 class="font-weight-bold">Welcome, Please Log in</h3>
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title font-weight-bold">Welcome, Please Log in</h3>
+            </div>
+        </div>
         {% endif %}
 
-        <h1>Welcome, {{ therapist.username }}!</h1>
-        <p>Phone Number: {{ therapist.phone_number }}</p>
-        <p>Date of Birth: {{ therapist.dob }}</p>
-        <p>Location: {{ therapist.location }}</p>
-        <p>Qualification: {{ therapist.qualification }}</p>
-        <p>Description: {{ therapist.description }}</p>
-        <p>Specialization: {{ therapist.specialization }}</p>
-        
-        <a href="{% url 'update_therapist' therapist.id %}">Update</a><br>
-        <li><a href="/therapist_appointments">view your pending appointments</a></li>
-      <h1>gjh</h1>
-      <a href="{% url 'add_time_slot' %}">Add Time Slot</a>
-      <a href="{% url 'view_time_slots' %}">view Time Slot</a>
+        <div class="card mt-3">
+            <div class="card-body">
+                {% if therapist.profile_picture %}
+                <img class="profile-picture mx-auto d-block mb-3" src="{{ therapist.profile_picture.url }}" alt="Profile Picture">
+                {% endif %}
+                
+                <h1 class="card-title">Welcome, {{ therapist.username }}!</h1>
+                <p class="card-text">Qualification: {{ therapist.qualification }}</p>
+                <p class="card-text">Description: {{ therapist.description }}</p>
+                <p class="card-text">Specialization: {{ therapist.specialization }}</p>
 
-        
+                <!-- Add Time Slot and View Time Slots buttons -->
+                <div class="btn-section">
+                    <a href="{% url 'add_time_slot' %}" class="btn btn-primary">Add Time Slot</a>
+                    <a href="{% url 'new_view_time_slots' %}" class="btn btn-secondary">View Time Slots</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <a href="{% url 'therapist_feedback' therapist.id %}">View Feedback</a>
-
-<!-- Additional content for booking appointment -->
-{% if user.is_authenticated and user.role == 'USER' %}
-    <a class="book-appointment-btn" href="{% url 'book_appointment' therapist.id %}">Book Appointment</a>
-{% endif %}
-        
-
-
-<h1>Welcome to the Therapy App</h1>
-
-{% if user.is_authenticated %}
-    {% if user.role == 'THERAPIST' %}
-        <p><a href="{% url 'add_time_slot' %}">Add Time Slot</a></p>
-    {% endif %}
-    <p><a href="{% url 'view_time_slots' %}">View Time Slots</a></p>
-    <!-- Add other user-specific links as needed -->
-{% else %}
-    <p><a href="{% url 'login' %}">Login</a></p>
-    <p><a href="{% url 'register' %}">Register</a></p>
-{% endif %}
-
-    
-
-    </main>
-
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2023 My Website. All rights reserved.</p>
+        © 2024 MindEase. All rights reserved.
     </footer>
-</body>
 
+    <!-- Include Bootstrap JS and Popper.js files -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
 </html>
