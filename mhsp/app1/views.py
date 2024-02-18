@@ -789,9 +789,17 @@ def add_time_slot(request):
         return redirect('home')  # Redirect to the home page if the user is not a therapist
 
     if request.method == 'POST':
+        session_type = request.POST.get('session_type')
         start_time = request.POST.get('start_time')
         end_time = request.POST.get('end_time')
-        TimeSlot.objects.create(therapist=request.user, start_time=start_time, end_time=end_time)
+
+        TimeSlot.objects.create(
+            therapist=request.user,
+            session_type=session_type,
+            start_time=start_time,
+            end_time=end_time
+        )
+
         return redirect('new_view_time_slots')  # Redirect to the home page after adding the time slot
 
     return render(request, 'add_time_slot.html')

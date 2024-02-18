@@ -1,267 +1,63 @@
+<!-- view_time_slots.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    
-    <!-- Add Bootstrap CSS link -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>View Time Slots</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
-        /* Reset some default styles */
-        body, h1, h2, ul, li {
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7; /* Light grey background color */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
+            background-color: #f8f9fa;
         }
-
-        header {
-            background-color: #477BE4;
-            color: #fff;
-            padding: 10px 0;
-            text-align: right; /* Align content to the right */
-            position: relative; /* Add position relative to the header */
-        }
-
-        header h1 {
-            font-size: 24px;
-        }
-
-        .brand-text {
-            font-size: 24px;
-            font-weight: bold;
-            font-style: italic;
-            color: #fff;
-            position: absolute; /* Position absolute for top-left corner */
-            top: 15px; /* Adjust as needed */
-            left: 10px; /* Adjust as needed */
-        }
-
-        .search-bar {
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .search-bar input[type="text"] {
-            padding: 10px;
-            border: none;
-            border-radius: 25px; /* Increase border-radius for a rounded look */
-            width: 250px;
-            margin-right: 10px;
-            outline: none; /* Remove input outline */
-        }
-
-        .search-bar button {
-            padding: 10px 20px; /* Increase padding for a larger button */
-            background-color: #675cfd;
-            color: #fff;
-            border: none;
-            border-radius: 25px; /* Match the input's border-radius */
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .search-bar button:hover {
-            background-color: #4158d0; /* Change background color on hover */
-        }
-
-        nav ul {
-            list-style: none;
-            text-align: right; /* Align navigation links to the right */
-        }
-
-        nav ul li {
-            display: inline;
-            margin-left: 20px; /* Adjust margin to separate links */
-        }
-
-        nav ul li:first-child {
-            margin-left: 0; /* Remove margin from the first link */
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: #fff; /* Set link text color to white */
-            font-weight: normal; /* Remove bold font weight */
-        }
-
-        nav ul li a:hover {
-            text-decoration: underline; /* Add underline on hover */
-        }
-
-        /* Add the Logout link */
-        header nav ul {
-            margin-right: 20px;
-        }
-
-        header nav ul li:last-child {
-            margin-left: 0;
-        }
-
-        header nav ul li:last-child a {
-            background-color: #fff;
-            color: #030824;
-            border: 1px solid #4158d0;
-            border-radius: 25px;
-            padding: 10px 20px;
-            transition: background-color 0.3s ease;
-        }
-
-        header nav ul li:last-child a:hover {
-            background-color: #4158d0;
-            color: #fff;
-            text-decoration: none;
-        }
-
-        main {
+        .container {
+            background-color: #ffffff;
             padding: 20px;
-        }
-
-        footer {
-            background-color: #477BE4;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-        }
-                /* Add this CSS to your style section or external stylesheet */
-/* Add this CSS to your style section or external stylesheet */
-
-    </style>
-    
-    <!-- Add Bootstrap JS and jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
-<body>
-    <header>
-        <div class="brand-text">MindEase</div>
-        <div class="search-bar">
-            <input type="text" placeholder="Search">
-            <button type="submit">Search</button>
-        </div>
-        <nav>
-            <ul>
-                <li><a href='/therapists'>Find Therapist</a></li>
-                <li><a href='/article_list/'>Get Help</a></li>
-                <li><a href='/product_list_view/'>Shop</a></li>
-                <li><a href='/update_profile'>update Profile</a></li>
-                <li><a href="/logout">Logout</a></li>
-                <!-- Add the Logout link -->
-            </ul>
-        </nav>
-    </header>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Therapist Directory</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        /* Styles for therapist items */
-        .therapist-item {
-            margin-bottom: 20px;
-            padding: 20px;
-            border: 1px solid #ccc;
             border-radius: 10px;
-            background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
-        /* Styles for the "Book Appointment" button */
-        .book-appointment-btn {
-            display: inline-block;
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+        h2 {
+            color: #007bff;
         }
-
-        .book-appointment-btn:hover {
-            background-color: #45a049;
+        .list-group-item {
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
         }
-
-        /* Styles for the no results message */
-        .no-results {
-            font-weight: bold;
-            color: #FF0000;
+        .list-group-item:hover {
+            background-color: #e2e6ea;
         }
-
-        /* Styles for the therapist profile picture */
-        .profile-picture {
-            max-width: 100px;
-            max-height: 100px;
-            border-radius: 50%;
+        small {
+            color: #6c757d;
         }
     </style>
 </head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Available Time Slots</h2>
 
-<body class="bg-light">
-    <header class="bg-primary text-white text-center py-3">
-        <h1>Therapist Directory</h1>
-    </header>
-
-    <div class="container mt-4">
-        <div class="row">
-            {% for therapist in therapists %}
-                <div class="col-md-6">
-                    <div class="therapist-item">
-                        {% if therapist.profile_picture %}
-                            <img class="profile-picture mx-auto d-block mb-3" src="{{ therapist.profile_picture.url }}" alt="Profile Picture">
-                        {% endif %}
-                        
-                        <h2 class="text-primary">{{ therapist.username }}</h2>
-                        <p><strong>Phone Number:</strong> {{ therapist.phone_number }}</p>
-                        <p><strong>Location:</strong> {{ therapist.location }}</p>
-                        <p><strong>Qualification:</strong> {{ therapist.qualification }}</p>
-                        <p><strong>Description:</strong> {{ therapist.description }}</p>
-                        <p><strong>Specialization:</strong> {{ therapist.specialization }}</p>
-                        <!-- Additional content for booking appointment -->
-                        {% if user.is_authenticated and user.role == 'USER' %}
-                            <a class="book-appointment-btn" href="{% url 'book_appointment' therapist.id %}">Book Appointment</a>
-                        {% endif %}
-                        <a class="book-appointment-btn mx-2" href="{% url 'feedback_form' therapist.id %}">Give Feedback</a>
-
-                        {% for feedback in therapist.profile.therapist_feedback.all %}
-                            <div class="border-top mt-3 pt-3">
-                                <p><strong>User:</strong> {{ feedback.user.username }}</p>
-                                <p><strong>Rating:</strong> {{ feedback.rating }}</p>
-                                <p><strong>Comment:</strong> {{ feedback.comment }}</p>
-                                <p><strong>Created at:</strong> {{ feedback.created_at }}</p>
-                            </div>
-                        {% empty %}
-                            <p class="mt-3">No feedback yet.</p>
-                        {% endfor %}
+        <div class="list-group">
+            {% for time_slot in time_slots %}
+                <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ time_slot.therapist.username }}</h5>
+                        {% if time_slot.therapist.profile_picture %}
+                        <img class="profile-picture mx-auto d-block mb-3" src="{{ time_slot.therapist.profile_picture.url }}" alt="Profile Picture">
+                    {% endif %}
+                        <small>{{ time_slot.start_time|date:"F d, Y H:i" }} - {{ time_slot.end_time|date:"H:i" }}</small>
                     </div>
-                </div>
-            {% empty %}
-                <div class="col-12">
-                    <p class="no-results text-center">No therapists found.</p>
-                </div>
+                </a>
             {% endfor %}
         </div>
+
+        
     </div>
 
-    <footer class="text-center py-3 mt-4 bg-dark text-white">
-        <!-- Add your footer content here -->
-    </footer>
+    
 
-    <!-- Bootstrap JS (optional) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-U7UqUu1PA0F5LOL4rH+wp5I9IHRYh4jGgahxMtoTBK8tjBZ/EqWPIhBLg7SIlXZi" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
-
 </html>

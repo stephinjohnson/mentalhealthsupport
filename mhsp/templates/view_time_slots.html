@@ -41,12 +41,19 @@
                 <a href="#" class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1">{{ time_slot.therapist.username }}</h5>
+                        {% if time_slot.therapist.profile_picture %}
+                        <img class="profile-picture mx-auto d-block mb-3" src="{{ time_slot.therapist.profile_picture.url }}" alt="Profile Picture">
+                    {% endif %}
                         <small>{{ time_slot.start_time|date:"F d, Y H:i" }} - {{ time_slot.end_time|date:"H:i" }}</small>
                     </div>
                 </a>
             {% endfor %}
         </div>
+
+        
     </div>
+
+    
 
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
