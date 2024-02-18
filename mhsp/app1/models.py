@@ -105,9 +105,16 @@ class Cart(models.Model):
 
 # time slot
 class TimeSlot(models.Model):
+    class SessionType(models.TextChoices):
+        MORNING = "MORNING", "Morning Session"
+        AFTERNOON = "AFTERNOON", "Afternoon Session"
+
     therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='available_time_slots')
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    session_type = models.CharField(max_length=50, choices=SessionType.choices, null=True)
 
     def __str__(self):
-        return f"{self.therapist.username}'s Time Slot {self.start_time} - {self.end_time}"
+        return f"{self.therapist.username}'s {self.get_session_type_display()} Time Slot {self.start_time} - {self.end_time}"
+    
+
