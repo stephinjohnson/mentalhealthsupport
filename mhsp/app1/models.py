@@ -35,18 +35,6 @@ class Product(models.Model):
         return self.name
 
 
-class Appointment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_appointments')
-    therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='therapist_appointments')
-    appointment_date = models.DateTimeField()
-    is_confirmed = models.BooleanField(default=False)
-    is_approved = models.BooleanField(default=False)
-    is_therapist = models.BooleanField(default=False)
-    
-
-    def __str__(self):
-        return f"Appointment between {self.user.username} and {self.therapist.username} on {self.appointment_date}"
-    
 
 
 class Feedback(models.Model):
@@ -68,11 +56,6 @@ class Article(models.Model):
 
 
 
-class Schedule(models.Model):  # Changed from Appointment to Schedule
-    therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='therapist_schedules')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_schedules')
-    date_time = models.DateTimeField()
-    duration = models.PositiveIntegerField()
 
 
 

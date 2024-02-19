@@ -19,4 +19,3 @@ class ArticleForm(forms.ModelForm):
 
 # time slot forms
 
-

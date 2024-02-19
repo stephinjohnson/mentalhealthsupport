@@ -51,10 +51,10 @@ urlpatterns=[
     path('deactivate-user/<int:user_id>/', views.deactivate_user, name='deactivate_user'),
     path('therapist_list_new/', views.therapist_list_new, name='therapist_list_new'),
     path('approve-therapist/<int:therapist_id>/', views.approve_therapist, name='approve_therapist'),
-    path('book_appointment/<int:therapist_id>/', views.book_appointment, name='book_appointment'),
-    path('therapist_appointments/', views.therapist_appointments, name='therapist_appointments'),
-    path('approve_appointment/<int:appointment_id>/', views.approve_appointment, name='approve_appointment'),
-    path('successappo/',views.successappo,name='successappo'),
+    # path('book_appointment/<int:therapist_id>/', views.book_appointment, name='book_appointment'),
+    # path('therapist_appointments/', views.therapist_appointments, name='therapist_appointments'),
+    # path('approve_appointment/<int:appointment_id>/', views.approve_appointment, name='approve_appointment'),
+    # path('successappo/',views.successappo,name='successappo'),
 
 
     path('therapist-list/', therapist_list, name='therapist_list'),
@@ -64,8 +64,8 @@ urlpatterns=[
     path('article_list/', views.article_list, name='article_list'),
 
 
-    path('schedule_appointment/',views.schedule_appointment, name='schedule_appointment'),
-    path('appointment_list/',views.appointment_list, name='appointment_list'),
+    # path('schedule_appointment/',views.schedule_appointment, name='schedule_appointment'),
+    # path('appointment_list/',views.appointment_list, name='appointment_list'),
 
     path('write_experience/',views.write_experience, name='write_experience'),
     path('experience_list/',views.experience_list, name='experience_list'),
@@ -81,4 +81,7 @@ urlpatterns=[
     path('new_view_time_slots/', views.new_view_time_slots, name='new_view_time_slots'),
     path('edit_time_slot/<int:time_slot_id>/', views.edit_time_slot, name='edit_time_slot'),
     path('delete_time_slot/<int:time_slot_id>/', views.delete_time_slot, name='delete_time_slot'),
+
+
+    
 ]

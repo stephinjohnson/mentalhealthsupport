@@ -1,15 +1,18 @@
-<!-- view_time_slots.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>View Time Slots</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
         body {
             background-color: #f8f9fa;
+            margin: 0; /* Reset margin to remove default body margin */
         }
+
         .container {
             background-color: #ffffff;
             padding: 20px;
@@ -17,46 +20,109 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-top: 50px;
         }
+
         h2 {
             color: #007bff;
         }
+
         .list-group-item {
             border-radius: 10px;
             margin-bottom: 10px;
             transition: background-color 0.3s ease;
-            border: 2px solid #1a3149; /* Border color for all cards */
+            border: 2px solid #1a3149;
+            /* Border color for all cards */
         }
+
         .list-group-item:hover {
             background-color: #e2e6ea;
         }
+
         small {
             color: #03070b;
         }
+
         .profile-picture {
             max-width: 150px;
             max-height: 150px;
             border-radius: 50%;
             margin-right: 10px;
         }
+
         .d-flex {
             flex-wrap: wrap;
         }
+
         .list-group-item-action {
             cursor: pointer;
         }
+
         .time-range-box {
-            background-color: #007bff;
+            background-color: #0ece14;
             color: #ffffff;
             padding: 5px 10px;
             border-radius: 5px;
         }
+
         .search-bar {
             margin-bottom: 20px;
         }
+
+        /* Header Section */
+        .header-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background-color: #001f3f; /* Dark Blue */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000; /* Ensure header is on top */
+        }
+
+        .header-section h3 {
+            color: #ffffff;
+            font-style: italic;
+            margin: 0;
+        }
+
+        .header-section .btn {
+            color: #ffffff;
+        }
+
+        /* Main content */
+        .main-content {
+            margin-top: 70px; /* Adjusted to accommodate fixed header */
+        }
+
+        /* Footer Section */
+        .footer-section {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 10px;
+            background-color: #0c2a4b;
+            color: #ffffff;
+            border-radius: 0 0 10px 10px;
+        }
+       
     </style>
 </head>
+
 <body>
-    <div class="container mt-5">
+    <!-- Header Section -->
+    <div class="header-section">
+        <h3>MindEase</h3>
+        <button class="btn btn-outline-light">Your Button</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content container mt-5">
         <h2 class="text-center mb-4">Available Time Slots</h2>
 
         <!-- Search Bar with Date Filter -->
@@ -70,30 +136,48 @@
 
         <div class="list-group">
             {% for time_slot in time_slots %}
-                <a href="#" class="list-group-item list-group-item-action" data-date="{{ time_slot.start_time|date:"Y-m-d" }}">
-                    <div class="d-flex w-100 justify-content-between align-items-center">
-                        {% if time_slot.therapist.profile_picture %}
-                            <img class="profile-picture" src="{{ time_slot.therapist.profile_picture.url }}" alt="Profile Picture">
-                        {% endif %}
-                        <div>
-                            <h5 class="mb-1">{{ time_slot.therapist.first_name }}</h5>
-                            <p><strong>Location:</strong> {{ time_slot.therapist.location }}</p>
-                            <p><strong>Qualification:</strong> {{ time_slot.therapist.qualification }}</p>
-                            <p><strong>Description:</strong> {{ time_slot.therapist.description }}</p>
-                            <p><strong>Specialization:</strong> {{ time_slot.therapist.specialization }}</p>
-                            <div class="time-range-box">Available Time: <br> <strong>{{ time_slot.start_time|date:"F d, Y H:i" }} - {{ time_slot.end_time|date:"H:i" }}</strong></div>
-                            <div class="time-range-box">Session <br> <strong>{{ time_slot.session_type }}</strong></div>
-                        </div>
+            <a href="#" class="list-group-item list-group-item-action"
+                data-date="{{ time_slot.start_time|date:'Y-m-d' }}">
+                <div class="d-flex w-100 justify-content-between align-items-center">
+                    {% if time_slot.therapist.profile_picture %}
+                    <img class="profile-picture" src="{{ time_slot.therapist.profile_picture.url }}"
+                        alt="Profile Picture">
+                    {% endif %}
+                    <div>
+                        <h5 class="mb-1">{{ time_slot.therapist.first_name }}</h5>
+                        <p><strong>Location:</strong> {{ time_slot.therapist.location }}</p>
+                        <p><strong>Qualification:</strong> {{ time_slot.therapist.qualification }}</p>
+                        <p><strong>Description:</strong> {{ time_slot.therapist.description }}</p>
+                        <p><strong>Specialization:</strong> {{ time_slot.therapist.specialization }}</p>
+                        
+
+                        <div class="time-range-box">Available Time: <br>
+                            <strong>{{ time_slot.start_time|date:'F d, Y H:i' }} -
+                                {{ time_slot.end_time|date:'H:i' }}</strong></div>
+                        <div class="time-range-box">Session <br> <strong>{{ time_slot.session_type }}</strong></div>
+                      
                     </div>
-                </a>
+                </div>
+            </a>
             {% endfor %}
         </div>
     </div>
 
+    <!-- Footer Section -->
+    <div class="footer-section">
+        MindEase - Your Mental Health Companion
+    </div>
+
     <!-- Bootstrap JS and Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-U7UqUu1PA0F5LOL4rH+wp5I9IHRYh4jGgahxMtoTBK8tjBZ/EqWPIhBLg7SIlXZi" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-U7UqUu1PA0F5LOL4rH+wp5I9IHRYh4jGgahxMtoTBK8tjBZ/EqWPIhBLg7SIlXZi"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 
     <!-- Add the following script section at the end of the <body> tag -->
     <script>
@@ -116,4 +200,5 @@
         }
     </script>
 </body>
+
 </html>
