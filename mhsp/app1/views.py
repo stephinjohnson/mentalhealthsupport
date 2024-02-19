@@ -851,3 +851,60 @@ def delete_time_slot(request, time_slot_id):
 
 
 
+
+
+
+#community forum
+# views.py
+from django.shortcuts import render, get_object_or_404
+from django.views import View
+from .models import Thread, Post
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+class ThreadListView(View):
+    def get(self, request):
+        threads = Thread.objects.all()
+        return render(request, 'thread_list.html', {'threads': threads})
+
+class ThreadDetailView(View):
+    def get(self, request, thread_id):
+        thread = get_object_or_404(Thread, pk=thread_id)
+        posts = Post.objects.filter(thread=thread)
+        return render(request, 'thread_detail.html', {'thread': thread, 'posts': posts})
+
+@method_decorator(login_required, name='dispatch')
+class CreateThreadView(View):
+    def get(self, request):
+        return render(request, 'create_thread.html')
+
+    def post(self, request):
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        creator = request.user
+        thread = Thread.objects.create(title=title, content=content, creator=creator)
+        return render(request, 'thread_detail.html', {'thread': thread, 'posts': []})
+
+@method_decorator(login_required, name='dispatch')
+class CreatePostView(View):
+    def get(self, request, thread_id):
+        thread = get_object_or_404(Thread, pk=thread_id)
+        return render(request, 'create_post.html', {'thread': thread})
+
+    def post(self, request, thread_id):
+        content = request.POST.get('content')
+        author = request.user
+        thread = get_object_or_404(Thread, pk=thread_id)
+        post = Post.objects.create(thread=thread, content=content, author=author)
+        return render(request, 'thread_detail.html', {'thread': thread, 'posts': [post]})
+
+
+# app1/views.py
+from django.shortcuts import render
+from django.views import View
+from .models import Thread
+
+class UserThreadListView(View):
+    def get(self, request, username):
+        threads = Thread.objects.filter(creator__username=username)
+        return render(request, 'thread_list_user.html', {'threads': threads, 'username': username})

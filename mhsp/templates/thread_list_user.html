@@ -1,0 +1,19 @@
+<!-- templates/forum/thread_list_user.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ username }}'s Threads</title>
+</head>
+<body>
+    <h1>{{ username }}'s Threads</h1>
+
+    <ul>
+        {% for thread in threads %}
+            <li><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
