@@ -81,7 +81,7 @@ urlpatterns=[
     path('new_view_time_slots/', views.new_view_time_slots, name='new_view_time_slots'),
     path('edit_time_slot/<int:time_slot_id>/', views.edit_time_slot, name='edit_time_slot'),
     path('delete_time_slot/<int:time_slot_id>/', views.delete_time_slot, name='delete_time_slot'),
-
+    
 
     
 ]
