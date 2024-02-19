@@ -438,21 +438,21 @@ def approve_therapist(request, therapist_id):
 
 # views.py
 
-from django.shortcuts import render, redirect
-from .models import User, Appointment
-from django.contrib.auth.decorators import login_required
-from datetime import datetime
+# from django.shortcuts import render, redirect
+# from .models import User, Appointment
+# from django.contrib.auth.decorators import login_required
+# from datetime import datetime
 
-@login_required
-def book_appointment(request, therapist_id):
-    therapist = User.objects.get(pk=therapist_id, role=User.Role.THERAPIST)
-    if request.method == 'POST':
-        appointment_date = request.POST['appointment_date']
-        appointment_date = datetime.strptime(appointment_date, '%Y-%m-%dT%H:%M')
-        appointment = Appointment(user=request.user, therapist=therapist, appointment_date=appointment_date)
-        appointment.save()
-        return render(request, 'successappo.html', {'message': 'Appointment booked successfully!'})
-    return render(request, 'book_appointment.html', {'therapist': therapist})
+# @login_required
+# def book_appointment(request, therapist_id):
+#     therapist = User.objects.get(pk=therapist_id, role=User.Role.THERAPIST)
+#     if request.method == 'POST':
+#         appointment_date = request.POST['appointment_date']
+#         appointment_date = datetime.strptime(appointment_date, '%Y-%m-%dT%H:%M')
+#         appointment = Appointment(user=request.user, therapist=therapist, appointment_date=appointment_date)
+#         appointment.save()
+#         return render(request, 'successappo.html', {'message': 'Appointment booked successfully!'})
+#     return render(request, 'book_appointment.html', {'therapist': therapist})
 
 
 """from django.shortcuts import render
@@ -469,32 +469,32 @@ def therapist_appointments(request):
         # Handle unauthorized access or redirect to login page
         pass"""
 
-from django.shortcuts import render
-from .models import User, Appointment 
-from django.contrib.auth.decorators import login_required
+# from django.shortcuts import render
+# from .models import User, Appointment 
+# from django.contrib.auth.decorators import login_required
 
-@login_required
-def therapist_appointments(request):
-    if request.user.is_authenticated and request.user.role == User.Role.THERAPIST:
-        pending_appointments = Appointment.objects.filter(therapist=request.user, is_approved=False)
-        return render(request, 'therapist_appointments.html', {'appointments': pending_appointments})
-    else:
-        # Handle unauthorized access or redirect to login page
-        pass
-
-
-from django.shortcuts import get_object_or_404, redirect
-from .models import Appointment
-
-def approve_appointment(request, appointment_id):
-    appointment = get_object_or_404(Appointment, pk=appointment_id)
-    appointment.is_approved = True
-    appointment.save()
-    return redirect('successappo') 
+# @login_required
+# def therapist_appointments(request):
+#     if request.user.is_authenticated and request.user.role == User.Role.THERAPIST:
+#         pending_appointments = Appointment.objects.filter(therapist=request.user, is_approved=False)
+#         return render(request, 'therapist_appointments.html', {'appointments': pending_appointments})
+#     else:
+#         # Handle unauthorized access or redirect to login page
+#         pass
 
 
-def successappo(request):
-    return render(request, 'successappo.html')
+# from django.shortcuts import get_object_or_404, redirect
+# from .models import Appointment
+
+# def approve_appointment(request, appointment_id):
+#     appointment = get_object_or_404(Appointment, pk=appointment_id)
+#     appointment.is_approved = True
+#     appointment.save()
+#     return redirect('successappo') 
+
+
+# def successappo(request):
+#     return render(request, 'successappo.html')
 
 
 
@@ -571,39 +571,39 @@ def article_list(request):
 from django.shortcuts import render, redirect
 
 
+#appointment old one 
+#views.py
+# from django.shortcuts import render, redirect
+# from django.contrib.auth.decorators import login_required
+# from .models import User, Schedule
 
-# views.py
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import User, Schedule
+# @login_required
+# def schedule_appointment(request):
+#     if request.method == 'POST':
+#         therapist_id = request.POST.get('therapist_id')
+#         date_time = request.POST.get('date_time')
+#         duration = request.POST.get('duration')
 
-@login_required
-def schedule_appointment(request):
-    if request.method == 'POST':
-        therapist_id = request.POST.get('therapist_id')
-        date_time = request.POST.get('date_time')
-        duration = request.POST.get('duration')
+#         therapist = User.objects.get(id=therapist_id)
+#         user = request.user
 
-        therapist = User.objects.get(id=therapist_id)
-        user = request.user
+#         Schedule.objects.create(
+#             therapist=therapist,
+#             user=user,
+#             date_time=date_time,
+#             duration=duration
+#         )
 
-        Schedule.objects.create(
-            therapist=therapist,
-            user=user,
-            date_time=date_time,
-            duration=duration
-        )
+#         return redirect('appointment_list')
 
-        return redirect('appointment_list')
+#     therapists = User.objects.filter(role=User.Role.USER)
+#     return render(request, 'schedule_appointment.html', {'therapists': therapists})
 
-    therapists = User.objects.filter(role=User.Role.USER)
-    return render(request, 'schedule_appointment.html', {'therapists': therapists})
-
-@login_required
-def appointment_list(request):
-    user = request.user
-    appointments = Schedule.objects.filter(user=user)
-    return render(request, 'appointment_list.html', {'appointments': appointments})
+# @login_required
+# def appointment_list(request):
+#     user = request.user
+#     appointments = Schedule.objects.filter(user=user)
+#     return render(request, 'appointment_list.html', {'appointments': appointments})
 
 
 
@@ -845,3 +845,6 @@ def delete_time_slot(request, time_slot_id):
         return redirect('new_view_time_slots')  # Redirect to view_time_slots after deleting the time slot
 
     return render(request, 'delete_time_slot.html', {'time_slot': time_slot})
+
+
+
