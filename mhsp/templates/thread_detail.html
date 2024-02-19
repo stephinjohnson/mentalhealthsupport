@@ -1,0 +1,24 @@
+<!-- forum/thread_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ thread.title }}</title>
+</head>
+<body>
+    <h1>{{ thread.title }}</h1>
+    <p>Created by: {{ thread.creator.username }} at {{ thread.created_at }}</p>
+    <p>{{ thread.content }}</p>
+
+    <h2>Replies</h2>
+    <ul>
+        {% for post in posts %}
+            <li>{{ post.author.username }} said: {{ post.content }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'create_post' thread.id %}">Reply to this thread</a>
+</body>
+</html>

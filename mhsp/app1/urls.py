@@ -81,7 +81,10 @@ urlpatterns=[
     path('new_view_time_slots/', views.new_view_time_slots, name='new_view_time_slots'),
     path('edit_time_slot/<int:time_slot_id>/', views.edit_time_slot, name='edit_time_slot'),
     path('delete_time_slot/<int:time_slot_id>/', views.delete_time_slot, name='delete_time_slot'),
-    
 
-    
+    path('threads/', views.ThreadListView.as_view(), name='thread_list'),
+    path('thread/<int:thread_id>/', views.ThreadDetailView.as_view(), name='thread_detail'),
+    path('create_thread/', views.CreateThreadView.as_view(), name='create_thread'),
+    path('thread/<int:thread_id>/create_post/', views.CreatePostView.as_view(), name='create_post'),
+    path('threads/<str:username>/', views.UserThreadListView.as_view(), name='thread_list_user'),
 ]

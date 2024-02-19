@@ -101,3 +101,20 @@ class TimeSlot(models.Model):
         return f"{self.therapist.username}'s {self.get_session_type_display()} Time Slot {self.start_time} - {self.end_time}"
     
 
+
+
+
+from django.db import models
+from django.contrib.auth import get_user_model
+
+class Thread(models.Model):
+    title = models.CharField(max_length=255)
+    creator = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class Post(models.Model):
+    thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

@@ -150,11 +150,13 @@
         <nav>
             <ul>
                 <li><a href='/therapists'>Find Therapist</a></li>
+                <li><a href='/threads'>Thread</a></li>
                 <li><a href='/article_list/'>Get Help</a></li>
                 <li><a href='/supportplatform/'>Community</a></li>
                 <li><a href='/product_list_view/'>Shop</a></li>
                 <li><a href='/update_profile'>update Profile</a></li>
                 <li><a href="/logout">Logout</a></li>
+                
                 <!-- Add the Logout link -->
             </ul>
         </nav>
@@ -250,6 +252,27 @@
         
         
         
+        </body>
+
+        <body>
+            <h1>Thread List</h1>
+            
+            {% if user.is_authenticated %}
+                <p>Welcome, {{ user.username }}!</p>
+                <p><a href="{% url 'thread_list_user' user.username %}">Your Threads</a></p>
+            {% else %}
+                <p>Explore the community threads:</p>
+            {% endif %}
+        
+            <ul>
+                {% for thread in threads %}
+                    <li><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></li>
+                {% endfor %}
+            </ul>
+        
+            {% if user.is_authenticated %}
+                <a href="{% url 'create_thread' %}"><button>Create Thread</button></a>
+            {% endif %}
         </body>
         </html>
         

@@ -58,9 +58,7 @@
                 <p><strong>Description:</strong> {{ therapist.description }}</p>
                 <p><strong>Specialization:</strong> {{ therapist.specialization }}</p>
                 <!-- Additional content for booking appointment -->
-                {% if user.is_authenticated and user.role == 'USER' %}
-                    <a class="book-appointment-btn" href="{% url 'book_appointment' therapist.id %}">Book Appointment</a>
-                {% endif %}
+               
             </div>
         {% empty %}
             <p class="no-results">No therapists found.</p>
