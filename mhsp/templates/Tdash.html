@@ -121,7 +121,7 @@
         <a href="#">Button 1</a>
         <a href="#">Button 2</a>
         <a href="#">Button 3</a>
-        <a href="#">Button 4</a>
+        <a href="{% url 'update_therapist' therapist.id %}">Update Profile</a>
     </nav>
 
     <section>
@@ -145,7 +145,7 @@
                 {% if therapist.profile_picture %}
                 <img class="profile-picture mx-auto d-block mb-3" src="{{ therapist.profile_picture.url }}" alt="Profile Picture">
                 {% endif %}
-                
+                <a href="{% url 'update_therapist' therapist.id %}">Update</a><br>
                 <h1 class="card-title">Welcome, {{ therapist.username }}!</h1>
                 <p class="card-text">Qualification: {{ therapist.qualification }}</p>
                 <p class="card-text">Description: {{ therapist.description }}</p>

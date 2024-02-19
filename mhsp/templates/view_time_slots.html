@@ -15,6 +15,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
         }
         h2 {
             color: #007bff;
@@ -23,12 +24,34 @@
             border-radius: 10px;
             margin-bottom: 10px;
             transition: background-color 0.3s ease;
+            border: 2px solid #1a3149; /* Border color for all cards */
         }
         .list-group-item:hover {
             background-color: #e2e6ea;
         }
         small {
-            color: #6c757d;
+            color: #03070b;
+        }
+        .profile-picture {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .d-flex {
+            flex-wrap: wrap;
+        }
+        .list-group-item-action {
+            cursor: pointer;
+        }
+        .time-range-box {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        .search-bar {
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -36,28 +59,61 @@
     <div class="container mt-5">
         <h2 class="text-center mb-4">Available Time Slots</h2>
 
+        <!-- Search Bar with Date Filter -->
+        <div class="input-group search-bar">
+            <input type="text" class="form-control" placeholder="Search by therapist name...">
+            <input type="date" class="form-control" id="dateFilter" placeholder="Select date...">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" onclick="applyFilters()">Apply Filters</button>
+            </div>
+        </div>
+
         <div class="list-group">
             {% for time_slot in time_slots %}
-                <a href="#" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ time_slot.therapist.username }}</h5>
+                <a href="#" class="list-group-item list-group-item-action" data-date="{{ time_slot.start_time|date:"Y-m-d" }}">
+                    <div class="d-flex w-100 justify-content-between align-items-center">
                         {% if time_slot.therapist.profile_picture %}
-                        <img class="profile-picture mx-auto d-block mb-3" src="{{ time_slot.therapist.profile_picture.url }}" alt="Profile Picture">
-                    {% endif %}
-                        <small>{{ time_slot.start_time|date:"F d, Y H:i" }} - {{ time_slot.end_time|date:"H:i" }}</small>
+                            <img class="profile-picture" src="{{ time_slot.therapist.profile_picture.url }}" alt="Profile Picture">
+                        {% endif %}
+                        <div>
+                            <h5 class="mb-1">{{ time_slot.therapist.username }}</h5>
+                            <p><strong>Location:</strong> {{ time_slot.therapist.location }}</p>
+                            <p><strong>Qualification:</strong> {{ time_slot.therapist.qualification }}</p>
+                            <p><strong>Description:</strong> {{ time_slot.therapist.description }}</p>
+                            <p><strong>Specialization:</strong> {{ time_slot.therapist.specialization }}</p>
+                            <div class="time-range-box">Available Time: <br> <strong>{{ time_slot.start_time|date:"F d, Y H:i" }} - {{ time_slot.end_time|date:"H:i" }}</strong></div>
+                            <div class="time-range-box">Session <br> <strong>{{ time_slot.session_type }}</strong></div>
+                        </div>
                     </div>
                 </a>
             {% endfor %}
         </div>
-
-        
     </div>
-
-    
 
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-U7UqUu1PA0F5LOL4rH+wp5I9IHRYh4jGgahxMtoTBK8tjBZ/EqWPIhBLg7SIlXZi" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- Add the following script section at the end of the <body> tag -->
+    <script>
+        function applyFilters() {
+            const searchInput = document.querySelector('.search-bar input');
+            const dateFilter = document.getElementById('dateFilter').value.toLowerCase();
+            const listItems = document.querySelectorAll('.list-group-item');
+
+            listItems.forEach(function (item) {
+                const therapistName = item.querySelector('h5').innerText.toLowerCase();
+                const itemDate = item.getAttribute('data-date');
+
+                if (therapistName.includes(searchInput.value.toLowerCase()) &&
+                    (dateFilter === '' || itemDate === dateFilter)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
