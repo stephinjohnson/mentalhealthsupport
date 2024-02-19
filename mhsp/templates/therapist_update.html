@@ -1,43 +1,106 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Therapist Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555555;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
+
 <body>
     <h1>Update Therapist Details</h1>
     <form method="post" action="{% url 'update_therapist' therapist.id %}" enctype="multipart/form-data">
         {% csrf_token %}
         <label for="firstname">First Name:</label>
-        <input type="text" id="firstname" name="firstname" value="{{ therapist.firstname }}"><br>
-        
+        <input type="text" id="firstname" name="firstname" value="{{ therapist.firstname }}">
+
         <label for="lastname">Last Name:</label>
-        <input type="text" id="lastname" name="lastname" value="{{ therapist.lastname }}"><br>
-        
+        <input type="text" id="lastname" name="lastname" value="{{ therapist.lastname }}">
+
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value="{{ therapist.username }}"><br>
-        
+        <input type="text" id="username" name="username" value="{{ therapist.username }}">
+
         <label for="phone">Phone:</label>
-        <input type="tel" id="phone" name="phone" value="{{ therapist.phone }}"><br>
-        
+        <input type="tel" id="phone" name="phone" value="{{ therapist.phone }}">
+
         <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" name="dob" value="{{ therapist.dob }}"><br>
-        
+        <input type="date" id="dob" name="dob" value="{{ therapist.dob }}">
+
         <label for="location">Location:</label>
-        <input type="text" id="location" name="location" value="{{ therapist.location }}"><br>
-        
+        <input type="text" id="location" name="location" value="{{ therapist.location }}">
+
         <label for="qualification">Qualification:</label>
-        <input type="text" id="qualification" name="qualification" value="{{ therapist.qualification }}"><br>
-        
+        <input type="text" id="qualification" name="qualification" value="{{ therapist.qualification }}">
+
         <label for="description">Description:</label>
-        <textarea id="description" name="description">{{ therapist.description }}</textarea><br>
-        
+        <textarea id="description" name="description">{{ therapist.description }}</textarea>
+
         <label for="specialization">Specialization:</label>
-        <input type="text" id="specialization" name="specialization" value="{{ therapist.specialization }}"><br>
-        
-        <label for="Profile Picture:">Profile Picture::</label>
+        <input type="text" id="specialization" name="specialization" value="{{ therapist.specialization }}">
+
+        <label for="profile_picture">Profile Picture:</label>
         <input type="file" id="profile_picture" name="profile_picture" value="{{ user.profile_picture }}">
 
         <input type="submit" value="Update">
     </form>
 </body>
+
 </html>
