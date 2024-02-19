@@ -33,28 +33,33 @@
         .btn-primary:hover {
             background-color: #0056b3;
         }
+        .error-message {
+            color: #ff0000;
+        }
     </style>
 </head>
 <body>
     <div class="container mt-5">
         <h2 class="text-center mb-4">Add Time Slot</h2>
 
-        <form method="post">
+        <form method="post" onsubmit="return validateForm()">
             {% csrf_token %}
             <div class="form-group">
                 <label for="session_type">Session Type:</label>
-                <select name="session_type" class="form-control" required>
+                <select name="session_type" id="sessionType" class="form-control" required>
                     <option value="MORNING">Morning Session</option>
                     <option value="AFTERNOON">Afternoon Session</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="start_time">Start Time:</label>
-                <input type="datetime-local" class="form-control" name="start_time" required>
+                <input type="datetime-local" class="form-control" name="start_time" id="startTime" required>
+                <span id="startError" class="error-message"></span>
             </div>
             <div class="form-group">
                 <label for="end_time">End Time:</label>
-                <input type="datetime-local" class="form-control" name="end_time" required>
+                <input type="datetime-local" class="form-control" name="end_time" id="endTime" required>
+                <span id="endError" class="error-message"></span>
             </div>
             <button type="submit" class="btn btn-primary">Add Time Slot</button>
         </form>
@@ -64,5 +69,42 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-U7UqUu1PA0F5LOL4rH+wp5I9IHRYh4jGgahxMtoTBK8tjBZ/EqWPIhBLg7SIlXZi" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+        function validateForm() {
+            const sessionType = document.getElementById('sessionType').value;
+            const startTime = new Date(document.getElementById('startTime').value);
+            const endTime = new Date(document.getElementById('endTime').value);
+
+            document.getElementById('startError').innerText = '';
+            document.getElementById('endError').innerText = '';
+
+            if (sessionType === 'MORNING' && startTime.getHours() >= 12) {
+                document.getElementById('startError').innerText = 'Morning session cannot have PM time';
+                return false;
+            }
+
+            if (sessionType === 'AFTERNOON' && startTime.getHours() < 12) {
+                document.getElementById('startError').innerText = 'Afternoon session cannot have AM time';
+                return false;
+            }
+
+            if (sessionType === 'MORNING' && endTime.getHours() >= 12) {
+                document.getElementById('endError').innerText = 'Morning session cannot have PM time';
+                return false;
+            }
+
+            if (sessionType === 'AFTERNOON' && endTime.getHours() < 12) {
+                document.getElementById('endError').innerText = 'Afternoon session cannot have AM time';
+                return false;
+            }
+
+            if (endTime <= startTime) {
+                document.getElementById('endError').innerText = 'End time must be after start time';
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </body>
 </html>

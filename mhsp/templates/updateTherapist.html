@@ -2,7 +2,67 @@
 <html lang="en">
 
 <head>
-    <!-- Meta tags and title here... -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555555;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
@@ -11,40 +71,39 @@
     <form method="post" action="{% url 'update_profile' %}">
         {% csrf_token %}
         <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}"><br>
+        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}">
 
         <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}"><br>
+        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}">
 
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value="{{ user.username }}"><br>
+        <input type="text" id="username" name="username" value="{{ user.username }}">
 
         <label for="phone_number">Phone Number:</label>
-        <input type="text" id="phone_number" name="phone_number" value="{{ user.phone_number }}"><br>
+        <input type="text" id="phone_number" name="phone_number" value="{{ user.phone_number }}">
 
         <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" name="dob" value="{{ user.dob }}"><br>
+        <input type="date" id="dob" name="dob" value="{{ user.dob }}">
 
         <label for="location">Location:</label>
-        <input type="text" id="location" name="location" value="{{ user.location }}"><br>
+        <input type="text" id="location" name="location" value="{{ user.location }}">
 
         <label for="qualification">Qualification:</label>
-        <input type="text" id="qualification" name="qualification" value="{{ user.qualification }}"><br>
+        <input type="text" id="qualification" name="qualification" value="{{ user.qualification }}">
 
         <label for="description">Description:</label>
-        <textarea id="description" name="description">{{ user.description }}</textarea><br>
+        <textarea id="description" name="description">{{ user.description }}</textarea>
 
         <label for="specialization">Specialization:</label>
-        <input type="text" id="specialization" name="specialization" value="{{ user.specialization }}"><br>
-        
+        <input type="text" id="specialization" name="specialization" value="{{ user.specialization }}">
 
-        <label for="description">Profile Picture:</label>
+        <label for="profile_picture">Profile Picture:</label>
         <input type="file" id="profile_picture" name="profile_picture" value="{{ user.profile_picture }}">
+
         <!-- Add any other fields you want to update -->
-          <h1>blaaa</h1>
+
         <button type="submit">Update</button>
     </form>
-
 </body>
 
 </html>
