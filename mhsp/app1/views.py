@@ -365,10 +365,14 @@ from django.shortcuts import render
 from .models import User
 
 def Tdash(request):
-    
-    therapist = User.objects.get(id=request.user.id, role=User.Role.THERAPIST) #if any error is encouter please add  that Tdash on above
-    print(f'Therapist ID: {therapist.id}') 
-    return render(request, 'Tdash.html', {'therapist': therapist})
+    try:
+        therapist = User.objects.get(id=request.user.id, role=User.Role.THERAPIST)
+        appointments = Appointment.objects.filter(therapist=therapist, status='PENDING')
+        print(f'Therapist ID: {therapist.id}')
+        return render(request, 'Tdash.html', {'therapist': therapist, 'appointments': appointments})
+    except User.DoesNotExist:
+        # Handle the case where the user is not found or is not a therapist
+        return redirect('home')  # Redirect to the home page or handle appropriately
 
 
 from django.shortcuts import render
@@ -908,3 +912,101 @@ class UserThreadListView(View):
     def get(self, request, username):
         threads = Thread.objects.filter(creator__username=username)
         return render(request, 'thread_list_user.html', {'threads': threads, 'username': username})
+
+
+
+
+
+#Feb 23 update
+
+from django.shortcuts import render, redirect
+from .models import TimeSlot, Appointment
+from django.contrib import messages
+
+def book_appointment(request, time_slot_id):
+    if request.user.role != 'USER':
+        return redirect('home')  # Redirect to the home page if the user is not a regular user
+
+    time_slot = TimeSlot.objects.get(pk=time_slot_id)
+
+    # Check if the user already has a pending appointment with the same therapist and time slot
+    existing_appointment = Appointment.objects.filter(
+        user=request.user,
+        therapist=time_slot.therapist,
+        time_slot=time_slot,
+        status='PENDING'
+    ).exists()
+
+    if not existing_appointment:
+        # Create a new pending appointment
+        Appointment.objects.create(
+            user=request.user,
+            therapist=time_slot.therapist,
+            time_slot=time_slot,
+            status='PENDING'
+        )
+        messages.success(request, f"Appointment request sent to {time_slot.therapist.username}")
+    else:
+        messages.warning(request, f"You already have a pending appointment request with {time_slot.therapist.username}")
+
+    return redirect('view_time_slots') 
+
+
+
+
+# views.py
+from django.shortcuts import render, redirect
+from .models import TimeSlot, Appointment
+from django.contrib import messages
+
+def therapist_appointments(request):
+    if request.user.role != 'THERAPIST':
+        return redirect('home')  # Redirect to the home page if the user is not a therapist
+
+    appointments = Appointment.objects.filter(therapist=request.user, status='PENDING')
+    return render(request, 'therapist_appointments.html', {'appointments': appointments})
+
+def approve_appointment(request, appointment_id):
+    if request.user.role != 'THERAPIST':
+        return redirect('home')  # Redirect to the home page if the user is not a therapist
+
+    appointment = Appointment.objects.get(pk=appointment_id)
+
+    # Check if the appointment belongs to the therapist
+    if appointment.therapist != request.user:
+        return redirect('home')  # Redirect to the home page if the therapist does not own the appointment
+
+    appointment.status = 'APPROVED'
+    appointment.save()
+
+    messages.success(request, f"Appointment with {appointment.user.username} approved successfully")
+    return redirect('therapist_appointments')
+
+# views.py
+from django.shortcuts import render
+
+# views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Appointment
+
+def therapist_approve_appointment(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id, therapist=request.user, status='PENDING')
+
+    if request.method == 'POST':
+        # Check if the form is submitted for approval
+        if 'approve' in request.POST:
+            # Handle approval logic here, e.g., change appointment status to 'APPROVED'
+            appointment.status = 'APPROVED'
+            appointment.save()
+            # Redirect or display a success message after approval
+            return redirect('therapist_appointments')  # Update with the appropriate URL name
+
+        elif 'reject' in request.POST:
+            # Handle rejection logic here, e.g., change appointment status to 'REJECTED'
+            appointment.status = 'REJECTED'
+            appointment.save()
+            # Redirect or display a success message after rejection
+            return redirect('therapist_appointments')  # Update with the appropriate URL name
+
+    return render(request, 'therapist_approve_appointment.html', {'appointment': appointment})
+

@@ -87,4 +87,9 @@ urlpatterns=[
     path('create_thread/', views.CreateThreadView.as_view(), name='create_thread'),
     path('thread/<int:thread_id>/create_post/', views.CreatePostView.as_view(), name='create_post'),
     path('threads/<str:username>/', views.UserThreadListView.as_view(), name='thread_list_user'),
+
+    path('book-appointment/<int:time_slot_id>/', views.book_appointment, name='book_appointment'),
+    path('therapist-appointments/', views.therapist_appointments, name='therapist_appointments'),
+    path('approve-appointment/<int:appointment_id>/', views.approve_appointment, name='approve_appointment'),
+    path('therapist-approve-appointment/<int:appointment_id>/', views.therapist_approve_appointment, name='therapist_approve_appointment'),
 ]

@@ -1,0 +1,24 @@
+<!-- therapist_approve_appointment.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approve Appointment</title>
+</head>
+<body>
+    <h1>Approve Appointment</h1>
+    <p>Appointment ID: {{ appointment.id }}</p>
+    <p>User: {{ appointment.user.username }}</p>
+    <p>Time Slot: {{ appointment.time_slot.start_time }}</p>
+
+    <form method="post" action="">
+        {% csrf_token %}
+        <input type="submit" name="approve" value="Approve Appointment">
+        <input type="submit" name="reject" value="Reject Appointment">
+    </form>
+
+    <!-- Add other appointment details or approval logic as needed -->
+
+</body>
+</html>

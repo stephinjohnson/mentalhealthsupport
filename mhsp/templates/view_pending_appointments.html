@@ -1,0 +1,14 @@
+<!-- view_pending_appointments.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Pending Appointments</title>
+</head>
+<body>
+    <h1>View Pending Appointments</h1>
+    
+    {% for appointment in pending_appointments %}
+        <p>{{ appointment }}</p>
+    {% endfor %}
+</body>
+</html>
