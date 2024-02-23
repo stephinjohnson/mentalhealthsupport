@@ -118,3 +118,13 @@ class Post(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Appointment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments')
+    therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='approved_appointments')
+    time_slot = models.ForeignKey('TimeSlot', on_delete=models.CASCADE)
+    status = models.CharField(max_length=20, choices=[('PENDING', 'Pending'), ('APPROVED', 'Approved')], default='PENDING')
+
+    def __str__(self):
+        return f"Appointment: {self.user.username} with {self.therapist.username} at {self.time_slot.start_time}"

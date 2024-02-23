@@ -150,7 +150,9 @@
                 <p class="card-text">Qualification: {{ therapist.qualification }}</p>
                 <p class="card-text">Description: {{ therapist.description }}</p>
                 <p class="card-text">Specialization: {{ therapist.specialization }}</p>
-
+                {% for appointment in appointments %}
+                <a href="{% url 'therapist_approve_appointment' appointment.id %}">Approve Appointment</a>
+            {% endfor %}
                 <!-- Add Time Slot and View Time Slots buttons -->
                 <div class="btn-section">
                     <a href="{% url 'add_time_slot' %}" class="btn btn-primary">Add Time Slot</a>

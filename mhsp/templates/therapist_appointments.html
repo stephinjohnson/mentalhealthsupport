@@ -1,0 +1,20 @@
+<!-- therapist_appointments.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Therapist Appointments</title>
+</head>
+<body>
+    <h1>Your Appointments</h1>
+
+    {% for appointment in request.user.approved_appointments.all %}
+        <h2>{{ appointment.user.username }} - {{ appointment.time_slot.start_time }}</h2>
+        <p>Status: {{ appointment.status }}</p>
+        {% if appointment.status == 'PENDING' %}
+            <a href="{% url 'therapist_approve_appointment' appointment.id %}">Approve Appointment</a>
+        {% endif %}
+    {% endfor %}
+</body>
+</html>
