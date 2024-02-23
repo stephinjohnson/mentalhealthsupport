@@ -6,8 +6,101 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ thread.title }}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        header {
+            background-color: #0e134e;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #555;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        li:hover {
+            background-color: #f0f0f0;
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #2980b9;
+        }
+
+        footer {
+            background-color: #0e134e;
+            color: #fff;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media only screen and (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            li {
+                padding: 10px;
+            }
+
+            a {
+                padding: 8px 16px;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <div style="font-style: italic;">MindEase</div>
+        <a href="{% url 'home' %}">
+            <button style="background-color: #3498db; color: #fff; padding: 8px 16px; border: none; border-radius: 5px;">Button</button>
+        </a>     </header>
+
     <h1>{{ thread.title }}</h1>
     <p>Created by: {{ thread.creator.username }} at {{ thread.created_at }}</p>
     <p>{{ thread.content }}</p>
@@ -20,5 +113,9 @@
     </ul>
 
     <a href="{% url 'create_post' thread.id %}">Reply to this thread</a>
+
+    <footer>
+        Your footer content goes here.
+    </footer>
 </body>
 </html>

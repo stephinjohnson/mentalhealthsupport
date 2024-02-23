@@ -74,10 +74,30 @@
             const sessionType = document.getElementById('sessionType').value;
             const startTime = new Date(document.getElementById('startTime').value);
             const endTime = new Date(document.getElementById('endTime').value);
+            const currentDate = new Date(); // Current date and time
 
             document.getElementById('startError').innerText = '';
             document.getElementById('endError').innerText = '';
 
+            // Check if start date is the same as end date
+            if (startTime.toDateString() !== endTime.toDateString()) {
+                document.getElementById('endError').innerText = 'End date must be the same as start date';
+                return false;
+            }
+
+            // Check if start date is in the past
+            if (startTime < currentDate) {
+                document.getElementById('startError').innerText = 'Cannot select past days';
+                return false;
+            }
+
+            // Check if end date is in the past
+            if (endTime < currentDate) {
+                document.getElementById('endError').innerText = 'Cannot select past days';
+                return false;
+            }
+
+            // Other validations (AM/PM and time order)
             if (sessionType === 'MORNING' && startTime.getHours() >= 12) {
                 document.getElementById('startError').innerText = 'Morning session cannot have PM time';
                 return false;
@@ -98,6 +118,7 @@
                 return false;
             }
 
+            // Check if end time is after start time
             if (endTime <= startTime) {
                 document.getElementById('endError').innerText = 'End time must be after start time';
                 return false;
