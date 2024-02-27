@@ -1,131 +1,140 @@
-<!-- add_time_slot.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Add Time Slot</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
     <style>
         body {
-            background-color: #f8f9fa;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
         }
-        .container {
-            background-color: #ffffff;
+
+        #sidebar {
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            color: #fff;
+            transition: width 0.5s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        #sidebar.minimized {
+            width: 80px;
+        }
+
+        #sidebar a {
+            padding: 15px;
+            text-decoration: none;
+            color: #fff;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        #sidebar a:hover {
+            background-color: #555;
+        }
+
+        #content {
+            flex: 1;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: margin-left 0.5s;
         }
-        h2 {
-            color: #007bff;
+
+        #content.minimized {
+            margin-left: 80px;
         }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            font-weight: bold;
-            color: #555555;
-        }
-        .btn-primary {
-            background-color: #007bff;
+
+        .toggle-btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: #fff;
             border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-left: 10px;
+            padding: 10px;
         }
-        .btn-primary:hover {
-            background-color: #0056b3;
+
+        #toggle-cross {
+            display: none;
         }
-        .error-message {
-            color: #ff0000;
+
+        #logout-top-left,
+        #logout-top-right {
+            position: fixed;
+            top: 10px;
+            padding: 10px;
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #logout-top-right {
+            right: 10px;
+        }
+
+        #footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
         }
     </style>
 </head>
-<body>
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Add Time Slot</h2>
 
-        <form method="post" onsubmit="return validateForm()">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="session_type">Session Type:</label>
-                <select name="session_type" id="sessionType" class="form-control" required>
-                    <option value="MORNING">Morning Session</option>
-                    <option value="AFTERNOON">Afternoon Session</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="start_time">Start Time:</label>
-                <input type="datetime-local" class="form-control" name="start_time" id="startTime" required>
-                <span id="startError" class="error-message"></span>
-            </div>
-            <div class="form-group">
-                <label for="end_time">End Time:</label>
-                <input type="datetime-local" class="form-control" name="end_time" id="endTime" required>
-                <span id="endError" class="error-message"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Time Slot</button>
-        </form>
+<body>
+
+    <button id="toggle-sidebar" class="toggle-btn" onclick="toggleSidebar()">
+        <span id="toggle-lines">&#9776;</span>
+        <span id="toggle-cross">&#10006;</span>
+    </button>
+
+    <div id="sidebar">
+        <a href="#">Button 1</a>
+        <a href="#">Button 2</a>
+        <a href="#">Button 3</a>
+        <a href="#">Button 4</a>
     </div>
 
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-U7UqUu1PA0F5LOL4rH+wp5I9IHRYh4jGgahxMtoTBK8tjBZ/EqWPIhBLg7SIlXZi" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <div id="content">
+        <h1>Main Content</h1>
+        <p>Your dashboard content goes here.</p>
+    </div>
+
+    <div id="footer">
+        <p>&copy; 2024 Your Company Name</p>
+    </div>
+
     <script>
-        function validateForm() {
-            const sessionType = document.getElementById('sessionType').value;
-            const startTime = new Date(document.getElementById('startTime').value);
-            const endTime = new Date(document.getElementById('endTime').value);
-            const currentDate = new Date(); // Current date and time
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var content = document.getElementById('content');
+            var toggleLines = document.getElementById('toggle-lines');
+            var toggleCross = document.getElementById('toggle-cross');
 
-            document.getElementById('startError').innerText = '';
-            document.getElementById('endError').innerText = '';
+            sidebar.classList.toggle('minimized');
+            content.classList.toggle('minimized');
 
-            // Check if start date is the same as end date
-            if (startTime.toDateString() !== endTime.toDateString()) {
-                document.getElementById('endError').innerText = 'End date must be the same as start date';
-                return false;
-            }
-
-            // Check if start date is in the past
-            if (startTime < currentDate) {
-                document.getElementById('startError').innerText = 'Cannot select past days';
-                return false;
-            }
-
-            // Check if end date is in the past
-            if (endTime < currentDate) {
-                document.getElementById('endError').innerText = 'Cannot select past days';
-                return false;
-            }
-
-            // Other validations (AM/PM and time order)
-            if (sessionType === 'MORNING' && startTime.getHours() >= 12) {
-                document.getElementById('startError').innerText = 'Morning session cannot have PM time';
-                return false;
-            }
-
-            if (sessionType === 'AFTERNOON' && startTime.getHours() < 12) {
-                document.getElementById('startError').innerText = 'Afternoon session cannot have AM time';
-                return false;
-            }
-
-            if (sessionType === 'MORNING' && endTime.getHours() >= 12) {
-                document.getElementById('endError').innerText = 'Morning session cannot have PM time';
-                return false;
-            }
-
-            if (sessionType === 'AFTERNOON' && endTime.getHours() < 12) {
-                document.getElementById('endError').innerText = 'Afternoon session cannot have AM time';
-                return false;
-            }
-
-            // Check if end time is after start time
-            if (endTime <= startTime) {
-                document.getElementById('endError').innerText = 'End time must be after start time';
-                return false;
-            }
-
-            return true;
+            toggleLines.style.display = toggleLines.style.display === 'none' ? 'inline-block' : 'none';
+            toggleCross.style.display = toggleCross.style.display === 'none' ? 'inline-block' : 'none';
         }
     </script>
+
 </body>
+
 </html>

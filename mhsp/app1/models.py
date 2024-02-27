@@ -87,6 +87,7 @@ class Cart(models.Model):
 
 
 # time slot
+    
 class TimeSlot(models.Model):
     class SessionType(models.TextChoices):
         MORNING = "MORNING", "Morning Session"
@@ -99,7 +100,10 @@ class TimeSlot(models.Model):
 
     def __str__(self):
         return f"{self.therapist.username}'s {self.get_session_type_display()} Time Slot {self.start_time} - {self.end_time}"
-    
+
+
+
+
 
 
 
