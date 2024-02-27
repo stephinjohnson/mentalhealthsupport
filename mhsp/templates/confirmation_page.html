@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation</title>
+    <script>
+        // Add JavaScript code for the confirmation alert
+        alert('Appointment request sent successfully!'); 
+        window.location.href = "{% url 'view_time_slots' %}";  // Redirect to the view_time_slots page
+    </script>
+</head>
+<body>
+    <p>If you are not redirected, <a href="{% url 'view_time_slots' %}">click here</a>.</p>
+</body>
+</html>

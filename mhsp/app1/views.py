@@ -9,9 +9,15 @@ from django.views.decorators.cache import never_cache
 
 
 # Create your views here.
+from django.shortcuts import render
+from .models import Appointment
+
 @login_required
 def home(request):
-    return render (request,"home.html")
+    # Fetch the user's appointments
+    user_appointments = Appointment.objects.filter(user=request.user)
+    return render(request, "home.html", {'user_appointments': user_appointments})
+
 
 
 # this is users signup 
@@ -946,10 +952,13 @@ def book_appointment(request, time_slot_id):
             status='PENDING'
         )
         messages.success(request, f"Appointment request sent to {time_slot.therapist.username}")
+
+        # Add JavaScript code for confirmation alert
+        return render(request, 'confirmation_page.html', {'therapist_username': time_slot.therapist.username})
     else:
         messages.warning(request, f"You already have a pending appointment request with {time_slot.therapist.username}")
 
-    return redirect('view_time_slots') 
+    return redirect('view_time_slots')
 
 
 
@@ -1009,4 +1018,31 @@ def therapist_approve_appointment(request, appointment_id):
             return redirect('therapist_appointments')  # Update with the appropriate URL name
 
     return render(request, 'therapist_approve_appointment.html', {'appointment': appointment})
+
+
+
+# views.py
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from .models import Appointment
+
+@require_POST
+def remove_appointment(request):
+    appointment_id = request.POST.get('appointment_id')
+
+    try:
+        appointment = Appointment.objects.get(id=appointment_id)
+        appointment.delete()
+        return JsonResponse({'success': True})
+    except Appointment.DoesNotExist:
+        return JsonResponse({'success': False})
+    
+# February 26
+# views.py
+from django.shortcuts import render, get_object_or_404
+from .models import Appointment
+
+def view_appointment_status(request, appointment_id):
+    appointment = get_object_or_404(Appointment, id=appointment_id, user=request.user)
+    return render(request, 'view_appointment_status.html', {'appointment': appointment})
 
