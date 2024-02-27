@@ -5,16 +5,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Therapist Appointments</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        .appointment-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            transition: box-shadow 0.3s;
+        }
+
+        .appointment-card:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .appointment-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-button {
+            background-color: #d9534f;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .remove-button:hover {
+            background-color: #c9302c;
+        }
+    </style>
 </head>
 <body>
     <h1>Your Appointments</h1>
 
     {% for appointment in request.user.approved_appointments.all %}
-        <h2>{{ appointment.user.username }} - {{ appointment.time_slot.start_time }}</h2>
-        <p>Status: {{ appointment.status }}</p>
-        {% if appointment.status == 'PENDING' %}
-            <a href="{% url 'therapist_approve_appointment' appointment.id %}">Approve Appointment</a>
-        {% endif %}
+        <div class="appointment-card" id="appointment-{{ appointment.id }}">
+            <div class="appointment-info">
+                <h2>{{ appointment.user.username }} - {{ appointment.time_slot.start_time }}</h2>
+                <p>Status: {{ appointment.status }}</p>
+            </div>
+            {% if appointment.status == 'PENDING' %}
+                <a href="{% url 'therapist_approve_appointment' appointment.id %}">Approve Appointment</a>
+            {% else %}
+            <button class="remove-button" onclick="removeAppointment('{{ appointment.id|escapejs }}')">Remove</button>
+
+            {% endif %}
+        </div>
     {% endfor %}
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function removeAppointment(appointmentId) {
+            // AJAX call to remove the appointment
+            $.ajax({
+                url: "{% url 'remove_appointment' %}",
+                method: 'POST',
+                data: {
+                    'appointment_id': appointmentId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                success: function(response) {
+                    // Assuming the backend returns success upon successful removal
+                    if (response.success) {
+                        // Remove the appointment card from the DOM
+                        $(`#appointment-${appointmentId}`).remove();
+                    } else {
+                        alert('Failed to remove appointment. Please try again.');
+                    }
+                },
+                error: function() {
+                    alert('An error occurred while processing your request. Please try again.');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
