@@ -479,32 +479,32 @@ def therapist_appointments(request):
         # Handle unauthorized access or redirect to login page
         pass"""
 
-# from django.shortcuts import render
-# from .models import User, Appointment 
-# from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .models import User, Appointment 
+from django.contrib.auth.decorators import login_required
 
-# @login_required
-# def therapist_appointments(request):
-#     if request.user.is_authenticated and request.user.role == User.Role.THERAPIST:
-#         pending_appointments = Appointment.objects.filter(therapist=request.user, is_approved=False)
-#         return render(request, 'therapist_appointments.html', {'appointments': pending_appointments})
-#     else:
-#         # Handle unauthorized access or redirect to login page
-#         pass
-
-
-# from django.shortcuts import get_object_or_404, redirect
-# from .models import Appointment
-
-# def approve_appointment(request, appointment_id):
-#     appointment = get_object_or_404(Appointment, pk=appointment_id)
-#     appointment.is_approved = True
-#     appointment.save()
-#     return redirect('successappo') 
+@login_required
+def therapist_appointments(request):
+    if request.user.is_authenticated and request.user.role == User.Role.THERAPIST:
+        pending_appointments = Appointment.objects.filter(therapist=request.user, is_approved=False)
+        return render(request, 'therapist_appointments.html', {'appointments': pending_appointments})
+    else:
+        # Handle unauthorized access or redirect to login page
+        pass
 
 
-# def successappo(request):
-#     return render(request, 'successappo.html')
+from django.shortcuts import get_object_or_404, redirect
+from .models import Appointment
+
+def approve_appointment(request, appointment_id):
+    appointment = get_object_or_404(Appointment, pk=appointment_id)
+    appointment.is_approved = True
+    appointment.save()
+    return redirect('successappo') 
+
+
+def successappo(request):
+    return render(request, 'successappo.html')
 
 
 
@@ -825,7 +825,7 @@ def view_time_slots(request):
     return render(request, 'view_time_slots.html', {'time_slots': time_slots})
 
 
-#new timeslotview
+# #new timeslotview
 
 def new_view_time_slots(request):
     if request.user.role != 'THERAPIST':
@@ -991,7 +991,7 @@ def approve_appointment(request, appointment_id):
     messages.success(request, f"Appointment with {appointment.user.username} approved successfully")
     return redirect('therapist_appointments')
 
-# views.py
+#views.py
 from django.shortcuts import render
 
 # views.py
