@@ -1,311 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    
-    <!-- Add Bootstrap CSS link -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    
-    <style>
-        /* Reset some default styles */
-        body, h1, h2, ul, li {
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+    }
+    .wrapper {
+      display: flex;
+      position: relative;
+    }
+    #sidebar {
+      height: 100vh;
+      width: 250px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #0b1e5c;
+      padding-top: 20px;
+      color: #fff;
+      transition: all 0.3s;
+      border-right: 2px solid #fff;
+    }
+    #sidebar.active {
+      width: 60px;
+    }
+    #sidebar-content {
+      padding: 20px;
+    }
+    #sidebar-content.show-icons-only {
+      display: none;
+    }
+    #content {
+      flex-grow: 1;
+      padding: 15px;
+      transition: all 0.3s;
+      margin-left: 250px;
+    }
+    .sidebar-link {
+      padding: 10px;
+      text-decoration: none;
+      color: #fff;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .sidebar-link:hover {
+      background-color: #495057;
+    }
+    #footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #0c3359;
+      padding: 10px;
+      color: #fff;
+      text-align: center;
+    }
+    #top-right-button {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+    #sidebarCollapse {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    #sidebarCollapse:hover {
+      transform: scale(1.2);
+    }
+    #brand {
+      margin-left: 15px;
+      font-size: 1.5em;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7; /* Light grey background color */
-            margin: 0; /* Remove default margin */
-            padding: 0; /* Remove default padding */
-        }
+    /* Additional styles for the card example */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      align-items: center;
+    }
 
-        header {
-            background-color: #477BE4;
-            color: #fff;
-            padding: 10px 0;
-            text-align: right; /* Align content to the right */
-            position: relative; /* Add position relative to the header */
-        }
+    .card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      background-color: #fff;
+      width: 45%;
+      display: inline-block;
+      margin-right: 2.5%;
+    }
 
-        header h1 {
-            font-size: 24px;
-        }
+    .card img {
+      width: 70%;
+      height: auto;
+    }
 
-        .brand-text {
-            font-size: 24px;
-            font-weight: bold;
-            font-style: italic;
-            color: #fff;
-            position: absolute; /* Position absolute for top-left corner */
-            top: 15px; /* Adjust as needed */
-            left: 10px; /* Adjust as needed */
-        }
+    .card-content {
+      padding: 20px;
+    }
 
-        .search-bar {
-            text-align: center;
-            margin-top: 10px;
-        }
+    h2 {
+      color: #333;
+    }
 
-        .search-bar input[type="text"] {
-            padding: 10px;
-            border: none;
-            border-radius: 25px; /* Increase border-radius for a rounded look */
-            width: 250px;
-            margin-right: 10px;
-            outline: none; /* Remove input outline */
-        }
+    p {
+      color: #666;
+    }
 
-        .search-bar button {
-            padding: 10px 20px; /* Increase padding for a larger button */
-            background-color: #675cfd;
-            color: #fff;
-            border: none;
-            border-radius: 25px; /* Match the input's border-radius */
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .profile-picture {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 105px;
+      margin-left: 1650px;
+    }
 
-        .search-bar button:hover {
-            background-color: #4158d0; /* Change background color on hover */
-        }
+    @media (max-width: 600px) {
+      .card {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+    .container-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-        nav ul {
-            list-style: none;
-            text-align: right; /* Align navigation links to the right */
-        }
+.thread-list {
+  list-style: none;
+  padding: 0;
+}
 
-        nav ul li {
-            display: inline;
-            margin-left: 20px; /* Adjust margin to separate links */
-        }
+.thread-list-item {
+  margin-bottom: 20px;
+}
 
-        nav ul li:first-child {
-            margin-left: 0; /* Remove margin from the first link */
-        }
+.thread-link {
+  text-decoration: none;
+  color: inherit;
+}
 
-        nav ul li a {
-            text-decoration: none;
-            color: #fff; /* Set link text color to white */
-            font-weight: normal; /* Remove bold font weight */
-        }
+.thread-card {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+}
 
-        nav ul li a:hover {
-            text-decoration: underline; /* Add underline on hover */
-        }
+.thread-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
 
-        /* Add the Logout link */
-        header nav ul {
-            margin-right: 20px;
-        }
+.thread-card h4 {
+  color: #007bff;
+  margin-bottom: 10px;
+}
 
-        header nav ul li:last-child {
-            margin-left: 0;
-        }
+.thread-description {
+  color: #555;
+}
 
-        header nav ul li:last-child a {
-            background-color: #fff;
-            color: #030824;
-            border: 1px solid #4158d0;
-            border-radius: 25px;
-            padding: 10px 20px;
-            transition: background-color 0.3s ease;
-        }
+.create-thread-button {
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
 
-        header nav ul li:last-child a:hover {
-            background-color: #4158d0;
-            color: #fff;
-            text-decoration: none;
-        }
+.create-thread-button:hover {
+  background-color: #218838;
+}
 
-        main {
-            padding: 20px;
-        }
-
-        footer {
-            background-color: #477BE4;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-        }
-                /* Add this CSS to your style section or external stylesheet */
-/* Add this CSS to your style section or external stylesheet */
-
-    </style>
-    
-    <!-- Add Bootstrap JS and jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </style>
 </head>
 <body>
-    <header>
-        <div class="brand-text">MindEase</div>
-        <div class="search-bar">
-            <input type="text" placeholder="Search">
-            <button type="submit">Search</button>
-        </div>
-        <nav>
-            <ul>
-                <li><a href='/therapists'>Find Therapist</a></li>
-                <li><a href='/threads'>Thread</a></li>
-                <li><a href='/article_list/'>Get Help</a></li>
-                <li><a href='/supportplatform/'>Community</a></li>
-                <li><a href='/product_list_view/'>Shop</a></li>
-                <li><a href='/update_profile'>update Profile</a></li>
-                <li><a href="/logout">Logout</a></li>
-                
-                <!-- Add the Logout link -->
-            </ul>
-        </nav>
-    </header>
 
+<div class="wrapper">
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      {% if user.profile_picture %}
+        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+      {% else %}
+        <!-- Handle the case where the user has no profile picture -->
+        <span class="profile-picture">No</span>
+      {% endif %}
+      <strong><i><h3 id="brand">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MindEase</h3></i></strong>
+    </div>
+
+    <div id="sidebar-content">
+      <ul class="list-unstyled components">
+        <li>
+          <a href="#" class="sidebar-link">
+            <i class="fas fa-home"></i> <span class="sidebar-content-text">Home</span>
+          </a>
+        </li>
+        <li>
+          <a href='/update_profile' class="sidebar-link">
+            <i class="fas fa-user"></i> <span class="sidebar-content-text">Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'view_time_slots' %}" class="sidebar-link">
+            <i class="fas fa-cog"></i> <span class="sidebar-content-text">Available Therapist</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="sidebar-link">
+            <i class="fas fa-envelope"></i> <span class="sidebar-content-text">Messages</span>
+          </a>
+        </li>
+        <li>
+          <a href="/write_experience" class="sidebar-link">
+            <i class="fas fa-chart-bar"></i> <span class="sidebar-content-text">Feedback</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="sidebar-link">
+            <i class="fas fa-calendar-alt"></i> <span class="sidebar-content-text">Calendar</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="sidebar-link">
+            <i class="fas fa-comment"></i> <span class="sidebar-content-text">Comments</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'logout' %}" class="sidebar-link">
+            <i class="fas fa-sign-out-alt"></i> <span class="sidebar-content-text">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <button type="button" id="sidebarCollapse" class="btn btn-dark">
+      <i class="fas fa-bars"></i>
+    </button>
+  </nav>
+  
+  <!-- Page content -->
+  <div id="content">
     <main>
-        {% if user.is_authenticated %}
-                  <h3 class="font-weight-bold">Welcome {{ user.username }}</h3>
-                  {% else %}
-                  <h3 class="font-weight-bold">Welcome, Please Log in</h3>
-                  {% endif %}
-        <!-- Your dashboard content goes here -->
-        <p><a href="{% url 'view_time_slots' %}">View Time Slots</a></p>
-        
-        <a href="/write_experience">What's Happening Now</a><br>
-        
-        <!DOCTYPE html>
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Card Example</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              background-color: #f4f4f4;
-              margin: 0;
-              padding: 20px;
-              align-items: center;
-            }
-        
-            .card {
-              border-radius: 8px;
-              overflow: hidden;
-              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-              margin-bottom: 20px;
-              background-color: #fff;
-              width: 45%; /* Adjusted width to make two cards fit in one row */
-              display: inline-block; /* Display cards in the same line */
-              margin-right: 2.5%; /* Add some space between cards */
-            }
-        
-            .card img {
-              width: 70%;
-              height: auto;
-            }
-        
-            .card-content {
-              padding: 20px;
-            }
-        
-            h2 {
-              color: #333;
-            }
-        
-            p {
-              color: #666;
-            }
-        
-            @media (max-width: 600px) {
-              .card {
-                width: 100%; /* Make cards take full width on smaller screens */
-                margin-right: 0; /* Remove margin between cards on smaller screens */
-              }
-            }
-          </style>
-        </head>
-        <body>
-            {% load static %}
-        <div class="card">
-          <center><img src="{% static 'mh1.jpg' %}" alt="Card Image"></center>
-          <div class="card-content">
-            <h2>Growth Mindset</h2>
-            <p>Mental health refers to a person's emotional, psychological, and social well-being.
-            <br> It involves the individual's ability to handle stress, relate to others, make decisions, 
-            <br>and cope with the challenges of life. Mental health is crucial at every stage of life, <br>from childhood and adolescence through adulthood.</p>
-          </div>
-        </div>
-        
-        <div class="card">
-            <center><img src="{% static 'mh2.jpg' %}" alt="Card Image"></center>
-          <div class="card-content">
-            <h2>Healthy Mindset</h2>
-            <p>Mental health refers to a person's emotional, psychological, and social well-being.
-                <br> It involves the individual's ability to handle stress, relate to others, make decisions, 
-                <br>and cope with the challenges of life. Mental health is crucial at every stage of life, <br>from childhood and adolescence through adulthood.</p>
-                <p>Mental health refers to a person's emotional, psychological, and social well-being.
-                    <br> It involves the individual's ability to handle stress, relate to others, make decisions, 
-                    <br>.</p>
-          </div>
-        </div>
-        
-        
-        
-        </body>
+      {% if user.is_authenticated %}
+        <strong><h3 class="font-weight-bold">Welcome {{ user.username }}</h3></strong>
+      {% else %}
+        <h3 class="font-weight-bold">Welcome, Please Log in</h3>
+      {% endif %}
+      <!-- Your page content goes here -->
+    <!-- Your page content goes here -->
+<div class="container-box">
+  {% if user.is_authenticated %}
+    <div class="welcome-message">
+      
+      <p><a href="{% url 'thread_list_user' user.username %}" class="btn btn-primary">Your Threads</a></p>
+    </div>
+  {% else %}
+    <div class="welcome-message">
+      <h3 class="font-weight-bold">Welcome, Please Log in</h3>
+    </div>
+  {% endif %}
 
-        <body>
-            <h1>Thread List</h1>
-            
-            {% if user.is_authenticated %}
-                <p>Welcome, {{ user.username }}!</p>
-                <p><a href="{% url 'thread_list_user' user.username %}">Your Threads</a></p>
-            {% else %}
-                <p>Explore the community threads:</p>
-            {% endif %}
-        
-            <ul>
-                {% for thread in threads %}
-                    <li><a href="{% url 'thread_detail' thread.id %}">{{ thread.title }}</a></li>
-                {% endfor %}
-            </ul>
-        
-            {% if user.is_authenticated %}
-                <a href="{% url 'create_thread' %}"><button>Create Thread</button></a>
-            {% endif %}
-        </body>
-        </html>
-        
+  <ul class="thread-list">
+    {% for thread in threads %}
+      <li class="thread-list-item">
+        <a href="{% url 'thread_detail' thread.id %}" class="thread-link">
+          <div class="thread-card">
+            <h4>{{ thread.title }}</h4>
+            <p class="thread-description">{{ thread.description }}</p>
+          </div>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
 
-        
+  {% if user.is_authenticated %}
+    <a href="{% url 'create_thread' %}" class="create-thread-button">Create Thread</a>
+  {% endif %}
+</div>
     </main>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+  </div>
+</div>
 
-    <footer>
-        <p><b>MindEase</b> <i> Mental Health Support Platform</i></p>
-        <p><i>2023</i></p>
-    </footer>
+<!-- Bootstrap JS and Font Awesome -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+<script>
+  document.getElementById('sidebarCollapse').addEventListener('click', function () {
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+    const sidebarContent = document.getElementById('sidebar-content');
 
-
-
+    sidebar.classList.toggle('active');
+    content.classList.toggle('active');
+    sidebarContent.classList.toggle('show-icons-only');
+    
+    const icon = document.getElementById('sidebarCollapse').querySelector('i');
+    icon.classList.toggle('fa-bars');
+    icon.classList.toggle('fa-times');
+  });
+</script>
 </body>
 </html>
