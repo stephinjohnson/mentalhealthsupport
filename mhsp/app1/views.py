@@ -175,6 +175,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import User
 
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
 @login_required
 def update_profile(request):
     if request.method == 'POST':
@@ -184,7 +187,7 @@ def update_profile(request):
         phone_number = request.POST.get('phone_number')
         dob = request.POST.get('dob')
         location = request.POST.get('location')
-        profile_picture =request.POST.GET('profile_picture')
+        profile_picture = request.FILES.get('profile_picture')  # Use request.FILES to get the file data
 
         # Parse and format the date
         try:
@@ -204,11 +207,17 @@ def update_profile(request):
         user.dob = dob_date
         user.location = location
 
+        if profile_picture:
+            # Save the uploaded profile picture to the user's profile
+            file_name = f"profile_pictures/{user.username}_{profile_picture.name}"
+            user.profile_picture.save(file_name, ContentFile(profile_picture.read()))
+
         user.save()
 
-        return redirect('/home')  # Redirect to the user's profile page after successful update
+        return redirect('/home')  # Redirect to the user's profile page after a successful update
 
     return render(request, 'update.html')
+
 
 def product(request):
      return render(request,"merchand.html")
