@@ -1,129 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Template</title>
-    <!-- Include Bootstrap CSS file -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+    }
+    .wrapper {
+      display: flex;
+      position: relative;
+    }
+    #sidebar {
+      height: 100vh;
+      width: 250px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #0c3359;
+      padding-top: 20px;
+      color: #fff;
+      transition: all 0.3s;
+      border-right: 2px solid #fff; /* Added border to separate sidebar from content */
+    }
+    #sidebar.active {
+      width: 60px;
+    }
+    #sidebar-content {
+      padding: 20px;
+    }
+    #sidebar-content.show-icons-only {
+      display: none;
+    }
+    #content {
+      flex-grow: 1;
+      padding: 15px;
+      transition: all 0.3s;
+      margin-left: 250px; /* Adjusted margin to accommodate the sidebar */
+    }
+    .sidebar-link {
+      padding: 10px;
+      text-decoration: none;
+      color: #fff;
+      display: block;
+      margin-bottom: 10px; /* Added margin between sidebar buttons */
+    }
+    .sidebar-link:hover {
+      background-color: #495057;
+    }
+    #footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #0c3359;
+      padding: 10px;
+      color: #fff;
+      text-align: center;
+    }
+    #top-right-button {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+    #sidebarCollapse {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    #sidebarCollapse:hover {
+      transform: scale(1.2);
+    }
+    #brand {
+      margin-left: 10px;
+      font-size: 1.5em;
+    }
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            overflow-x: hidden; /* Hide horizontal scrollbar */
-        }
+    /* New styles for profile picture */
+    #profile-picture-container {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
 
-        header {
-            background-color: #081978;
-            color: #fff;
-            padding: 15px;
-            text-align: left;
-        }
-
-        header h1 {
-            margin: 0;
-        }
-
-        nav {
-            background-color: #081978;
-            padding: 10px;
-            position: fixed;
-            width: 200px;
-            height: 100%;
-            overflow: auto;
-        }
-
-        nav a {
-            display: block;
-            padding: 15px;
-            text-decoration: none;
-            color: #fefefe;
-            border-bottom: 1px solid #ddd;
-            font-size: 16px;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        nav a:hover {
-            background-color: #1c1a1a;
-        }
-
-        section {
-            margin-left: 220px;
-            padding: 20px;
-        }
-
-        .profile-picture {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto;
-            display: block;
-        }
-
-        /* Add Time Slot and View Time Slots button styles */
-        .btn-section {
-            margin-top: 15px;
-        }
-
-        .btn-section a {
-            display: inline-block;
-            margin-right: 10px;
-        }
-
-        /* Footer styles */
-        footer {
-            background-color: #081978;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        @media screen and (max-width: 600px) {
-            nav {
-                width: 100%;
-                position: relative;
-                height: auto;
-            }
-
-            nav a {
-                width: 100%;
-            }
-
-            section {
-                margin-left: 0;
-            }
-
-            .btn-section a {
-                display: block;
-                margin-bottom: 10px;
-                width: 100%;
-            }
-        }
-    </style>
+    .profile-picture-sidebar {
+      width: 40px; /* Adjust the size as needed */
+      height: 40px; /* Adjust the size as needed */
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  </style>
 </head>
-
 <body>
 
-    <header>
-        <i><h1>MindEase</h1></i><br>
-    </header> 
-    <nav>
-        <a href="#">Button 1</a>
-        <a href="#">Button 2</a>
-        <a href="#">Button 3</a>
-        <a href="{% url 'update_therapist' therapist.id %}">Update Profile</a>
-    </nav>
+<div class="wrapper">
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      <strong><i><h3 id="brand">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MindEase</h3></i></strong>
+      
+    </div>
 
+    <div id="sidebar-content">
+      <ul class="list-unstyled components">
+        <li>
+          <a href="/Tdash" class="sidebar-link">
+            <i class="fas fa-home"></i> <span class="sidebar-content-text">Home</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'update_therapist' therapist.id %}" class="sidebar-link">
+            <i class="fas fa-user"></i> <span class="sidebar-content-text">Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="sidebar-link">
+            <i class="fas fa-cog"></i> <span class="sidebar-content-text">Settings</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="sidebar-link">
+            <i class="fas fa-envelope"></i> <span class="sidebar-content-text">Messages</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    
+    <button type="button" id="sidebarCollapse" class="btn btn-dark">
+      <i class="fas fa-bars"></i>
+    </button>
+   
+  </nav>
+  
+  <!-- Page content -->
+  <div id="content">
     <section>
         <!-- Content goes here -->
         {% if user.is_authenticated %}
@@ -152,7 +174,7 @@
                 <p class="card-text">Specialization: {{ therapist.specialization }}</p>
                 {% for appointment in appointments %}
                 <a href="{% url 'therapist_approve_appointment' appointment.id %}">Approve Appointment</a>
-            {% endfor %}
+                {% endfor %}
                 <!-- Add Time Slot and View Time Slots buttons -->
                 <div class="btn-section">
                     <a href="{% url 'add_time_slot' %}" class="btn btn-primary">Add Time Slot</a>
@@ -161,16 +183,28 @@
             </div>
         </div>
     </section>
+  </div>
+</div>
 
-    <!-- Footer -->
-    <footer>
-        © 2024 MindEase. All rights reserved.
-    </footer>
+<!-- Bootstrap JS and Font Awesome -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+<script>
+  // Toggle sidebar function
+  document.getElementById('sidebarCollapse').addEventListener('click', function () {
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+    const sidebarContent = document.getElementById('sidebar-content');
 
-    <!-- Include Bootstrap JS and Popper.js files -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
+    sidebar.classList.toggle('active');
+    content.classList.toggle('active');
+    sidebarContent.classList.toggle('show-icons-only');
+    
+    // Change the icon based on sidebar state
+    const icon = document.getElementById('sidebarCollapse').querySelector('i');
+    icon.classList.toggle('fa-bars');
+    icon.classList.toggle('fa-times');
+  });
+</script>
 </body>
 </html>
