@@ -1048,10 +1048,17 @@ def remove_appointment(request):
     
 # February 26
 # views.py
-from django.shortcuts import render, get_object_or_404
+
+# views.py
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from .models import Appointment
 
-def view_appointment_status(request, appointment_id):
-    appointment = get_object_or_404(Appointment, id=appointment_id, user=request.user)
-    return render(request, 'view_appointment_status.html', {'appointment': appointment})
+@login_required
+def view_appointment_status(request):
+    user = request.user
+    appointments = Appointment.objects.filter(user=user)
+    return render(request, 'view_appointment_status.html', {'appointments': appointments})
+
+
 

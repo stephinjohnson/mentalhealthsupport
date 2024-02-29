@@ -1,17 +1,24 @@
-<!-- view_appointment_status.html -->
+<!-- templates/view_appointment_status.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Appointment Status</title>
+    <title>Appointment Status</title>
 </head>
 <body>
-    <h1>Appointment Status</h1>
-    <p>Appointment ID: {{ appointment.id }}</p>
-    <p>Status: {{ appointment.status }}</p>
-
-    <!-- Display other appointment details as needed -->
-
+    <h2>Your Appointment Status</h2>
+    
+    {% if appointments %}
+        <ul>
+            {% for appointment in appointments %}
+                <li>
+                    <strong>Therapist:</strong> {{ appointment.therapist.username }}<br>
+                    <strong>Time Slot:</strong> {{ appointment.time_slot.start_time }}<br>
+                    <strong>Status:</strong> {{ appointment.status }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No appointments found.</p>
+    {% endif %}
 </body>
 </html>
