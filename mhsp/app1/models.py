@@ -129,6 +129,7 @@ class Appointment(models.Model):
     therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='approved_appointments')
     time_slot = models.ForeignKey('TimeSlot', on_delete=models.CASCADE)
     status = models.CharField(max_length=20, choices=[('PENDING', 'Pending'), ('APPROVED', 'Approved')], default='PENDING')
+    status_change_notification = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Appointment: {self.user.username} with {self.therapist.username} at {self.time_slot.start_time}"

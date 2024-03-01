@@ -958,7 +958,8 @@ def book_appointment(request, time_slot_id):
             user=request.user,
             therapist=time_slot.therapist,
             time_slot=time_slot,
-            status='PENDING'
+            status='PENDING',
+            status_change_notification=True
         )
         messages.success(request, f"Appointment request sent to {time_slot.therapist.username}")
 
@@ -1015,6 +1016,8 @@ def therapist_approve_appointment(request, appointment_id):
         if 'approve' in request.POST:
             # Handle approval logic here, e.g., change appointment status to 'APPROVED'
             appointment.status = 'APPROVED'
+            appointment.status_change_notification = True
+
             appointment.save()
             # Redirect or display a success message after approval
             return redirect('therapist_appointments')  # Update with the appropriate URL name
@@ -1022,9 +1025,11 @@ def therapist_approve_appointment(request, appointment_id):
         elif 'reject' in request.POST:
             # Handle rejection logic here, e.g., change appointment status to 'REJECTED'
             appointment.status = 'REJECTED'
+            appointment.status_change_notification = True
             appointment.save()
             # Redirect or display a success message after rejection
             return redirect('therapist_appointments')  # Update with the appropriate URL name
+    has_notification = request.user.appointments.filter(status_change_notification=True).exists()
 
     return render(request, 'therapist_approve_appointment.html', {'appointment': appointment})
 
