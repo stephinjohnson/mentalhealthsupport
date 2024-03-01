@@ -94,4 +94,5 @@ urlpatterns=[
     path('therapist-approve-appointment/<int:appointment_id>/', views.therapist_approve_appointment, name='therapist_approve_appointment'),
     path('remove_appointment/', views.remove_appointment, name='remove_appointment'),
     path('view_appointment_status/', views.view_appointment_status, name='view_appointment_status'),
+    path('delete_appointment/', views.delete_appointment, name='delete_appointment'),
 ]
