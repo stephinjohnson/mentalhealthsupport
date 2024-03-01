@@ -1067,3 +1067,26 @@ def view_appointment_status(request):
 
 
 
+# views.py
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .models import Appointment
+
+def delete_appointment(request):
+    if request.method == 'POST':
+        appointment_id = request.POST.get('appointment_id')
+
+        try:
+            # Assuming you have an Appointment model with an 'id' field
+            appointment = get_object_or_404(Appointment, id=appointment_id)
+
+            # Implement your logic to delete the appointment based on the appointment_id
+            appointment.delete()
+
+            # Return a JSON response to the AJAX request
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            # Handle exceptions (e.g., invalid appointment_id or deletion error)
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
