@@ -826,12 +826,32 @@ def add_time_slot(request):
 
     return render(request, 'add_time_slot.html')
 
+from django.shortcuts import render, redirect
+from .models import TimeSlot, Appointment
+
 def view_time_slots(request):
     if request.user.role != 'USER':
-        return redirect('home')  # Redirect to the home page if the user is not a regular user
+        return redirect('home')
 
-    time_slots = TimeSlot.objects.all()
-    return render(request, 'view_time_slots.html', {'time_slots': time_slots})
+    if request.method == 'POST':
+        time_slot_id = request.POST.get('time_slot_id')
+        time_slot = TimeSlot.objects.get(pk=time_slot_id)
+
+        # Check if the time slot is already booked
+        if not time_slot.is_booked:
+            # Mark the time slot as booked
+            time_slot.is_booked = True
+            time_slot.save()
+
+    # Fetch only available time slots (not booked)
+    time_slots = TimeSlot.objects.filter(is_booked=False)
+
+    # Check for approved appointments and mark the associated time slots as booked
+    approved_appointments = Appointment.objects.filter(status='APPROVED', time_slot__in=time_slots)
+    booked_time_slots = set(appointment.time_slot for appointment in approved_appointments)
+
+    return render(request, 'view_time_slots.html', {'time_slots': time_slots, 'booked_time_slots': booked_time_slots})
+
 
 
 # #new timeslotview
