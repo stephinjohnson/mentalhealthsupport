@@ -97,6 +97,8 @@ class TimeSlot(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     session_type = models.CharField(max_length=50, choices=SessionType.choices, null=True)
+    is_booked = models.BooleanField(default=False)
+
 
     def __str__(self):
         return f"{self.therapist.username}'s {self.get_session_type_display()} Time Slot {self.start_time} - {self.end_time}"
@@ -133,3 +135,6 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f"Appointment: {self.user.username} with {self.therapist.username} at {self.time_slot.start_time}"
+    
+    def is_approved(self):
+        return self.status == 'APPROVED'
