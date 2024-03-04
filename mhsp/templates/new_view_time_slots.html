@@ -13,13 +13,22 @@
 
         <div class="list-group">
             {% for time_slot in time_slots %}
-                <div class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">{{ time_slot.start_time|date:"F d, Y H:i" }} - {{ time_slot.end_time|date:"H:i" }}</h5>
-                        <div>
-                            <a href="{% url 'edit_time_slot' time_slot.id %}" class="btn btn-primary btn-sm mr-2">Edit</a>
-                            <a href="{% url 'delete_time_slot' time_slot.id %}" class="btn btn-danger btn-sm">Delete</a>
-                        </div>
+                <div id="timeSlot{{ time_slot.id }}" class="list-group-item">
+                    <!-- Your existing code for therapist information -->
+        
+                    <div class="time-range-box">Available Time: <br>
+                        <strong>{{ time_slot.start_time|date:'F d, Y H:i' }} - {{ time_slot.end_time|date:'H:i' }}</strong>
+                    </div>
+                    <div class="time-range-box">Session <br> <strong>{{ time_slot.session_type }}</strong></div>
+        
+                    {% if selected_time_slot and selected_time_slot.id == time_slot.id %}
+                        <p>Selected Time Slot: {{ selected_time_slot.start_time|date:'F d, Y H:i' }} - {{ selected_time_slot.end_time|date:'H:i' }}</p>
+                    {% endif %}
+
+                    <!-- Add Edit and Delete buttons/links -->
+                    <div class="mt-3">
+                        <a href="{% url 'edit_time_slot' time_slot.id %}" class="btn btn-warning">Edit</a>
+                        <a href="{% url 'delete_time_slot' time_slot.id %}" class="btn btn-danger">Delete</a>
                     </div>
                 </div>
             {% endfor %}

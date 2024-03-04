@@ -93,7 +93,18 @@ class TimeSlot(models.Model):
         MORNING = "MORNING", "Morning Session"
         AFTERNOON = "AFTERNOON", "Afternoon Session"
 
+    TIME_SLOTS = [
+        ("8-9", "8:00 AM - 9:00 AM"),
+        ("9-10", "9:00 AM - 10:00 AM"),
+        ("10-11", "10:00 AM - 11:00 AM"),
+        ("12-1", "12:00 PM - 1:00 PM"),
+        ("1-2", "1:00 PM - 2:00 PM"),
+        ("2-3", "2:00 PM - 3:00 PM"),
+        ("3-4", "3:00 PM - 4:00 PM"),
+    ]
+    
     therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='available_time_slots')
+    time_slot = models.CharField(max_length=5, choices=TIME_SLOTS, null=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     session_type = models.CharField(max_length=50, choices=SessionType.choices, null=True)
@@ -102,9 +113,6 @@ class TimeSlot(models.Model):
 
     def __str__(self):
         return f"{self.therapist.username}'s {self.get_session_type_display()} Time Slot {self.start_time} - {self.end_time}"
-
-
-
 
 
 
