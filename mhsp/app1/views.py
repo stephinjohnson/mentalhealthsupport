@@ -846,6 +846,7 @@ def add_time_slot(request):
     return render(request, 'add_time_slot.html', context)
 
 
+# views.py
 from django.shortcuts import render
 from .models import TimeSlot
 
