@@ -815,7 +815,7 @@ def add_time_slot(request):
     if request.method == 'POST':
         session_type = request.POST.get('session_type')
         time_slot = request.POST.get('time_slot')  # Make sure to get the selected time slot from the form
-
+        
         # Default to today's date if 'start_date' is not provided
         start_date = request.POST.get('start_date', date.today())
         
@@ -844,7 +844,6 @@ def add_time_slot(request):
     }
 
     return render(request, 'add_time_slot.html', context)
-
 
 # views.py
 from django.shortcuts import render
