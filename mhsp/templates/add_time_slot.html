@@ -217,7 +217,7 @@
 <body>
   <div class="container mt-5">
     <h2 class="text-center mb-4">Add Time Slot</h2>
-    <form method="post" onsubmit="return validateForm()">
+    <form method="post" id="timeSlotForm" onsubmit="return validateForm()">
         {% csrf_token %}
         <div class="form-group">
             <label for="session_type">Session Type:</label>
@@ -227,14 +227,13 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="time_slot">Choose Time Slot:</label>
-            <select name="time_slot" id="timeSlot" class="form-control" required>
-                {% for slot_value, slot_display in time_slots %}
-                    <option value="{{ slot_value }}" {% if slot_value == default_time_slot %}selected{% endif %}>
-                        {{ slot_display }}
-                    </option>
-                {% endfor %}
-            </select>
+            <label for="time_slots">Choose Time Slots:</label>
+            {% for slot_value, slot_display in time_slots %}
+                <div class="form-check">
+                    <input type="checkbox" name="time_slots[]" id="slot{{ forloop.counter }}" value="{{ slot_value }}">
+                    <label for="slot{{ forloop.counter }}">{{ slot_display }}</label>
+                </div>
+            {% endfor %}
         </div>
         <div class="form-group">
             <label for="start_date">Start Date:</label>
@@ -243,6 +242,9 @@
         <button type="submit" class="btn btn-primary">Add Time Slot</button>
     </form>
 </div>
+
+
+
 
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -282,16 +284,7 @@
                 return false;
             }
 
-            if (sessionType === 'AFTERNOON' && startTime.getHours() < 12) {
-                document.getElementById('startError').innerText = 'Afternoon session cannot have AM time';
-                return false;
-            }
-
-            if (sessionType === 'MORNING' && endTime.getHours() >= 12) {
-                document.getElementById('endError').innerText = 'Morning session cannot have PM time';
-                return false;
-            }
-
+           
             if (sessionType === 'AFTERNOON' && endTime.getHours() < 12) {
                 document.getElementById('endError').innerText = 'Afternoon session cannot have AM time';
                 return false;
