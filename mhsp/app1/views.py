@@ -810,37 +810,38 @@ def add_time_slot(request):
     if request.user.role != 'THERAPIST':
         return redirect('home')  # Redirect to the home page if the user is not a therapist
 
-    default_time_slot = "8-9"  # Set your default time slot here
+    default_time_slots = ["8-9", "9-10"]  # Set your default time slots here as a list
 
     if request.method == 'POST':
         session_type = request.POST.get('session_type')
-        time_slot = request.POST.get('time_slot')  # Make sure to get the selected time slot from the form
+        selected_time_slots = request.POST.getlist('time_slots[]')  # Use getlist to get multiple selected time slots
         
         # Default to today's date if 'start_date' is not provided
         start_date = request.POST.get('start_date', date.today())
-        
-        # Construct start_time and end_time directly from the selected time_slot
-        start_time_str = f"{start_date} {time_slot.split('-')[0]}:00"
-        end_time_str = f"{start_date} {time_slot.split('-')[1]}:00"
 
-        # Convert the start_time and end_time strings to datetime objects
-        start_time = datetime.strptime(start_time_str, "%Y-%m-%d %H:%M")
-        end_time = datetime.strptime(end_time_str, "%Y-%m-%d %H:%M")
+        for time_slot in selected_time_slots:
+            # Construct start_time and end_time directly from the selected time_slot
+            start_time_str = f"{start_date} {time_slot.split('-')[0]}:00"
+            end_time_str = f"{start_date} {time_slot.split('-')[1]}:00"
 
-        # Use start_time and end_time directly in the TimeSlot.objects.create() call
-        TimeSlot.objects.create(
-            therapist=request.user,
-            session_type=session_type,
-            time_slot=time_slot,
-            start_time=start_time,
-            end_time=end_time
-        )
+            # Convert the start_time and end_time strings to datetime objects
+            start_time = datetime.strptime(start_time_str, "%Y-%m-%d %H:%M")
+            end_time = datetime.strptime(end_time_str, "%Y-%m-%d %H:%M")
 
-        return redirect('new_view_time_slots')  # Redirect to the home page after adding the time slot
+            # Use start_time and end_time directly in the TimeSlot.objects.create() call
+            TimeSlot.objects.create(
+                therapist=request.user,
+                session_type=session_type,
+                time_slot=time_slot,
+                start_time=start_time,
+                end_time=end_time
+            )
+
+        return redirect('new_view_time_slots')  # Redirect to the home page after adding the time slots
 
     context = {
         'time_slots': TimeSlot.TIME_SLOTS,
-        'default_time_slot': default_time_slot,
+        'default_time_slots': default_time_slots,
     }
 
     return render(request, 'add_time_slot.html', context)
