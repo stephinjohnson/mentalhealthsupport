@@ -1060,7 +1060,6 @@ def therapist_approve_appointment(request, appointment_id):
             # Handle approval logic here, e.g., change appointment status to 'APPROVED'
             appointment.status = 'APPROVED'
             appointment.status_change_notification = True
-
             appointment.save()
             # Redirect or display a success message after approval
             return redirect('therapist_appointments')  # Update with the appropriate URL name
@@ -1070,8 +1069,15 @@ def therapist_approve_appointment(request, appointment_id):
             appointment.status = 'REJECTED'
             appointment.status_change_notification = True
             appointment.save()
+
+            # Make the associated time slot available again
+            time_slot = appointment.time_slot
+            time_slot.status = 'AVAILABLE'  # Update with the actual status used in your TimeSlot model
+            time_slot.save()
+
             # Redirect or display a success message after rejection
             return redirect('therapist_appointments')  # Update with the appropriate URL name
+
     has_notification = request.user.appointments.filter(status_change_notification=True).exists()
 
     return render(request, 'therapist_approve_appointment.html', {'appointment': appointment})

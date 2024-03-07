@@ -466,14 +466,14 @@
     
             <!-- Search Bar with Date Filter -->
             <div class="input-group search-bar">
-                <input type="text" class="form-control" placeholder="Search by therapist name..." id="nameFilter">
-                <input type="text" class="form-control" placeholder="Search by specialization..." id="specializationFilter">
-                <input type="date" class="form-control" id="dateFilter" placeholder="Select date...">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" onclick="applyFilters()">Apply Filters</button>
-                </div>
-            </div>
-            
+              <input type="text" class="form-control" placeholder="Search by therapist name..." id="nameFilter">
+              <input type="text" class="form-control" placeholder="Search by specialization..." id="specializationFilter">
+              <input type="date" class="form-control" id="dateFilter" placeholder="Select date...">
+              <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" onclick="applyFilters()">Apply Filters</button>
+              </div>
+          </div>
+
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -503,71 +503,95 @@
            
           
           
-          <div class="list-group">
-              {% regroup time_slots by therapist as therapist_time_slots %}
-              {% for therapist_slots in therapist_time_slots %}
-                  <div id="therapistSlots{{ therapist_slots.grouper }}">
-                      {% if therapist_slots.list %}
-                          {% with time_slot=therapist_slots.list.0 %}
-                              <a href="#" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#confirmationModal{{ time_slot.therapist.id }}" data-date="{{ time_slot.start_time|date:'Y-m-d' }}">
-                                  <div class="d-flex w-100 justify-content-between align-items-center">
-                                      {% if time_slot.therapist.profile_picture %}
-                                          <img class="profile-picture" src="{{ time_slot.therapist.profile_picture.url }}" alt="Profile Picture">
-                                      {% endif %}
-                                      <div>
-                                          <h5 class="mb-1">{{ time_slot.therapist.first_name }}</h5>
-                                          <p><strong>Location:</strong> {{ time_slot.therapist.location }}</p>
-                                          <p><strong>Qualification:</strong> {{ time_slot.therapist.qualification }}</p>
-                                          <p><strong>Description:</strong> {{ time_slot.therapist.description }}</p>
-                                          <p><strong>Specialization:</strong> {{ time_slot.therapist.specialization }}</p>
-                                      </div>
-                                  </div>
-                              </a>
-          
-                              <!-- Time Slots as Buttons -->
-                              {% for time_slot in therapist_slots.list %}
-                                  <button class="time-slot-btn" data-toggle="modal" data-target="#confirmationModal{{ time_slot.id }}" data-date="{{ time_slot.start_time|date:'Y-m-d' }}">
-                                      Available Time: <br>
-                                      <strong>{{ time_slot.start_time|date:'F d, Y H:i' }} - {{ time_slot.end_time|date:'H:i' }}</strong>
-                                  </button>
-          
-                                  <!-- Confirmation Modal -->
-                                  <div class="modal fade" id="confirmationModal{{ time_slot.id }}" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel{{ time_slot.id }}" aria-hidden="true">
-                                      <div class="modal-dialog" role="document">
-                                          <div class="modal-content">
-                                              <div class="modal-header">
-                                                  <h5 class="modal-title" id="confirmationModalLabel{{ time_slot.id }}">Confirmation</h5>
-                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                      <span aria-hidden="true">&times;</span>
-                                                  </button>
-                                              </div>
-                                              <div class="modal-body">
-                                                  Are you sure you want to book an appointment with {{ time_slot.therapist.first_name }} on {{ time_slot.start_time|date:'F d, Y H:i' }}?
-                                              </div>
-                                              <div class="modal-footer">
-                                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                  <a href="{% url 'book_appointment' time_slot.id %}" class="btn btn-primary" onclick="bookAppointment('{{ time_slot.id }}')">Yes, Book Appointment</a>
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
-                              {% endfor %}
-                          {% endwith %}
-                      {% endif %}
-                  </div>
-              {% endfor %}
-          </div>
-          
-          <script>
-              function bookAppointment(timeSlotId) {
-                  var timeSlotElement = document.getElementById('timeSlot' + timeSlotId);
-                  if (timeSlotElement) {
-                      timeSlotElement.remove();
-                  }
-              }
-          </script>
-          
-          
+    <div class="list-group">
+    {% regroup time_slots by therapist as therapist_time_slots %}
+    {% for therapist_slots in therapist_time_slots %}
+        <div id="therapistSlots{{ therapist_slots.grouper }}">
+            {% if therapist_slots.list %}
+                {% with time_slot=therapist_slots.list.0 %}
+                    <a href="#" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#confirmationModal{{ time_slot.therapist.id }}" data-date="{{ time_slot.start_time|date:'Y-m-d' }}">
+                        <div class="d-flex w-100 justify-content-between align-items-center">
+                            {% if time_slot.therapist.profile_picture %}
+                                <img class="profile-picture" src="{{ time_slot.therapist.profile_picture.url }}" alt="Profile Picture">
+                            {% endif %}
+                            <div>
+                                <h5 class="mb-1">{{ time_slot.therapist.first_name }} {{ time_slot.therapist.last_name }}</h5>
+                                <p><strong>Location:</strong> {{ time_slot.therapist.location }}</p>
+                                <p><strong>Qualification:</strong> {{ time_slot.therapist.qualification }}</p>
+                                <p><strong>Description:</strong> {{ time_slot.therapist.description }}</p>
+                                <p><strong>Specialization:</strong> {{ time_slot.therapist.specialization }}</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Time Slots as Buttons -->
+                    {% for time_slot in therapist_slots.list %}
+                        <button class="time-slot-btn" data-toggle="modal" data-target="#confirmationModal{{ time_slot.id }}" data-date="{{ time_slot.start_time|date:'Y-m-d' }}">
+                            Available Time: <br>
+                            <strong>{{ time_slot.start_time|date:'F d, Y H:i' }} - {{ time_slot.end_time|date:'H:i' }}</strong>
+                        </button>
+
+                        <!-- Confirmation Modal -->
+                        <div class="modal fade" id="confirmationModal{{ time_slot.id }}" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel{{ time_slot.id }}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="confirmationModalLabel{{ time_slot.id }}">Confirmation</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to book an appointment with {{ time_slot.therapist.first_name }} on {{ time_slot.start_time|date:'F d, Y H:i' }}?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <a href="{% url 'book_appointment' time_slot.id %}" class="btn btn-primary" onclick="bookAppointment('{{ time_slot.id }}')">Yes, Book Appointment</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endwith %}
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    function applyFilters() {
+        const nameFilterInput = document.getElementById('nameFilter').value.toLowerCase();
+        const specializationFilterInput = document.getElementById('specializationFilter').value.toLowerCase();
+        const dateFilter = document.getElementById('dateFilter').value.toLowerCase();
+        const listItems = document.querySelectorAll('.list-group-item');
+
+        listItems.forEach(function (item) {
+            const therapistName = item.querySelector('h5').innerText.toLowerCase();
+            const specialization = item.querySelector('p:contains("Specialization")').innerText.toLowerCase();
+            const itemDate = item.getAttribute('data-date');
+
+            if ((therapistName.includes(nameFilterInput) || specialization.includes(specializationFilterInput)) &&
+                (dateFilter === '' || itemDate === dateFilter)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    function bookAppointment(timeSlotId) {
+        var timeSlotElement = document.getElementById('timeSlot' + timeSlotId);
+        if (timeSlotElement) {
+            timeSlotElement.remove();
+        }
+    }
+
+    // Custom jQuery-like :contains selector for vanilla JavaScript
+    // Note: This selector is case-sensitive
+    document.querySelector.prototype.containsText = function (text) {
+        return this.innerText.includes(text);
+    };
+</script>
             <!-- Add Bootstrap JS and jQuery scripts -->
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -584,10 +608,9 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
-    
         <!-- Add the following script section at the end of the <body> tag -->
         <script>
-            function applyFilters() {
+              function applyFilters() {
                 const searchInput = document.querySelector('.search-bar input');
                 const dateFilter = document.getElementById('dateFilter').value.toLowerCase();
                 const listItems = document.querySelectorAll('.list-group-item');
@@ -610,8 +633,6 @@
     
     </html>
     
-    
- 
 
 <br>
 <br>
@@ -634,7 +655,6 @@
     sidebar.classList.toggle('active');
     content.classList.toggle('active');
     sidebarContent.classList.toggle('show-icons-only');
-    
     const icon = document.getElementById('sidebarCollapse').querySelector('i');
     icon.classList.toggle('fa-bars');
     icon.classList.toggle('fa-times');
