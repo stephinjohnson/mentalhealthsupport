@@ -486,9 +486,9 @@
                   background-color: #a3dba3;
                   border: 1px solid #43d743; /* Add border for a button-like appearance */
                   border-radius: 5px; /* Adjust the border radius as needed */
-                  padding:1px 2px; /* Adjust padding to make it smaller */
+                  padding:2px 4px; /* Adjust padding to make it smaller */
                   margin-top: 2px;
-                  width: 22%;
+                  width: 28%;
                   height:55px;
                   text-align: center;
                   cursor: pointer;
@@ -500,63 +500,105 @@
                   border: 2px solid #43d743; /* Adjust border color on hover */
               }
           </style>
-           
+            <div class="list-group">
+              {% regroup time_slots by therapist as therapist_time_slots %}
+              {% for therapist_slots in therapist_time_slots %}
+                  <div id="therapistSlots{{ therapist_slots.grouper }}">
+                      {% if therapist_slots.list %}
+                          {% with time_slot=therapist_slots.list.0 %}
+                              <a href="#" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#confirmationModal{{ time_slot.therapist.id }}" data-date="{{ time_slot.start_time|date:'Y-m-d' }}">
+                                  <div class="d-flex w-100 justify-content-between align-items-center">
+                                      {% if time_slot.therapist.profile_picture %}
+                                          <img class="profile-picture" src="{{ time_slot.therapist.profile_picture.url }}" alt="Profile Picture">
+                                      {% endif %}
+                                      <div>
+                                          <h5 class="mb-1">{{ time_slot.therapist.first_name }} {{ time_slot.therapist.last_name }}</h5>
+                                          <p><strong>Location:</strong> {{ time_slot.therapist.location }}</p>
+                                          <p><strong>Qualification:</strong> {{ time_slot.therapist.qualification }}</p>
+                                          <p><strong>Description:</strong> {{ time_slot.therapist.description }}</p>
+                                          <p><strong>Specialization:</strong> {{ time_slot.therapist.specialization }}</p>
+                                      </div>
+                                  </div>
+                              
           
-          
-    <div class="list-group">
-    {% regroup time_slots by therapist as therapist_time_slots %}
-    {% for therapist_slots in therapist_time_slots %}
-        <div id="therapistSlots{{ therapist_slots.grouper }}">
-            {% if therapist_slots.list %}
-                {% with time_slot=therapist_slots.list.0 %}
-                    <a href="#" class="list-group-item list-group-item-action" data-toggle="modal" data-target="#confirmationModal{{ time_slot.therapist.id }}" data-date="{{ time_slot.start_time|date:'Y-m-d' }}">
-                        <div class="d-flex w-100 justify-content-between align-items-center">
-                            {% if time_slot.therapist.profile_picture %}
-                                <img class="profile-picture" src="{{ time_slot.therapist.profile_picture.url }}" alt="Profile Picture">
-                            {% endif %}
-                            <div>
-                                <h5 class="mb-1">{{ time_slot.therapist.first_name }} {{ time_slot.therapist.last_name }}</h5>
-                                <p><strong>Location:</strong> {{ time_slot.therapist.location }}</p>
-                                <p><strong>Qualification:</strong> {{ time_slot.therapist.qualification }}</p>
-                                <p><strong>Description:</strong> {{ time_slot.therapist.description }}</p>
-                                <p><strong>Specialization:</strong> {{ time_slot.therapist.specialization }}</p>
-                            </div>
-                        </div>
-                    </a>
-
-                    <!-- Time Slots as Buttons -->
-                    {% for time_slot in therapist_slots.list %}
-                        <button class="time-slot-btn" data-toggle="modal" data-target="#confirmationModal{{ time_slot.id }}" data-date="{{ time_slot.start_time|date:'Y-m-d' }}">
-                            Available Time: <br>
-                            <strong>{{ time_slot.start_time|date:'F d, Y H:i' }} - {{ time_slot.end_time|date:'H:i' }}</strong>
-                        </button>
-
-                        <!-- Confirmation Modal -->
-                        <div class="modal fade" id="confirmationModal{{ time_slot.id }}" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel{{ time_slot.id }}" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmationModalLabel{{ time_slot.id }}">Confirmation</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure you want to book an appointment with {{ time_slot.therapist.first_name }} on {{ time_slot.start_time|date:'F d, Y H:i' }}?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        <a href="{% url 'book_appointment' time_slot.id %}" class="btn btn-primary" onclick="bookAppointment('{{ time_slot.id }}')">Yes, Book Appointment</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endwith %}
-            {% endif %}
+                              <!-- Time Slots as Buttons -->
+                              {% for time_slot in therapist_slots.list %}
+                                  <button class="time-slot-btn" data-toggle="modal" data-target="#confirmationModal{{ time_slot.id }}" data-date="{{ time_slot.start_time|date:'Y-m-d' }}">
+                                      Available Time: <br>
+                                      <strong>{{ time_slot.start_time|date:'F d, Y h:i A' }} - {{ time_slot.end_time|date:'h:i A' }}</strong>
+                                  </button>
+                               
+                              {% endfor %}
+                          {% endwith %}
+                        </a>
+                      {% endif %}
+                  </div>
+              {% endfor %}
+          </div>
+        
+          <!-- Confirmation Modal -->
+{% for therapist_slots in therapist_time_slots %}
+{% for time_slot in therapist_slots.list %}
+    <div class="modal fade" id="confirmationModal{{ time_slot.id }}" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel{{ time_slot.id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel{{ time_slot.id }}">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to book an appointment with {{ time_slot.therapist.first_name }} on {{ time_slot.start_time|date:'F d, Y H:i' }}?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <a href="{% url 'book_appointment' time_slot.id %}" class="btn btn-primary confirm-appointment" data-time-slot-id="{{ time_slot.id }}">Yes, Book Appointment</a>
+                </div>
+            </div>
         </div>
-    {% endfor %}
-</div>
+    </div>
+{% endfor %}
+{% endfor %}
+
+<!-- Include SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+// Function to handle booking appointment confirmation
+$(document).on('click', '.confirm-appointment', function(e) {
+    e.preventDefault();
+    var timeSlotId = $(this).data('time-slot-id');
+    
+    // Perform AJAX request to book the appointment
+    $.ajax({
+        type: 'GET',
+        url: $(this).attr('href'),
+        success: function(response) {
+            // Show SweetAlert for successful booking
+            Swal.fire({
+                icon: 'success',
+                title: 'Appointment Booked!',
+                text: 'Your appointment has been successfully booked.',
+                timer: 3000,
+                timerProgressBar: true,
+                onClose: () => {
+                    // Refresh the page or perform any other action
+                    location.reload();
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            // Show SweetAlert for booking error
+            Swal.fire({
+                icon: 'error',
+                title: 'Booking Error',
+                text: 'There was an error booking your appointment. Please try again later.'
+            });
+        }
+    });
+});
+</script>
 
 <script>
     function applyFilters() {
