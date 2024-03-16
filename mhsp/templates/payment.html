@@ -25,10 +25,21 @@
                 console.log(response);
                 alert('Payment successful. Payment ID: ' + response.razorpay_payment_id);
                 
-                // Add a redirect to the 'tenantpg' URL
-              
+                // Make AJAX request to update payment status
+                var paymentId = response.razorpay_payment_id;
+                var appointmentId = '{{ appointment.id }}';  // You need to provide the appointment ID here
                 
-                // You can perform further actions here, like updating your database
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/payment/', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log(xhr.responseText);
+                        // Optionally, redirect to a success page
+                    }
+                };
+                var data = JSON.stringify({'payment_id': paymentId, 'appointment_id': appointmentId});
+                xhr.send(data);
             },
         };
     
@@ -38,6 +49,7 @@
             rzp.open();
         };
     </script>
+    
     
 </body>
 </html>
