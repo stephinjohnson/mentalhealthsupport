@@ -1142,12 +1142,20 @@ def delete_appointment(request):
     
 
 
-
-# views.py
-# views.py
+from django.shortcuts import render
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from razorpay import Client
+from django.conf import settings
+from .models import Appointment
 
-def payment_view(request):
+razorpay_api_key = settings.RAZORPAY_API_KEY
+razorpay_secret_key = settings.RAZORPAY_API_SECRET
+
+razorpay_client = Client(auth=(razorpay_api_key, razorpay_secret_key))
+
+@csrf_exempt
+def new_payment(request):
     if request.method == 'POST':
         # Get the data sent in the request
         data = request.POST
@@ -1159,14 +1167,31 @@ def payment_view(request):
         print("Payment ID:", payment_id)
         print("Appointment ID:", appointment_id)
 
-        # Fetch the appointment object and update payment status
+        # Fetch the appointment object and update payment status and payment_id
         try:
             appointment = Appointment.objects.get(id=appointment_id)
             appointment.payment_status = 'PAID'
+            appointment.payment_id = payment_id  # Assign payment_id to the appointment
             appointment.save()
-            return JsonResponse({'message': 'Payment status updated successfully.'})
+            # Create a Razorpay order
+            amount = 1000  # Example amount, you can change this dynamically based on your logic
+            order_data = {
+                'amount': amount,
+                'currency': 'INR',
+                'receipt': 'order_rcptid_11',
+                'payment_capture': '1',  # Auto-capture payment
+            }
+            order = razorpay_client.order.create(data=order_data)
+            context = {
+                'razorpay_api_key': razorpay_api_key,
+                'amount': order_data['amount'],
+                'currency': order_data['currency'],
+                'order_id': order['id'],
+            }
+            return render(request, 'new_payment.html', context)
         except Appointment.DoesNotExist:
             return JsonResponse({'error': 'Appointment not found.'}, status=404)
     else:
-        return JsonResponse({'error': 'Invalid request.'}, status=400)
+        # If it's a GET request, render the new_payment.html template
+        return render(request, 'new_payment.html')
 
