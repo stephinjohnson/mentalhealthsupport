@@ -1139,3 +1139,34 @@ def delete_appointment(request):
             return JsonResponse({'status': 'error', 'message': str(e)})
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+    
+
+
+
+# views.py
+# views.py
+from django.http import JsonResponse
+
+def payment_view(request):
+    if request.method == 'POST':
+        # Get the data sent in the request
+        data = request.POST
+
+        # Extract payment_id and appointment_id
+        payment_id = data.get('payment_id')
+        appointment_id = data.get('appointment_id')
+
+        print("Payment ID:", payment_id)
+        print("Appointment ID:", appointment_id)
+
+        # Fetch the appointment object and update payment status
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+            appointment.payment_status = 'PAID'
+            appointment.save()
+            return JsonResponse({'message': 'Payment status updated successfully.'})
+        except Appointment.DoesNotExist:
+            return JsonResponse({'error': 'Appointment not found.'}, status=404)
+    else:
+        return JsonResponse({'error': 'Invalid request.'}, status=400)
+

@@ -389,29 +389,87 @@
 
 <body>
 
-    <div class="container">
-        <h2>Your Appointment Status</h2>
+  <div class="container">
+    <h2>Your Appointment Status</h2>
 
-        {% if appointments %}
-        <ul>
-            {% for appointment in appointments %}
-            <li id="appointment_{{ appointment.id }}">
-                <strong>Therapist:</strong> {{ appointment.therapist.username }}<br>
-                <strong>Time Slot:</strong> {{ appointment.time_slot.start_time }}<br>
-                <strong>Status:</strong> {{ appointment.status }}
+    {% if appointments %}
+    <ul>
+        {% for appointment in appointments %}
+        <li id="appointment_{{ appointment.id }}">
+            <strong>Therapist:</strong> {{ appointment.therapist.username }}<br>
+            <strong>Time Slot:</strong> {{ appointment.time_slot.start_time }}<br>
+            <strong>Status:</strong> {{ appointment.status }}
 
-                <!-- Add the remove icon with a link to delete the appointment -->
-                <a href="#" class="remove-button" onclick="deleteAppointment('{{ appointment.id }}')">
-                    <i class="fas fa-times"></i>
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No appointments found.</p>
-        {% endif %}
-    </div>
+            {% if appointment.status == 'APPROVED' %}
+                <!-- Add the Pay Now button -->
+                <form action="{% url 'payment_view' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
+                    <button type="submit">Pay Now</button>
+                </form>
+            {% endif %}
 
+            <!-- Add the remove icon with a link to delete the appointment -->
+            <a href="#" class="remove-button" onclick="deleteAppointment('{{ appointment.id }}')">
+                <i class="fas fa-times"></i>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No appointments found.</p>
+    {% endif %}
+</div>
+<script>
+  // Function to handle payment success
+  function handlePaymentSuccess(appointmentId) {
+      // Hide the Pay Now button for the corresponding appointment
+      var appointmentElement = document.getElementById('appointment_' + appointmentId);
+      if (appointmentElement) {
+          var payNowButton = appointmentElement.querySelector('.pay-now-button');
+          if (payNowButton) {
+              payNowButton.style.display = 'none';
+          }
+      }
+
+      // Update the appointment status to 'PAID' in the UI
+      var statusElement = appointmentElement.querySelector('.status');
+      if (statusElement) {
+          statusElement.textContent = 'PAID';
+      }
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+      // Add event listeners to Pay Now buttons
+      var payNowButtons = document.querySelectorAll('.pay-now-button');
+      payNowButtons.forEach(function(button) {
+          button.addEventListener('click', function(event) {
+              var appointmentId = event.target.getAttribute('data-appointment-id');
+
+              // Make AJAX request to process payment
+              var xhr = new XMLHttpRequest();
+              xhr.open('POST', '/payment/');
+              xhr.setRequestHeader('Content-Type', 'application/json');
+              xhr.onload = function() {
+                  if (xhr.status === 200) {
+                      // Payment successful
+                      handlePaymentSuccess(appointmentId);
+                  } else {
+                      // Payment failed, handle error
+                      console.error('Payment failed:', xhr.statusText);
+                  }
+              };
+              xhr.onerror = function() {
+                  console.error('Network error occurred');
+              };
+              xhr.send(JSON.stringify({ appointment_id: appointmentId }));
+
+              // Prevent default form submission
+              event.preventDefault();
+          });
+      });
+  });
+</script>
     <!-- Add the Font Awesome script link (if not already included) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
 

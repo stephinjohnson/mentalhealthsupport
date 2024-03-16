@@ -141,8 +141,16 @@ class Appointment(models.Model):
     status = models.CharField(max_length=20, choices=[('PENDING', 'Pending'), ('APPROVED', 'Approved')], default='PENDING')
     status_change_notification = models.BooleanField(default=False)
 
+    PAYMENT_STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('PAID', 'Paid'),
+        ('FAILED', 'Failed'),
+    ]
+    payment_status = models.CharField(max_length=10, choices=PAYMENT_STATUS_CHOICES, default='PENDING')
+
     def __str__(self):
         return f"Appointment: {self.user.username} with {self.therapist.username} at {self.time_slot.start_time}"
     
     def is_approved(self):
         return self.status == 'APPROVED'
+    
