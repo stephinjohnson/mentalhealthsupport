@@ -148,6 +148,8 @@ class Appointment(models.Model):
     ]
     payment_status = models.CharField(max_length=10, choices=PAYMENT_STATUS_CHOICES, default='PENDING')
 
+    payment_id = models.CharField(max_length=100, blank=True, null=True)
+
     def __str__(self):
         return f"Appointment: {self.user.username} with {self.therapist.username} at {self.time_slot.start_time}"
     

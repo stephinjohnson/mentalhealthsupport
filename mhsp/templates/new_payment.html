@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+    <!-- Other head elements -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <button id="pay-button">Proceed to payment</button>
+    <script>
+        var options = {
+            key: '{{ razorpay_api_key }}',
+            amount: '{{ amount }}',
+            currency: '{{ currency }}',
+            name: 'MindEase',
+            description: 'Security Amount',
+            image: 'path_to_logo.png',
+            prefill: {
+                name: 'Your Name',
+                email: 'your_email@example.com',
+            },
+            theme: {
+                color: '#F37254',
+            },
+            handler: function(response) {
+                // This function will be called on successful payment
+                console.log(response);
+                alert('Payment successful. Payment ID: ' + response.razorpay_payment_id);
+                
+                // Make AJAX request to update payment status
+                var paymentId = response.razorpay_payment_id;
+                var appointmentId = '{{ appointment.id }}';  // You need to provide the appointment ID here
+                
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '/payment/', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        console.log(xhr.responseText);
+                        // Optionally, redirect to a success page
+                    }
+                };
+                var data = JSON.stringify({'payment_id': paymentId, 'appointment_id': appointmentId});
+                xhr.send(data);
+            },
+        };
+    
+        var rzp = new Razorpay(options);
+    
+        document.getElementById('pay-button').onclick = function () {
+            rzp.open();
+        };
+    </script>
+    
+    
+</body>
+</html>
+

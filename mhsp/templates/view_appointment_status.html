@@ -402,7 +402,7 @@
 
             {% if appointment.status == 'APPROVED' %}
                 <!-- Add the Pay Now button -->
-                <form action="{% url 'payment_view' %}" method="POST">
+                <form action="{% url 'new_payment' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
                     <button type="submit">Pay Now</button>
