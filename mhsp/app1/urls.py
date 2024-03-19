@@ -96,5 +96,8 @@ urlpatterns=[
     path('view_appointment_status/', views.view_appointment_status, name='view_appointment_status'),
     path('delete_appointment/', views.delete_appointment, name='delete_appointment'),
     path('new_payment/', views.new_payment, name='new_payment'),
+    path('new_paymenttok/', views.new_paymenttok, name='new_paymenttok'),
+    path('download_receipt/<int:appointment_id>/', views.download_receipt, name='download_receipt'),
+    #path('generate_payment_request', views.generate_payment_request, name='generate_payment_request'),
    
 ]

@@ -732,7 +732,7 @@ def add_to_cart_page(request):
 
 # views.py
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Cart
 
 def add_to_cart_page(request):
@@ -1006,7 +1006,7 @@ def book_appointment(request, time_slot_id):
         messages.success(request, f"Appointment request sent to {time_slot.therapist.username}")
 
         # Redirect to the 'view_time_slots' page
-        return redirect('view_time_slots')
+        return redirect('new_paymenttok')
     else:
         messages.warning(request, f"You already have a pending appointment request with {time_slot.therapist.username}")
 
@@ -1195,3 +1195,121 @@ def new_payment(request):
         # If it's a GET request, render the new_payment.html template
         return render(request, 'new_payment.html')
 
+
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+
+def generate_pdf_content(appointment):
+    styles = getSampleStyleSheet()
+
+    content = []
+
+    # Add title
+    content.append(Paragraph(f"Receipt for Appointment ID: {appointment.id}", styles['Title']))
+
+    # Add appointment details
+    content.append(Paragraph(f"User: {appointment.user.username}", styles['Normal']))
+    content.append(Paragraph(f"Therapist: {appointment.therapist.username}", styles['Normal']))
+    content.append(Paragraph(f"Time Slot: {appointment.time_slot.start_time} to {appointment.time_slot.end_time}", styles['Normal']))
+    content.append(Paragraph(f"Payment Status: {appointment.payment_status}", styles['Normal']))
+
+    return content
+
+
+def download_receipt(request, appointment_id):
+    # Retrieve the appointment object
+    appointment = get_object_or_404(Appointment, id=appointment_id)
+
+    # Generate PDF content
+    content = generate_pdf_content(appointment)
+
+    try:
+        # Create an HttpResponse object with PDF content
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="receipt_{appointment_id}.pdf"'
+
+        # Create PDF document
+        doc = SimpleDocTemplate(response, pagesize=letter)
+        doc.build(content)
+
+        return response
+    except Exception as e:
+        # Log the error or handle it appropriately
+        print(f"Error generating PDF: {e}")
+        # Return an error response or redirect to an error page
+        return HttpResponse("Error generating PDF. Please try again later.", status=500)
+
+
+
+# from django.shortcuts import redirect
+# import razorpay
+# from django.conf import settings
+
+# def generate_payment_request(request):
+#     if request.method == 'POST':
+#         # Initialize Razorpay client with your API key
+#         client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
+
+#         # Extract necessary data from the request
+#         time_slot_id = request.POST.get('time_slot_id')
+
+#         # Calculate the amount based on time slot details or any other criteria
+#         amount = 1000  # Example amount in paisa (e.g., 1000 paisa = Rs. 10)
+
+#         # Create a Razorpay order
+#         razorpay_order = client.order.create({
+#             'amount': amount,
+#             'currency': 'INR',
+#             'payment_capture': 1  # Auto-capture payment after order creation
+#             # Add additional parameters as required by your payment gateway
+#         })
+
+#         # Extract the order ID from the Razorpay order response
+#         order_id = razorpay_order['id']
+
+#         # Optionally, you may save the order ID or other details in your database for reference
+
+#         # Redirect the user to the Razorpay checkout page with the order ID
+#         return redirect(f"https://checkout.razorpay.com/v1/payment?order_id={order_id}")
+
+#     # If the request method is not POST, handle it accordingly (e.g., return an error response)
+#     return HttpResponseBadRequest("Invalid request method")
+
+
+
+from django.shortcuts import render, redirect
+from django.conf import settings
+from razorpay import Client
+
+razorpay_api_key = settings.RAZORPAY_API_KEY
+razorpay_secret_key = settings.RAZORPAY_API_SECRET
+
+razorpay_client = Client(auth=(razorpay_api_key, razorpay_secret_key))
+
+def new_paymenttok(request):
+    if request.method == 'POST':
+        razorpay_payment_id = request.POST.get('razorpay_payment_id')
+        if razorpay_payment_id:
+            # Payment successful, redirect to home page
+            return redirect('/')
+        else:
+            # Payment failed, handle accordingly
+            return render(request, 'payment_failed.html')  # Render a template for failed payment
+    else:
+        # Create a Razorpay order
+        amount = 1000  # Example amount, you can change this dynamically based on your logic
+        order_data = {
+            'amount': amount,
+            'currency': 'INR',
+            'receipt': 'order_rcptid_11',
+            'payment_capture': '1',  # Auto-capture payment
+        }
+        order = razorpay_client.order.create(data=order_data)
+        context = {
+            'razorpay_api_key': razorpay_api_key,
+            'amount': order_data['amount'],
+            'currency': order_data['currency'],
+            'order_id': order['id'],
+        }
+        return render(request, 'new_paymenttok.html', context)
