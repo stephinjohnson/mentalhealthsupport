@@ -536,70 +536,94 @@
               {% endfor %}
           </div>
         
-          <!-- Confirmation Modal -->
+<!-- Confirmation Modal -->
 {% for therapist_slots in therapist_time_slots %}
 {% for time_slot in therapist_slots.list %}
-    <div class="modal fade" id="confirmationModal{{ time_slot.id }}" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel{{ time_slot.id }}" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmationModalLabel{{ time_slot.id }}">Confirmation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+<div class="modal fade" id="confirmationModal{{ time_slot.id }}" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel{{ time_slot.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel{{ time_slot.id }}">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="bookAppointmentForm{{ time_slot.id }}" action="{% url 'book_appointment' time_slot.id %}" method="POST">
+                {% csrf_token %}
                 <div class="modal-body">
                     Are you sure you want to book an appointment with {{ time_slot.therapist.first_name }} on {{ time_slot.start_time|date:'F d, Y H:i' }}?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <a href="{% url 'book_appointment' time_slot.id %}" class="btn btn-primary confirm-appointment" data-time-slot-id="{{ time_slot.id }}">Yes, Book Appointment</a>
+                    <!-- Use submit button to submit the form -->
+                    <button type="submit" class="btn btn-primary">Yes, Book Appointment</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 {% endfor %}
 {% endfor %}
 
-<!-- Include SweetAlert library -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Add this script to handle Razorpay payment -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
-// Function to handle booking appointment confirmation
-$(document).on('click', '.confirm-appointment', function(e) {
-    e.preventDefault();
-    var timeSlotId = $(this).data('time-slot-id');
-    
-    // Perform AJAX request to book the appointment
-    $.ajax({
-        type: 'GET',
-        url: $(this).attr('href'),
-        success: function(response) {
-            // Show SweetAlert for successful booking
-            Swal.fire({
-                icon: 'success',
-                title: 'Appointment Booked!',
-                text: 'Your appointment has been successfully booked.',
-                timer: 3000,
-                timerProgressBar: true,
-                onClose: () => {
-                    // Refresh the page or perform any other action
-                    location.reload();
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            // Show SweetAlert for booking error
-            Swal.fire({
-                icon: 'error',
-                title: 'Booking Error',
-                text: 'There was an error booking your appointment. Please try again later.'
-            });
-        }
+$(document).ready(function () {
+    // Event listener for clicking the "Book Appointment" button
+    $('.confirm-appointment').on('click', function (e) {
+        e.preventDefault();
+        var timeSlotId = $(this).data('time-slot-id');
+        // Initiate payment process via AJAX
+        $.ajax({
+            type: 'POST',
+            url: '{% url "new_paymenttok" %}',
+            data: {
+                'time_slot_id': timeSlotId,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (data) {
+                // Initialize Razorpay Checkout
+                var options = {
+                    key: 'rzp_test_bdkAwxZfmcyBkq', // Replace with your Razorpay public key
+                    amount: data.amount,
+                    currency: 'INR',
+                    name: 'Your Company Name',
+                    description: 'Appointment Booking',
+                    order_id: data.order_id,
+                    handler: function (response) {
+                        // Handle payment success
+                        console.log('Payment successful: ', response);
+                    }
+                };
+                var rzp = new Razorpay(options);
+                // Open Razorpay Checkout form
+                rzp.open();
+            }
+        });
     });
 });
 </script>
 
+
+<script>
+  function bookAppointment(timeSlotId) {
+      $.ajax({
+          type: 'POST',
+          url: '/new_paymenttok/',
+          data: {
+              'time_slot_id': timeSlotId,
+              csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          success: function (data) {
+              // Process payment response data and handle payment initiation
+              // Example: Redirect to payment gateway page with received data
+              window.location.href = '/payment/?order_id=' + data.order_id;
+          }
+      });
+  }
+  </script>
+  
 <script>
     function applyFilters() {
         const nameFilterInput = document.getElementById('nameFilter').value.toLowerCase();

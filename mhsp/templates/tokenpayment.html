@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Your head content goes here -->
+</head>
+<body>
+
+    <!-- Your HTML content -->
+
+    <!-- Add this script to handle Razorpay payment -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.confirm-appointment').on('click', function (e) {
+                e.preventDefault();
+                var timeSlotId = $(this).data('time-slot-id');
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "initiate_payment" %}',
+                    data: {
+                        'time_slot_id': timeSlotId,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function (data) {
+                        var options = {
+                            "key": "rzp_test_bdkAwxZfmcyBkq",
+                            "amount": data.amount,
+                            "currency": "INR",
+                            "name": "Your Company Name",
+                            "description": "Appointment Booking",
+                            "order_id": data.id,
+                            "handler": function (response){
+                                // Redirect to a success page or handle success
+                                console.log(response);
+                            },
+                            "prefill": {
+                                "name": "Customer Name",
+                                "email": "customer@example.com",
+                                "contact": "9999999999"
+                            },
+                            "theme": {
+                                "color": "#3399cc"
+                            }
+                        };
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
