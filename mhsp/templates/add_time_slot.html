@@ -215,34 +215,186 @@
     </style>
 </head>
 <body>
-  <div class="container mt-5">
-    <h2 class="text-center mb-4">Add Time Slot</h2>
-    <form method="post" id="timeSlotForm" onsubmit="return validateForm()">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="session_type">Session Type:</label>
-            <select name="session_type" id="sessionType" class="form-control" required>
-                <option value="MORNING">Morning Session</option>
-                <option value="AFTERNOON">Afternoon Session</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="time_slots">Choose Time Slots:</label>
-            {% for slot_value, slot_display in time_slots %}
-                <div class="form-check">
-                    <input type="checkbox" name="time_slots[]" id="slot{{ forloop.counter }}" value="{{ slot_value }}">
-                    <label for="slot{{ forloop.counter }}">{{ slot_display }}</label>
-                </div>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            <label for="start_date">Start Date:</label>
-            <input type="date" name="start_date" class="form-control" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Add Time Slot</button>
-    </form>
+  <style>
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .checkboxes {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .form-check {
+        margin-right: 20px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .form-check input[type="checkbox"] {
+        display: none; /* Hide the default checkbox */
+    }
+
+    .form-check label {
+        cursor: pointer;
+        margin-left: 5px;
+    }
+
+    /* Styling the custom checkbox */
+    .form-check label:before {
+        content: "";
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #007bff;
+        border-radius: 4px;
+        background-color: #fff;
+        margin-right: 5px;
+    }
+
+    /* Styling the custom checkbox when checked */
+    .form-check input[type="checkbox"]:checked + label:before {
+        background-color: #007bff;
+    }
+
+    /* Styling the checkmark inside the custom checkbox */
+    .form-check label:after {
+        content: "\2713"; /* Unicode character for checkmark */
+        display: inline-block;
+        color: #fff;
+        font-size: 16px;
+        visibility: hidden;
+    }
+
+    /* Showing the checkmark when the custom checkbox is checked */
+    .form-check input[type="checkbox"]:checked + label:after {
+        visibility: visible;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        width: 100%;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+    
+    @media (max-width: 576px) {
+        .form-check {
+            margin-right: 0;
+            width: 50%; /* Two checkboxes per row on smaller screens */
+        }
+    }
+</style>
+
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Add Time Slot</h2>
+  <form method="post" id="timeSlotForm" onsubmit="return validateForm()">
+      {% csrf_token %}
+      <div class="form-group">
+          <label for="time_slots">Choose Time Slots:</label>
+          <div class="checkboxes">
+              {% for slot_value, slot_display in time_slots %}
+                  <div class="form-check">
+                      <input type="checkbox" name="time_slots[]" id="slot{{ forloop.counter }}" value="{{ slot_value }}">
+                      <label for="slot{{ forloop.counter }}">{{ slot_display }}</label>
+                  </div>
+              {% endfor %}
+          </div>
+      </div>
+      <div class="form-group">
+          <label for="start_date">Start Date:</label>
+          <input type="date" name="start_date" id="start_date" class="form-control" required>
+      </div>
+      <button type="submit"  id="submit_button" class="btn btn-primary">Add Time Slot</button>
+      <p id="validation_message" style="color: red;"></p>
+
+  </form>
 </div>
 
+<script>
+    function validateForm() {
+        var checkboxes = document.querySelectorAll('input[name="time_slots[]"]:checked');
+        var selectedDate = new Date(document.getElementById("start_date").value);
+        var today = new Date();
+
+        // Check if at least one time slot is selected
+        if (checkboxes.length === 0) {
+            alert("Please select at least one time slot.");
+            return false;
+        }
+
+        // Check if more than three time slots are selected
+        if (checkboxes.length > 3) {
+            alert("Please select a maximum of 3 time slots.");
+            return false;
+        }
+
+        // Check if a future date is selected
+        if (selectedDate < today) {
+            alert("Please select today's date or a future date.");
+            return false;
+        }
+
+        // All conditions met, allow form submission
+        return true;
+    }
+
+    // Function to update UI based on validation
+    document.addEventListener("DOMContentLoaded", function() {
+        var submitButton = document.getElementById("submit_button");
+        var checkboxes = document.querySelectorAll('input[name="time_slots[]"]');
+        var startDate = document.getElementById("start_date");
+        var validationMessage = document.getElementById("validation_message");
+
+        function updateValidation() {
+            var checkboxesChecked = document.querySelectorAll('input[name="time_slots[]"]:checked');
+            var selectedDate = new Date(startDate.value);
+            var today = new Date();
+
+            // Check if at least one time slot is selected
+            if (checkboxesChecked.length === 0) {
+                validationMessage.innerText = "Please select at least one time slot.";
+                submitButton.disabled = true;
+                return;
+            }
+
+            // Check if more than three time slots are selected
+            if (checkboxesChecked.length > 3) {
+                validationMessage.innerText = "Please select a maximum of 3 time slots.";
+                submitButton.disabled = true;
+                return;
+            }
+
+            // Check if a future date is selected
+            if (selectedDate < today) {
+                validationMessage.innerText = "Please select today's date or a future date.";
+                submitButton.disabled = true;
+                return;
+            }
+
+            // All conditions met, enable submit button
+            validationMessage.innerText = "";
+            submitButton.disabled = false;
+        }
+
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener("change", updateValidation);
+        });
+
+        startDate.addEventListener("change", updateValidation);
+    });
+</script>
 
 
 
@@ -250,55 +402,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-U7UqUu1PA0F5LOL4rH+wp5I9IHRYh4jGgahxMtoTBK8tjBZ/EqWPIhBLg7SIlXZi" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script>
-        function validateForm() {
-            const sessionType = document.getElementById('sessionType').value;
-            const startTime = new Date(document.getElementById('startTime').value);
-            const endTime = new Date(document.getElementById('endTime').value);
-            const currentDate = new Date(); // Current date and time
 
-            document.getElementById('startError').innerText = '';
-            document.getElementById('endError').innerText = '';
-
-            // Check if start date is the same as end date
-            if (startTime.toDateString() !== endTime.toDateString()) {
-                document.getElementById('endError').innerText = 'End date must be the same as start date';
-                return false;
-            }
-
-            // Check if start date is in the past
-            if (startTime < currentDate) {
-                document.getElementById('startError').innerText = 'Cannot select past days';
-                return false;
-            }
-
-            // Check if end date is in the past
-            if (endTime < currentDate) {
-                document.getElementById('endError').innerText = 'Cannot select past days';
-                return false;
-            }
-
-            // Other validations (AM/PM and time order)
-            if (sessionType === 'MORNING' && startTime.getHours() >= 12) {
-                document.getElementById('startError').innerText = 'Morning session cannot have PM time';
-                return false;
-            }
-
-           
-            if (sessionType === 'AFTERNOON' && endTime.getHours() < 12) {
-                document.getElementById('endError').innerText = 'Afternoon session cannot have AM time';
-                return false;
-            }
-
-            // Check if end time is after start time
-            if (endTime <= startTime) {
-                document.getElementById('endError').innerText = 'End time must be after start time';
-                return false;
-            }
-
-            return true;
-        }
-    </script>
 </body>
 </html>
 
