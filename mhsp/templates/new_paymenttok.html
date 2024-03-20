@@ -1,10 +1,53 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Other head elements -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #back-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
-    <button id="pay-button">Proceed to payment</button>
+    <div class="container">
+        <h1 style="text-align: center;">Proceed to Payment</h1>
+        <button id="pay-button" style="display: block; margin: 0 auto; padding: 10px 20px; background-color: #28a745; color: #fff; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.3s;">Pay Now</button>
+        <div class="button-container">
+            
+
+        </div>
+    </div>
+
     <script>
         var options = {
             key: '{{ razorpay_api_key }}',
@@ -48,68 +91,8 @@
         document.getElementById('pay-button').onclick = function () {
             rzp.open();
         };
-    </script>
-    
-    
-</body>
-</html>
 
-<html lang="en">
-<head>
-    <!-- Other head elements -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-</head>
-<body>
-    <button id="pay-button">Proceed to payment</button>
-    <script>
-        var options = {
-            key: '{{ rzp_test_rAQjnwrgQ0jGdQ }}',
-            amount: '{{ amount }}',
-            currency: '{{ INR }}',
-            name: 'MindEase',
-            description: 'Security Amount',
-            image: 'path_to_logo.png',
-            prefill: {
-                name: 'Your Name',
-                email: 'your_email@example.com',
-            },
-            theme: {
-                color: '#F37254',
-            },
-            
-            handler: function(response) {
-                // This function will be called on successful payment
-                console.log(response);
-                alert('Payment successful. Payment ID: ' + response.razorpay_payment_id);
-                
-                // Make AJAX request to update payment status
-                var paymentId = response.razorpay_payment_id;
-                var appointmentId = '{{ appointment.id }}';  // You need to provide the appointment ID here
-                
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', '/payment/', true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === 4 && xhr.status === 200) {
-                        console.log(xhr.responseText);
-                        // Optionally, redirect to a success page
-                    }
-                };
-                var data = JSON.stringify({'payment_id': paymentId, 'appointment_id': appointmentId});
-                xhr.send(data);
-            },
-        };
-    
-        var rzp = new Razorpay(options);
-    
-        document.getElementById('pay-button').onclick = function () {
-            rzp.open();
-        };
         
     </script>
-    
-    
 </body>
 </html>
-
-

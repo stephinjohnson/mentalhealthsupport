@@ -1,69 +1,368 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Your Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"> 
   <style>
     body {
-      background-color: #f4f4f4;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
     }
-
-    .navbar {
-      background-color: #007bff;
-      color: #ffffff;
+    .wrapper {
+      display: flex;
+      position: relative;
     }
-
-    .container {
-      margin-top: 30px;
+    #sidebar {
+      height: 100vh;
+      width: 250px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #080808;
+      padding-top: 20px;
+      color: #fff;
+      transition: all 0.3s;
+      border-right: 2px solid #fff;
     }
-
-    .footer {
-      background-color: #333;
-      color: #ffffff;
-      text-align: center;
-      padding: 10px 0;
+    #sidebar.active {
+      width: 60px;
+    }
+    #sidebar-content {
+      padding: 20px;
+    }
+    #sidebar-content.show-icons-only {
+      display: none;
+    }
+    #content {
+      flex-grow: 1;
+      padding: 15px;
+      transition: all 0.3s;
+      margin-left: 250px;
+    }
+    .sidebar-link {
+      padding: 10px;
+      text-decoration: none;
+      color: #fff;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .sidebar-link:hover {
+      background-color: #495057;
+    }
+    #footer {
       position: fixed;
       bottom: 0;
       width: 100%;
+      background-color: #0c3359;
+      padding: 10px;
+      color: #fff;
+      text-align: center;
     }
+    #top-right-button {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+    #sidebarCollapse {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    #sidebarCollapse:hover {
+      transform: scale(1.2);
+    }
+    #brand {
+      margin-left: 15px;
+      font-size: 1.5em;
+    }
+
+    /* Additional styles for the card example */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      align-items: center;
+    }
+
+    .card {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      background-color: #fff;
+      width: 45%;
+      display: inline-block;
+      margin-right: 2.5%;
+    }
+
+    .card img {
+      width: 70%;
+      height: auto;
+    }
+
+    .card-content {
+      padding: 20px;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    p {
+      color: #666;
+    }
+
+    .profile-picture {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 105px;
+      margin-left: 1650px;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+    .container-box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 38px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.thread-list {
+  list-style: none;
+  padding: 0;
+}
+
+.thread-list-item {
+  margin-bottom: 20px;
+}
+
+.thread-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.thread-card {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+}
+
+.thread-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.thread-card h4 {
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.thread-description {
+  color: #555;
+}
+
+.create-thread-button {
+  background-color: #a73128;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.create-thread-button:hover {
+  background-color: #218838;
+}
+.new-card {
+      border-radius: 38px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      background-color: #fff;
+      width: 45%;
+      display: inline-block;
+      margin-right: 2.5%;
+    }
+
+    .new-card img {
+      width: 100%;
+      height: auto;
+    }
+
+    .new-card-content {
+      padding: 40px;
+    }
+
+    .new-card h2 {
+      color: #333;
+    }
+
+    .new-card p {
+      color: #666;
+    }
+
+    .new-card-button {
+      background-color: #ff8800;
+      color: #070707;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+
+    .new-card-button:hover {
+      background-color: #0056b3;
+    }
+    .logo-link {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* Align to the right */
+            color: #ff9100; /* Blue color */
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px; /* Add some padding */
+            position: fixed; /* Fixed position to stay at the top right */
+            top: 0; /* Align to the top */
+            right: 0; /* Align to the right */
+            z-index: 1000; /* Set a higher z-index to stay above other elements */
+        }
+
+        .logo-link:hover {
+            color: #060605; /* Darker blue on hover */
+        }
+
+        .logo-icon {
+            margin-right: 75px;
+            font-size: 35px;
+        }
+        .logo-icon.notification {
+    position: relative;
+}
+
+.logo-icon.notification::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+
   </style>
 </head>
-
 <body>
- 
-  <nav class="navbar navbar-expand-lg">
-    <div class="container">
-      <a class="navbar-brand" href="#"><strong>MindEase</strong></a>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="normal_user.html">Normal User</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="therapist.html">Therapist</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="add_books.html">Add Books</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="about.html">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="feedback.html">Feedback</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  {% if user.is_authenticated %}
-  <h3 class="font-weight-bold">Welcome {{ user.username }}</h3>
-  {% else %}
-  <h3 class="font-weight-bold">Welcome, Please Log in</h3>
-  {% endif %}
 
+<div class="wrapper">
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <div class="sidebar-header">
+      {% if user.profile_picture %}
+        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+      {% else %}
+        <!-- Handle the case where the user has no profile picture -->
+        <span class="profile-picture">No</span>
+      {% endif %}
+      <strong><i><h3 id="brand">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MindEase</h3></i></strong>
+    </div>
+
+    <div id="sidebar-content">
+      <ul class="list-unstyled components">
+        <li>
+          <a href="custom_admin_page" class="sidebar-link">
+            <i class="fas fa-home"></i> <span class="sidebar-content-text">Home</span>
+          </a>
+        </li>
+        <li>
+          <a href='#' class="sidebar-link">
+            <i class="fas fa-user"></i> <span class="sidebar-content-text">Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'view_time_slots' %}" class="sidebar-link">
+            <i class="fas fa-cog"></i> <span class="sidebar-content-text">Available Therapist</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="sidebar-link">
+            <i class="fas fa-envelope"></i> <span class="sidebar-content-text">Messages</span>
+          </a>
+        </li>
+        <li>
+          <a href="/write_experience" class="sidebar-link">
+            <i class="fas fa-chart-bar"></i> <span class="sidebar-content-text">Feedback</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="sidebar-link">
+            <i class="fas fa-calendar-alt"></i> <span class="sidebar-content-text">Calendar</span>
+          </a>
+        </li>
+        <li>
+          <a href="/threads" class="sidebar-link">
+            <i class="fas fa-comment"></i> <span class="sidebar-content-text">Thread</span>
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'logout' %}" class="sidebar-link">
+            <i class="fas fa-sign-out-alt"></i> <span class="sidebar-content-text">Logout</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <button type="button" id="sidebarCollapse" class="btn btn-dark">
+      <i class="fas fa-bars"></i>
+    </button>
+  </nav>
+  
+  <!-- Page content -->
+  <div id="content">
+    <main>
+      {% if user.is_authenticated %}
+        <strong><h3 class="font-weight-bold">Welcome {{ user.username }}</h3></strong>
+      {% else %}
+        <h3 class="font-weight-bold">Welcome, Please Log in</h3>
+      {% endif %}
+      <!-- Your page content goes here -->
+    <!-- Your page content goes here -->
+
+
+   
   <div class="container">
     <div class="row">
       <div class="col-md-6">
@@ -103,11 +402,41 @@
   <h5 class="card-title">Add Articles</h5>
         <a href="{% url 'add_article' %}" class="btn btn-primary">Add</a>
 
-  <div class="footer">
-    <p>&copy; 2023 MindEase. All rights reserved.</p>
+  
+
+ 
+</div>
+<br>
+<br>
+ 
+
+<!-- Customize the size and color of the icon -->
+<i class="fas fa-calendar-plus fa-2x" style="color: #e0102c;"></i>
+<br>
+<br>
+    
+
+    </main>
   </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap JS and Font Awesome -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+<script>
+  document.getElementById('sidebarCollapse').addEventListener('click', function () {
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+    const sidebarContent = document.getElementById('sidebar-content');
+
+    sidebar.classList.toggle('active');
+    content.classList.toggle('active');
+    sidebarContent.classList.toggle('show-icons-only');
+    
+    const icon = document.getElementById('sidebarCollapse').querySelector('i');
+    icon.classList.toggle('fa-bars');
+    icon.classList.toggle('fa-times');
+  });
+</script>
 </body>
-
 </html>

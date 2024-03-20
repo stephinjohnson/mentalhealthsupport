@@ -104,7 +104,6 @@ def user_login(request):
             elif user.role == 'ADMIN':
                 auth_login(request, user)  # You had a login() call here, which was causing the error
                 user_profiles = User.objects.exclude(id=user.id)
-                # Pass the data to the template
                 context = {'user_profiles': user_profiles}
                 return render(request, 'demo.html', context)
         else:
