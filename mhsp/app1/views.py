@@ -1194,10 +1194,10 @@ def new_payment(request):
         # If it's a GET request, render the new_payment.html template
         return render(request, 'new_payment.html')
 
-
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
 
 def generate_pdf_content(appointment):
     styles = getSampleStyleSheet()
@@ -1205,15 +1205,38 @@ def generate_pdf_content(appointment):
     content = []
 
     # Add title
-    content.append(Paragraph(f"Receipt for Appointment ID: {appointment.id}", styles['Title']))
+    title_text = f"Receipt for Appointment ID: {appointment.id}"
+    title = Paragraph(title_text, styles['Title'])
+    content.append(title)
 
-    # Add appointment details
-    content.append(Paragraph(f"User: {appointment.user.username}", styles['Normal']))
-    content.append(Paragraph(f"Therapist: {appointment.therapist.username}", styles['Normal']))
-    content.append(Paragraph(f"Time Slot: {appointment.time_slot.start_time} to {appointment.time_slot.end_time}", styles['Normal']))
-    content.append(Paragraph(f"Payment Status: {appointment.payment_status}", styles['Normal']))
+    mind_ease_heading_text = "Mind Ease"
+    mind_ease_heading = Paragraph(mind_ease_heading_text, styles['Heading1'])
+    content.append(mind_ease_heading)
+
+
+    # Add a spacer for separation
+    content.append(Spacer(1, 12))
+
+    # Add appointment details with improved styling
+    user_text = f"<font color='blue'><b>User:</b></font> {appointment.user.username}"
+    therapist_text = f"<font color='blue'><b>Therapist:</b></font> {appointment.therapist.username}"
+    time_slot_text = f"<font color='blue'><b>Time Slot:</b></font> {appointment.time_slot.start_time} to {appointment.time_slot.end_time}"
+    payment_status_text = f"<font color='blue'><b>Payment Status:</b></font> {appointment.payment_status}"
+
+    user = Paragraph(user_text, styles['BodyText'])
+    therapist = Paragraph(therapist_text, styles['BodyText'])
+    time_slot = Paragraph(time_slot_text, styles['BodyText'])
+    payment_status = Paragraph(payment_status_text, styles['BodyText'])
+
+    content.extend([user, therapist, time_slot, payment_status])
+
+    # Add a spacer for separation
+    content.append(Spacer(1, 24))
 
     return content
+
+
+
 
 
 def download_receipt(request, appointment_id):
@@ -1277,8 +1300,11 @@ def download_receipt(request, appointment_id):
 
 
 
+# views.py
+
 from django.shortcuts import render, redirect
 from django.conf import settings
+from .models import Order
 from razorpay import Client
 
 razorpay_api_key = settings.RAZORPAY_API_KEY
@@ -1297,7 +1323,7 @@ def new_paymenttok(request):
             return render(request, 'payment_failed.html')  # Render a template for failed payment
     else:
         # Create a Razorpay order
-        amount = 1000  # Example amount, you can change this dynamically based on your logic
+        amount = 10000  # Example amount, you can change this dynamically based on your logic
         order_data = {
             'amount': amount,
             'currency': 'INR',
@@ -1305,6 +1331,14 @@ def new_paymenttok(request):
             'payment_capture': '1',  # Auto-capture payment
         }
         order = razorpay_client.order.create(data=order_data)
+        
+        # Save order details to the database
+        Order.objects.create(
+            order_id=order['id'],
+            amount=order_data['amount'],
+            currency=order_data['currency']
+        )
+        
         context = {
             'razorpay_api_key': razorpay_api_key,
             'amount': order_data['amount'],

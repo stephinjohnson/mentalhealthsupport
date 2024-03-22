@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .receipt {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .title {
+            font-size: 20px;
+            color: #336699;
+            margin-bottom: 10px;
+        }
+        .details {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .footer {
+            font-size: 12px;
+            color: #999999;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    {% for appointment in appointments %}
+    <div class="receipt">
+        <div class="title">Receipt for Appointment ID: {{ appointment.id }}</div>
+        <div class="details">
+            <p><strong>User:</strong> {{ appointment.user.username }}</p>
+            <p><strong>Therapist:</strong> {{ appointment.therapist.username }}</p>
+            <p><strong>Time Slot:</strong> {{ appointment.time_slot.start_time }} to {{ appointment.time_slot.end_time }}</p>
+            <p><strong>Payment Status:</strong> {{ appointment.payment_status }}</p>
+        </div>
+        <hr>
+        <div class="footer">Thank you for choosing our service!</div>
+    </div>
+    {% endfor %}
+</body>
+</html>
