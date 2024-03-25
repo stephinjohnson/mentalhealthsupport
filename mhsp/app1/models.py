@@ -161,11 +161,22 @@ class Appointment(models.Model):
         return self.status == 'APPROVED'
     
 
+from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 class Order(models.Model):
     order_id = models.CharField(max_length=100, unique=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     currency = models.CharField(max_length=3)
     created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='paid_orders')
+    payment_status = models.CharField(max_length=20, choices=[('PENDING', 'Pending'), ('PAID', 'Paid'), ('FAILED', 'Failed')], default='PENDING')
+
+    def __str__(self):
+        return f"Order {self.order_id}"
+
     
 
 
