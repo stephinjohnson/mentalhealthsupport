@@ -1045,41 +1045,61 @@ def approve_appointment(request, appointment_id):
 
 #views.py
 from django.shortcuts import render
-
-# views.py
-from django.shortcuts import render, get_object_or_404, redirect
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings  # Import settings to access email configuration
+from django.shortcuts import get_object_or_404, redirect
 from .models import Appointment
 
 def therapist_approve_appointment(request, appointment_id):
     appointment = get_object_or_404(Appointment, id=appointment_id, therapist=request.user, status='PENDING')
 
     if request.method == 'POST':
-        # Check if the form is submitted for approval
         if 'approve' in request.POST:
-            # Handle approval logic here, e.g., change appointment status to 'APPROVED'
             appointment.status = 'APPROVED'
             appointment.status_change_notification = True
             appointment.save()
-            # Redirect or display a success message after approval
-            return redirect('therapist_appointments')  # Update with the appropriate URL name
+
+            # Send approval notification email to the user
+            send_approval_notification(appointment)
+
+            return redirect('therapist_appointments')
 
         elif 'reject' in request.POST:
-            # Handle rejection logic here, e.g., change appointment status to 'REJECTED'
             appointment.status = 'REJECTED'
             appointment.status_change_notification = True
             appointment.save()
+            send_approval_notification(appointment, is_approved=False)
 
             # Make the associated time slot available again
             time_slot = appointment.time_slot
-            time_slot.status = 'AVAILABLE'  # Update with the actual status used in your TimeSlot model
+            time_slot.status = 'AVAILABLE'
             time_slot.save()
+            
 
-            # Redirect or display a success message after rejection
-            return redirect('therapist_appointments')  # Update with the appropriate URL name
+            return redirect('therapist_appointments')
 
     has_notification = request.user.appointments.filter(status_change_notification=True).exists()
 
     return render(request, 'therapist_approve_appointment.html', {'appointment': appointment})
+
+def send_approval_notification(appointment, is_approved=True):
+    if is_approved:
+        subject = 'Your appointment has been approved'
+        template_name = 'approval_email_template.html'
+    else:
+        subject = 'Your appointment has been rejected'
+        template_name = 'rejection_email_template.html'
+
+    message = render_to_string(template_name, {'appointment': appointment})
+    plain_message = strip_tags(message)
+    from_email = settings.DEFAULT_FROM_EMAIL
+    to_email = appointment.user.email
+
+    # Send the email
+    send_mail(subject, plain_message, from_email, [to_email], html_message=message)
+
 
 
 

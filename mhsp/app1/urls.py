@@ -100,5 +100,6 @@ urlpatterns=[
     path('download_receipt/<int:appointment_id>/', views.download_receipt, name='download_receipt'),
     #path('generate_payment_request', views.generate_payment_request, name='generate_payment_request'),
     path('generate_pdf_content/', views.generate_pdf_content, name='generate_pdf_content'),
+    path('send_approval_notification/', views.send_approval_notification, name='send_approval_notification'),
    
 ]

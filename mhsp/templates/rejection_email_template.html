@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Rejected</title>
+</head>
+<body>
+    <p>We regret to inform you that your appointment has been rejected.</p>
+    
+    <p>Details:</p>
+    <ul>
+        <li>Appointment ID: {{ appointment.id }}</li>
+        <li>Therapist: {{ appointment.therapist.get_full_name }}</li>
+        <li>Appointment Time: {{ appointment.time_slot.start_time }}</li>
+        <!-- Add more appointment details here as needed -->
+    </ul>
+    
+    <p>We apologize for any inconvenience caused.</p>
+</body>
+</html>
