@@ -10,22 +10,31 @@
 
 <div class="container mt-5">
     <h2 class="mb-4">Product List</h2>
-    <div class="row">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for product in products %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body">
+        <div class="col mb-4">
+            <div class="card h-100">
+                <div style="height: 200px; overflow: hidden;">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top w-100" style="object-fit: cover; height: 100%;" alt="Product Image">
+                    {% else %}
+                    <!-- Display a placeholder image or text if no image is available -->
+                    <div class="card-img-top" style="background-color: lightgray; height: 100%;"></div>
+                    {% endif %}
+                </div>
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">{{ product.description }}</p>
                     <p class="card-text">${{ product.price }}</p>
-                    <div class="d-flex justify-content-between">
-                        <a href="{% url 'edit_product' product.id %}" class="btn btn-primary">Edit</a>
-                        <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">Delete</a>
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'edit_product' product.id %}" class="btn btn-primary">Edit</a>
+                            <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">Delete</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
         {% empty %}
         <div class="col">
             <p>No products available.</p>
@@ -33,7 +42,9 @@
         {% endfor %}
     </div>
 </div>
-<p class="registration-link"><a href="add_product">Add Mental Health Related Products</a></p>
+
+<p class="registration-link"><a href="{% url 'add_product' %}">Add Mental Health Related Products</a></p>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV7g9Jznz3n8VvCk6PwFbF/+3PaPxMHpGjGwUr6JwXw981cZYdAveF95z2AOb" crossorigin="anonymous"></script>
 
 </body>
