@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +22,12 @@
         .product-card {
             margin-bottom: 20px;
         }
+
+        .product-image {
+            height: 200px; /* Set a fixed height for the images */
+            object-fit: cover; /* Ensure the entire image is visible */
+            border-radius: 10px 10px 0 0; /* Rounded corners on top */
+        }
     </style>
 </head>
 <body>
@@ -34,10 +38,12 @@
         {% for product in products %}
         <div class="col-md-4">
             <div class="card product-card">
+                <img src="{{ product.image.url }}" class="card-img-top product-image" alt="Product Image">
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">{{ product.description }}</p>
                     <p class="card-text"><strong>${{ product.price }}</strong></p>
+                    <p class="card-text">Available stocks: {{ product.stock }}</p> <!-- Display available stock -->
                     <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary btn-sm">Add to Cart</a>
                     <a href="{% url 'payment'  %}" class="btn btn-primary btn-sm">Buy now</a>
                 </div>
@@ -64,12 +70,5 @@
         });
     });
 </script>
-
-
-<footer>
-    <p><b>MindEase</b> <i> Mental Health Support Platform</i></p>
-    <p><i>2023</i></p>
-</footer>
-
 </body>
 </html>
