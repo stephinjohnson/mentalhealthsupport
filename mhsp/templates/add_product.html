@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-body">
                     <h2 class="card-title mb-4">Add Product</h2>
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data"> <!-- Added enctype for handling file uploads -->
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="productName" class="form-label">Product Name</label>
@@ -30,6 +30,10 @@
                                 <span class="input-group-text">$</span>
                                 <input type="number" class="form-control" id="productPrice" name="price" required>
                             </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="productImage" class="form-label">Product Image</label>
+                            <input type="file" class="form-control" id="productImage" name="image" accept="image/*" required> <!-- Added input field for image -->
                         </div>
                         <button type="submit" class="btn btn-primary">Add Product</button>
                     </form>

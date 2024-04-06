@@ -228,13 +228,14 @@ from .models import Product
 
 def add_product(request):
     if request.method == 'POST':
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)  # Include request.FILES for handling file uploads
         if form.is_valid():
             form.save()
             return redirect('product_list')  # Redirect to a page displaying the list of products
     else:
         form = ProductForm()
     return render(request, 'add_product.html', {'form': form})
+
 
 def product_list(request):
     products = Product.objects.all()
