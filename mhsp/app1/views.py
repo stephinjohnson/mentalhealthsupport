@@ -696,66 +696,55 @@ def supportplatform(request):
     experiences = UserExperience.objects.all().order_by('-created_at')
     return render(request, 'supportplatform.html', {'experiences': experiences})
 
-
-
-from django.shortcuts import get_object_or_404, redirect
-from .models import Product
-
-
-# views.py
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseNotAllowed, JsonResponse
 from .models import Product, Cart
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
-
-@login_required
-# views.py
-
 
 def add_to_cart(request, product_id):
-    product = Product.objects.get(pk=product_id)
+    try:
+        product = Product.objects.get(pk=product_id)
+    except Product.DoesNotExist:
+        return HttpResponseNotAllowed("Product does not exist.")
+
     user_cart, created = Cart.objects.get_or_create(user=request.user, product=product)
     if not created:
         user_cart.quantity += 1
         user_cart.save()
+
     return redirect('add_to_cart_page')
 
-
-
-# views.py
-from django.shortcuts import render
-from .models import Cart
-
 def add_to_cart_page(request):
     user_carts = Cart.objects.filter(user=request.user)
     return render(request, 'add_to_cart_page.html', {'user_carts': user_carts})
 
-# views.py
-from django.shortcuts import render, redirect
-from django.http import HttpResponseNotAllowed, JsonResponse
-from .models import Cart
+from django.db.models import F
 
-def add_to_cart_page(request):
-    user_carts = Cart.objects.filter(user=request.user)
-    return render(request, 'add_to_cart_page.html', {'user_carts': user_carts})
-
+@login_required
 def update_cart_quantity(request, cart_id, action):
     if request.method == 'POST' and action in ['increment', 'decrement']:
-        cart_item = Cart.objects.get(pk=cart_id, user=request.user)
+        cart_item = get_object_or_404(Cart, pk=cart_id, user=request.user)
 
         if action == 'increment':
-            cart_item.quantity += 1
+            cart_item.quantity = F('quantity') + 1
         elif action == 'decrement':
             if cart_item.quantity > 1:
-                cart_item.quantity -= 1
+                cart_item.quantity = F('quantity') - 1
             else:
                 cart_item.delete()
 
         cart_item.save()
 
-        return JsonResponse({'success': True, 'new_quantity': cart_item.quantity})
+        # Update the total price of the cart item
+        cart_item.refresh_from_db()
+        total_price = cart_item.quantity * cart_item.product.price
+        cart_item.total_price = total_price
+        cart_item.save()
+
+        return JsonResponse({'success': True, 'new_quantity': cart_item.quantity, 'total_price': total_price})
 
     return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+
 
 
 

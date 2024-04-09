@@ -1,40 +1,102 @@
-
-
-
-<!-- templates/add_to_cart_page.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Cart</title>
-   
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+            margin: 0;
+        }
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        header h2 {
+            margin: 0;
+        }
+        .cart-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .quantity-btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        .quantity {
+            margin: 0 10px;
+        }
+        .price {
+            margin-left: auto;
+        }
+        .btn-buy {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+        .btn-buy:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
     <header>
         <h2>Your Cart</h2>
     </header>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <div class="cart-container">
         <ul>
             {% for cart_item in user_carts %}
-                <li>
-                    <span>Book:<b>{{ cart_item.product.name }}</b></span>
-                    
-                    
+                <li data-cart-id="{{ cart_item.id }}">
+                    <span>Book: <b>{{ cart_item.product.name }}</b></span>
                     <div class="quantity-controls">
                         <button class="quantity-btn" data-cart-id="{{ cart_item.id }}" data-action="decrement">-</button>
-                        <span>Quantity: {{ cart_item.quantity }}</span>
-                        
+                        <span class="quantity">Quantity: {{ cart_item.quantity }}</span>
                         <button class="quantity-btn" data-cart-id="{{ cart_item.id }}" data-action="increment">+</button>
-
-                        <span>${{ cart_item.product.price }}</span>
+                        <span class="price">Total Price: ${{ cart_item.total_price }}</span>
                     </div>
                 </li>
             {% endfor %}
         </ul>
-        <a href="{% url 'payment'  %}" class="btn btn-primary btn-sm">Buy now</a>
+        <a href="{% url 'payment'  %}" class="btn btn-primary btn-sm btn-buy">Buy now</a>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         document.querySelectorAll('.quantity-btn').forEach(button => {
             button.addEventListener('click', function() {
@@ -52,8 +114,15 @@
                 })
                 .then(response => {
                     if (response.ok) {
-                        // Optionally, you can update the UI to reflect the change
-                        window.location.reload();  // Refresh the page after the update
+                        // Update the UI to reflect the change
+                        response.json().then(data => {
+                            // Find the cart item element by its ID
+                            const cartItemElement = document.querySelector(`[data-cart-id="${cartId}"]`);
+                            
+                            // Update the quantity and total price of the cart item
+                            cartItemElement.querySelector('.quantity').innerText = `Quantity: ${data.new_quantity}`;
+                            cartItemElement.querySelector('.price').innerText = `Total Price: $${data.total_price}`;
+                        });
                     } else {
                         console.error('Failed to update cart quantity');
                     }

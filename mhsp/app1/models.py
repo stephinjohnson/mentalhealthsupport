@@ -38,6 +38,9 @@ class Product(models.Model):
 
 
 
+
+
+
 class Feedback(models.Model):
     therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='therapist_feedback')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_feedback')
@@ -86,8 +89,16 @@ class Cart(models.Model):
         return f"{self.user.username}'s Cart"
 
 
+class CartItem(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # New field
 
-# time slot
+    def save(self, *args, **kwargs):
+        self.total_price = self.quantity * self.product.price
+        super().save(*args, **kwargs)
+
     
 class TimeSlot(models.Model):
     class SessionType(models.TextChoices):
