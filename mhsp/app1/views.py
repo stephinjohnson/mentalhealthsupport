@@ -1356,3 +1356,140 @@ def new_paymenttok(request):
             'order_id': order['id'],
         }
         return render(request, 'new_paymenttok.html', context)
+
+# Implementing Emotion Detection
+# views.py
+# from django.shortcuts import render
+# import cv2
+# import numpy as np
+# import tensorflow_hub as hub
+
+# def index(request):
+#     detect_emotions()
+#     return render(request, 'index.html')
+
+# def detect_emotions():
+#     try:
+#         # Load the pre-trained Haar cascade for face detection
+#         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+#         # Load the FER model from TensorFlow Hub
+#         # Load the FER model from TensorFlow Hub
+#         fer_model = hub.load("https://tfhub.dev/google/on_device_vision/classifier/emotion_classifier_autoflip/1")
+
+#         print("FER model loaded successfully!")
+#     except Exception as e:
+#         print("Error loading FER model:", e)
+#         return
+
+#     # Open video capture device (0 for webcam)
+#     cap = cv2.VideoCapture(0)
+
+#     while True:
+#         # Capture frame-by-frame
+#         ret, frame = cap.read()
+
+#         # Convert the frame to grayscale for face detection
+#         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+#         # Detect faces in the frame
+#         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
+#         # Draw rectangles around the detected faces and label emotions
+#         for (x, y, w, h) in faces:
+#             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+#             # Perform emotion detection on each face region
+#             emotion = detect_single_emotion(gray[y:y+h, x:x+w], fer_model)
+#             cv2.putText(frame, emotion, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+
+#         # Convert the frame to JPEG format
+#         _, jpeg = cv2.imencode('.jpg', frame)
+
+#         # Send the JPEG frame to the web interface via Django channels or other means
+
+#         # Break the loop if 'q' is pressed
+#         if cv2.waitKey(1) & 0xFF == ord('q'):
+#             break
+
+#     # Release the capture device
+#     cap.release()
+
+# def detect_single_emotion(face_region, fer_model):
+#     emotions = ["Angry", "Disgust", "Fear", "Happy", "Sad", "Surprise", "Neutral"]
+
+#     # Resize input frame to match model input size (48x48 pixels)
+#     resized_face = cv2.resize(face_region, (48, 48))
+
+#     # Normalize pixel values to [0, 1]
+#     normalized_face = resized_face / 255.0
+
+#     # Expand dimensions to match model input shape
+#     input_tensor = np.expand_dims(normalized_face, 0)
+
+#     # Perform inference
+#     predictions = fer_model(input_tensor)
+
+#     # Get the predicted emotion label
+#     emotion_index = np.argmax(predictions[0])
+#     return emotions[emotion_index]
+
+
+
+
+# new testing 
+from django.shortcuts import render
+import cv2
+from deepface import DeepFace
+
+def emotion_detection(request):
+    # Open video capture device (0 for webcam)
+    cap = cv2.VideoCapture(0)
+
+    # Initialize face count
+    total_faces_detected = 0
+
+    while True:
+        # Capture frame-by-frame
+        ret, frame = cap.read()
+
+        # Detect faces in the frame
+        faces = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml').detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+        # Update total face count
+        total_faces_detected = len(faces)
+
+        # Process each detected face
+        for (x, y, w, h) in faces:
+            # Perform emotion classification
+            face = frame[y:y+h, x:x+w]
+            result = DeepFace.analyze(face, enforce_detection=False)
+
+            # Ensure that result is not an empty list
+            if result:
+                # Assuming the first element of the list contains the dominant emotion
+                emotion = result[0]['dominant_emotion']
+
+                # Overlay detected emotion on the frame
+                cv2.putText(frame, emotion, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+
+            # Draw rectangle around the detected face
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+
+        # Display the total face count
+        cv2.putText(frame, f"Total Faces Detected: {total_faces_detected}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+
+        # Display the resulting frame
+        cv2.imshow('Real-time Emotion Detection', frame)
+
+        # Break the loop if 'q' is pressed
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    # Release the capture device and close all windows
+    cap.release()
+    cv2.destroyAllWindows()
+
+    return render(request, 'emotion_detection.html')
+
+
+

@@ -103,5 +103,5 @@ urlpatterns=[
     #path('generate_payment_request', views.generate_payment_request, name='generate_payment_request'),
     path('generate_pdf_content/', views.generate_pdf_content, name='generate_pdf_content'),
     path('send_approval_notification/', views.send_approval_notification, name='send_approval_notification'),
-   
+    path('emotion_detection/',views.emotion_detection,name='emotion_detection'),
 ]
