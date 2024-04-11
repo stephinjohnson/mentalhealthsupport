@@ -1437,59 +1437,139 @@ def new_paymenttok(request):
 
 
 # new testing 
-from django.shortcuts import render
+
 import cv2
+import tkinter as tk
+from tkinter import filedialog
+from PIL import Image, ImageTk
 from deepface import DeepFace
 
+# Dictionary mapping emotions to image file paths
+EMOJI_MAP = {
+    'angry': 'app1/emoji_images/angry.png',
+    'disgust': 'app1/emoji_images/disgust.png',
+    'fear': 'app1/emoji_images/fear.png',
+    'happy': 'app1/emoji_images/happy.png',
+    'neutral': 'app1/emoji_images/neutral.png',
+    'sad': 'app1/emoji_images/sad.png',
+    'surprise': 'app1/emoji_images/surprise.png'
+}
+
 def emotion_detection(request):
-    # Open video capture device (0 for webcam)
-    cap = cv2.VideoCapture(0)
+    def detect_emotion():
+        # Function to start video capture from webcam
+        def open_camera():
+            cap = cv2.VideoCapture(0)
 
-    # Initialize face count
-    total_faces_detected = 0
+            while True:
+                ret, frame = cap.read()
 
-    while True:
-        # Capture frame-by-frame
-        ret, frame = cap.read()
+                if ret:
+                    # Detect faces in the frame
+                    faces = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml').detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-        # Detect faces in the frame
-        faces = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml').detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+                    # Process each detected face
+                    for (x, y, w, h) in faces:
+                        # Perform emotion classification
+                        face = frame[y:y+h, x:x+w]
+                        result = DeepFace.analyze(face, enforce_detection=False)
 
-        # Update total face count
-        total_faces_detected = len(faces)
+                        # Ensure that result is not an empty list
+                        if result:
+                            # Assuming the first element of the list contains the dominant emotion
+                            emotion = result[0]['dominant_emotion']
 
-        # Process each detected face
-        for (x, y, w, h) in faces:
-            # Perform emotion classification
-            face = frame[y:y+h, x:x+w]
-            result = DeepFace.analyze(face, enforce_detection=False)
+                            # Overlay detected emotion on the frame
+                            cv2.putText(frame, emotion, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
 
-            # Ensure that result is not an empty list
-            if result:
-                # Assuming the first element of the list contains the dominant emotion
-                emotion = result[0]['dominant_emotion']
+                        # Draw rectangle around the detected face
+                        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
-                # Overlay detected emotion on the frame
-                cv2.putText(frame, emotion, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+                    # Display the resulting frame
+                    img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    img = Image.fromarray(img)
+                    img_tk = ImageTk.PhotoImage(image=img)
+                    canvas.create_image(0, 0, anchor=tk.NW, image=img_tk)
 
-            # Draw rectangle around the detected face
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+                    root.update()
 
-        # Display the total face count
-        cv2.putText(frame, f"Total Faces Detected: {total_faces_detected}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+                    # Break the loop if 'q' is pressed
+                    if cv2.waitKey(1) & 0xFF == ord('q'):
+                        break
 
-        # Display the resulting frame
-        cv2.imshow('Real-time Emotion Detection', frame)
+            # Release the capture device
+            cap.release()
 
-        # Break the loop if 'q' is pressed
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        # Function to upload an image and detect emotion
+        def upload_image():
+            file_path = filedialog.askopenfilename()
+            if file_path:
+                frame = cv2.imread(file_path)
 
-    # Release the capture device and close all windows
-    cap.release()
-    cv2.destroyAllWindows()
+                # Detect faces in the frame
+                faces = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml').detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+                detected_emotions = []
+
+                # Process each detected face
+                for (x, y, w, h) in faces:
+                    # Perform emotion classification
+                    face = frame[y:y+h, x:x+w]
+                    result = DeepFace.analyze(face, enforce_detection=False)
+
+                    # Ensure that result is not an empty list
+                    if result:
+                        # Assuming the first element of the list contains the dominant emotion
+                        emotion = result[0]['dominant_emotion']
+                        detected_emotions.append(emotion)
+
+                # Display detected emotions with images
+                display_emotions_with_images(detected_emotions)
+
+        # Function to display emotions using images
+        def display_emotions_with_images(detected_emotions):
+            for emotion in detected_emotions:
+                image_path = EMOJI_MAP.get(emotion)
+                if image_path:
+                    img = Image.open(image_path)
+                    img.thumbnail((50, 50))  # Resize image if needed
+                    img_tk = ImageTk.PhotoImage(img)
+                    image_label = tk.Label(root, image=img_tk)
+                    image_label.image = img_tk  # Keep a reference to the image to prevent garbage collection
+                    image_label.pack()
+                else:
+                    emotions_text.insert(tk.END, f"{emotion}\n")
+
+        # Create Tkinter window
+        root = tk.Tk()
+        root.title("Emotion Detection using Facial Expression")
+        root.configure(background="#f0f0f0")
+
+        # Heading
+        heading_label = tk.Label(root, text="Emotion Detection using Facial Expression", font=("Arial", 16, "bold"), bg="#f0f0f0")
+        heading_label.pack(pady=10)
+
+        # Create canvas to display video feed
+        canvas = tk.Canvas(root, width=640, height=480, bg="#fff")
+        canvas.pack()
+
+        # Button to open camera
+        camera_btn = tk.Button(root, text="Open Camera", command=open_camera, bg="#007bff", fg="white", padx=10, pady=5, font=("Arial", 12), borderwidth=0, relief="raised")
+        camera_btn.pack(pady=5)
+
+        # Button to upload image
+        upload_btn = tk.Button(root, text="Upload Image", command=upload_image, bg="#28a745", fg="white", padx=10, pady=5, font=("Arial", 12), borderwidth=0, relief="raised")
+        upload_btn.pack(pady=5)
+
+        # Text widget to display detected emotions
+        emotions_text = tk.Text(root, height=8, width=40, bg="#f0f0f0", borderwidth=0, font=("Arial", 12))
+        emotions_text.pack(pady=5)
+        emotions_text.insert(tk.END, "Detected Emotions:\n")
+        emotions_text.config(state=tk.DISABLED)
+
+        root.mainloop()
+
+    # Run the emotion detection function
+    detect_emotion()
 
     return render(request, 'emotion_detection.html')
-
-
-
