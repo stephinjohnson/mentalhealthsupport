@@ -1437,7 +1437,6 @@ def new_paymenttok(request):
 
 
 # new testing 
-
 import cv2
 import tkinter as tk
 from tkinter import filedialog
@@ -1488,6 +1487,7 @@ def emotion_detection(request):
                     # Display the resulting frame
                     img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     img = Image.fromarray(img)
+                    img = img.resize((640, 480))  # Resize image to fit the canvas
                     img_tk = ImageTk.PhotoImage(image=img)
                     canvas.create_image(0, 0, anchor=tk.NW, image=img_tk)
 
@@ -1532,11 +1532,11 @@ def emotion_detection(request):
                 image_path = EMOJI_MAP.get(emotion)
                 if image_path:
                     img = Image.open(image_path)
-                    img.thumbnail((50, 50))  # Resize image if needed
+                    img = img.resize((100, 100))  # Resize image for better visibility
                     img_tk = ImageTk.PhotoImage(img)
                     image_label = tk.Label(root, image=img_tk)
                     image_label.image = img_tk  # Keep a reference to the image to prevent garbage collection
-                    image_label.pack()
+                    image_label.pack(side=tk.RIGHT)  # Pack the label to the right side
                 else:
                     emotions_text.insert(tk.END, f"{emotion}\n")
 
@@ -1551,7 +1551,7 @@ def emotion_detection(request):
 
         # Create canvas to display video feed
         canvas = tk.Canvas(root, width=640, height=480, bg="#fff")
-        canvas.pack()
+        canvas.pack(side=tk.LEFT)  # Pack the canvas to the left side
 
         # Button to open camera
         camera_btn = tk.Button(root, text="Open Camera", command=open_camera, bg="#007bff", fg="white", padx=10, pady=5, font=("Arial", 12), borderwidth=0, relief="raised")
@@ -1563,7 +1563,7 @@ def emotion_detection(request):
 
         # Text widget to display detected emotions
         emotions_text = tk.Text(root, height=8, width=40, bg="#f0f0f0", borderwidth=0, font=("Arial", 12))
-        emotions_text.pack(pady=5)
+        emotions_text.pack(pady=5, side=tk.RIGHT)  # Pack the text widget to the right side
         emotions_text.insert(tk.END, "Detected Emotions:\n")
         emotions_text.config(state=tk.DISABLED)
 
@@ -1573,3 +1573,4 @@ def emotion_detection(request):
     detect_emotion()
 
     return render(request, 'emotion_detection.html')
+
