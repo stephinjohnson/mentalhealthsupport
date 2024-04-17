@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mental Health Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            margin-top: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="date"],
+        input[type="time"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #e74c3c;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ccc;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mental Health Status</h1>
+        <ul>
+        {% for user_status in user_statuses %}
+            <li>
+                <p>Name: {{ user_status.user.first_name }}</p>
+                <p>Status: {{ user_status.status }}</p>
+                <p>Sleep Quality: {{ user_status.sleep_quality }}</p>
+                <p>Energy Level: {{ user_status.energy_level }}</p>
+                <p>Stress Level: {{ user_status.stress_level }}</p>
+                <p>Mood: {{ user_status.mood }}</p>
+                <p>Thoughts: {{ user_status.thoughts }}</p>
+                <!-- Add delete button/link -->
+                <form method="post" action="{% url 'delete_mental_health_status' user_status.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+            <hr>
+        {% empty %}
+            <li>No mental health status found.</li>
+        {% endfor %}
+        </ul>
+
+           
+        </form>
+    </div>
+</body>
+</html>

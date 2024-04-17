@@ -1,0 +1,101 @@
+<!-- add_mental_health_status.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Mental Health Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        select, textarea {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add Mental Health Status</h1>
+        <form method="post">
+            {% csrf_token %}
+            <label for="therapist">Therapist:</label>
+            <select name="therapist" id="therapist">
+                {% for therapist in therapists %}
+                    <option value="{{ therapist.id }}">{{ therapist.username }}</option>
+                {% endfor %}
+            </select>
+            <label for="status">Status:</label>
+            <select name="status" id="status">
+                <option value="Feeling Anxious">Feeling Anxious</option>
+                <option value="Feeling Depressed">Feeling Depressed</option>
+                <option value="Feeling Stressed">Feeling Stressed</option>
+            </select>
+            <label for="sleep_quality">Sleep Quality:</label>
+            <select name="sleep_quality" id="sleep_quality">
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+                <option value="Poor">Poor</option>
+            </select>
+            <label for="energy_level">Energy Level:</label>
+            <select name="energy_level" id="energy_level">
+                <option value="High">High</option>
+                <option value="Moderate">Moderate</option>
+                <option value="Low">Low</option>
+            </select>
+            <label for="stress_level">Stress Level:</label>
+            <select name="stress_level" id="stress_level">
+                <option value="Low">Low</option>
+                <option value="Moderate">Moderate</option>
+                <option value="High">High</option>
+            </select>
+            <label for="mood">Mood:</label>
+            <select name="mood" id="mood">
+                <option value="Happy">Happy</option>
+                <option value="Neutral">Neutral</option>
+                <option value="Sad">Sad</option>
+            </select>
+            <label for="thoughts">Thoughts:</label>
+            <textarea name="thoughts" id="thoughts" cols="30" rows="5"></textarea>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

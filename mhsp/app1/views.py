@@ -1274,41 +1274,6 @@ def download_receipt(request, appointment_id):
 
 
 
-# from django.shortcuts import redirect
-# import razorpay
-# from django.conf import settings
-
-# def generate_payment_request(request):
-#     if request.method == 'POST':
-#         # Initialize Razorpay client with your API key
-#         client = razorpay.Client(auth=(settings.RAZORPAY_API_KEY, settings.RAZORPAY_API_SECRET))
-
-#         # Extract necessary data from the request
-#         time_slot_id = request.POST.get('time_slot_id')
-
-#         # Calculate the amount based on time slot details or any other criteria
-#         amount = 1000  # Example amount in paisa (e.g., 1000 paisa = Rs. 10)
-
-#         # Create a Razorpay order
-#         razorpay_order = client.order.create({
-#             'amount': amount,
-#             'currency': 'INR',
-#             'payment_capture': 1  # Auto-capture payment after order creation
-#             # Add additional parameters as required by your payment gateway
-#         })
-
-#         # Extract the order ID from the Razorpay order response
-#         order_id = razorpay_order['id']
-
-#         # Optionally, you may save the order ID or other details in your database for reference
-
-#         # Redirect the user to the Razorpay checkout page with the order ID
-#         return redirect(f"https://checkout.razorpay.com/v1/payment?order_id={order_id}")
-
-#     # If the request method is not POST, handle it accordingly (e.g., return an error response)
-#     return HttpResponseBadRequest("Invalid request method")
-
-
 
 # views.py
 
@@ -1357,220 +1322,211 @@ def new_paymenttok(request):
         }
         return render(request, 'new_paymenttok.html', context)
 
-# Implementing Emotion Detection
-# views.py
-# from django.shortcuts import render
+
+
+
+# # new testing 
 # import cv2
-# import numpy as np
-# import tensorflow_hub as hub
+# import tkinter as tk
+# from tkinter import filedialog
+# from PIL import Image, ImageTk
+# from deepface import DeepFace
 
-# def index(request):
-#     detect_emotions()
-#     return render(request, 'index.html')
+# # Dictionary mapping emotions to image file paths
+# EMOJI_MAP = {
+#     'angry': 'app1/emoji_images/angry.png',
+#     'disgust': 'app1/emoji_images/disgust.png',
+#     'fear': 'app1/emoji_images/fear.png',
+#     'happy': 'app1/emoji_images/happy.png',
+#     'neutral': 'app1/emoji_images/neutral.png',
+#     'sad': 'app1/emoji_images/sad.png',
+#     'surprise': 'app1/emoji_images/surprise.png'
+# }
 
-# def detect_emotions():
-#     try:
-#         # Load the pre-trained Haar cascade for face detection
-#         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+# def emotion_detection(request):
+#     def detect_emotion():
+#         # Function to start video capture from webcam
+#         def open_camera():
+#             cap = cv2.VideoCapture(0)
 
-#         # Load the FER model from TensorFlow Hub
-#         # Load the FER model from TensorFlow Hub
-#         fer_model = hub.load("https://tfhub.dev/google/on_device_vision/classifier/emotion_classifier_autoflip/1")
+#             while True:
+#                 ret, frame = cap.read()
 
-#         print("FER model loaded successfully!")
-#     except Exception as e:
-#         print("Error loading FER model:", e)
-#         return
+#                 if ret:
+#                     # Detect faces in the frame
+#                     faces = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml').detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-#     # Open video capture device (0 for webcam)
-#     cap = cv2.VideoCapture(0)
+#                     # Process each detected face
+#                     for (x, y, w, h) in faces:
+#                         # Perform emotion classification
+#                         face = frame[y:y+h, x:x+w]
+#                         result = DeepFace.analyze(face, enforce_detection=False)
 
-#     while True:
-#         # Capture frame-by-frame
-#         ret, frame = cap.read()
+#                         # Ensure that result is not an empty list
+#                         if result:
+#                             # Assuming the first element of the list contains the dominant emotion
+#                             emotion = result[0]['dominant_emotion']
 
-#         # Convert the frame to grayscale for face detection
-#         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+#                             # Overlay detected emotion on the frame
+#                             cv2.putText(frame, emotion, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
 
-#         # Detect faces in the frame
-#         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-#         # Draw rectangles around the detected faces and label emotions
-#         for (x, y, w, h) in faces:
-#             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+#                         # Draw rectangle around the detected face
+#                         cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
-#             # Perform emotion detection on each face region
-#             emotion = detect_single_emotion(gray[y:y+h, x:x+w], fer_model)
-#             cv2.putText(frame, emotion, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+#                     # Display the resulting frame
+#                     img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+#                     img = Image.fromarray(img)
+#                     img = img.resize((640, 480))  # Resize image to fit the canvas
+#                     img_tk = ImageTk.PhotoImage(image=img)
+#                     canvas.create_image(0, 0, anchor=tk.NW, image=img_tk)
 
-#         # Convert the frame to JPEG format
-#         _, jpeg = cv2.imencode('.jpg', frame)
+#                     root.update()
 
-#         # Send the JPEG frame to the web interface via Django channels or other means
+#                     # Break the loop if 'q' is pressed
+#                     if cv2.waitKey(1) & 0xFF == ord('q'):
+#                         break
 
-#         # Break the loop if 'q' is pressed
-#         if cv2.waitKey(1) & 0xFF == ord('q'):
-#             break
+#             # Release the capture device
+#             cap.release()
 
-#     # Release the capture device
-#     cap.release()
+#         # Function to upload an image and detect emotion
+#         def upload_image():
+#             file_path = filedialog.askopenfilename()
+#             if file_path:
+#                 frame = cv2.imread(file_path)
 
-# def detect_single_emotion(face_region, fer_model):
-#     emotions = ["Angry", "Disgust", "Fear", "Happy", "Sad", "Surprise", "Neutral"]
+#                 # Detect faces in the frame
+#                 faces = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml').detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-#     # Resize input frame to match model input size (48x48 pixels)
-#     resized_face = cv2.resize(face_region, (48, 48))
+#                 detected_emotions = []
 
-#     # Normalize pixel values to [0, 1]
-#     normalized_face = resized_face / 255.0
+#                 # Process each detected face
+#                 for (x, y, w, h) in faces:
+#                     # Perform emotion classification
+#                     face = frame[y:y+h, x:x+w]
+#                     result = DeepFace.analyze(face, enforce_detection=False)
 
-#     # Expand dimensions to match model input shape
-#     input_tensor = np.expand_dims(normalized_face, 0)
+#                     # Ensure that result is not an empty list
+#                     if result:
+#                         # Assuming the first element of the list contains the dominant emotion
+#                         emotion = result[0]['dominant_emotion']
+#                         detected_emotions.append(emotion)
 
-#     # Perform inference
-#     predictions = fer_model(input_tensor)
+#                 # Display detected emotions with images
+#                 display_emotions_with_images(detected_emotions)
 
-#     # Get the predicted emotion label
-#     emotion_index = np.argmax(predictions[0])
-#     return emotions[emotion_index]
+#         # Function to display emotions using images
+#         def display_emotions_with_images(detected_emotions):
+#             for emotion in detected_emotions:
+#                 image_path = EMOJI_MAP.get(emotion)
+#                 if image_path:
+#                     img = Image.open(image_path)
+#                     img = img.resize((100, 100))  # Resize image for better visibility
+#                     img_tk = ImageTk.PhotoImage(img)
+#                     image_label = tk.Label(root, image=img_tk)
+#                     image_label.image = img_tk  # Keep a reference to the image to prevent garbage collection
+#                     image_label.pack(side=tk.RIGHT)  # Pack the label to the right side
+#                 else:
+#                     emotions_text.insert(tk.END, f"{emotion}\n")
+
+#         # Create Tkinter window
+#         root = tk.Tk()
+#         root.title("Emotion Detection using Facial Expression")
+#         root.configure(background="#f0f0f0")
+
+#         # Heading
+#         heading_label = tk.Label(root, text="Emotion Detection using Facial Expression", font=("Arial", 16, "bold"), bg="#f0f0f0")
+#         heading_label.pack(pady=10)
+
+#         # Create canvas to display video feed
+#         canvas = tk.Canvas(root, width=640, height=480, bg="#fff")
+#         canvas.pack(side=tk.LEFT)  # Pack the canvas to the left side
+
+#         # Button to open camera
+#         camera_btn = tk.Button(root, text="Open Camera", command=open_camera, bg="#007bff", fg="white", padx=10, pady=5, font=("Arial", 12), borderwidth=0, relief="raised")
+#         camera_btn.pack(pady=5)
+
+#         # Button to upload image
+#         upload_btn = tk.Button(root, text="Upload Image", command=upload_image, bg="#28a745", fg="white", padx=10, pady=5, font=("Arial", 12), borderwidth=0, relief="raised")
+#         upload_btn.pack(pady=5)
+
+#         # Text widget to display detected emotions
+#         emotions_text = tk.Text(root, height=8, width=40, bg="#f0f0f0", borderwidth=0, font=("Arial", 12))
+#         emotions_text.pack(pady=5, side=tk.RIGHT)  # Pack the text widget to the right side
+#         emotions_text.insert(tk.END, "Detected Emotions:\n")
+#         emotions_text.config(state=tk.DISABLED)
+
+#         root.mainloop()
+
+#     # Run the emotion detection function
+#     detect_emotion()
+
+#     return render(request, 'emotion_detection.html')
 
 
 
 
-# new testing 
-import cv2
-import tkinter as tk
-from tkinter import filedialog
-from PIL import Image, ImageTk
-from deepface import DeepFace
 
-# Dictionary mapping emotions to image file paths
-EMOJI_MAP = {
-    'angry': 'app1/emoji_images/angry.png',
-    'disgust': 'app1/emoji_images/disgust.png',
-    'fear': 'app1/emoji_images/fear.png',
-    'happy': 'app1/emoji_images/happy.png',
-    'neutral': 'app1/emoji_images/neutral.png',
-    'sad': 'app1/emoji_images/sad.png',
-    'surprise': 'app1/emoji_images/surprise.png'
-}
+# new modifications on seventeen
 
-def emotion_detection(request):
-    def detect_emotion():
-        # Function to start video capture from webcam
-        def open_camera():
-            cap = cv2.VideoCapture(0)
+# views.py
+from django.shortcuts import render
+from .models import Appointment
 
-            while True:
-                ret, frame = cap.read()
+def appointment_history(request):
+    user = request.user
+    appointments = Appointment.objects.filter(user=user)
+    return render(request, 'appointment_history.html', {'appointments': appointments})
 
-                if ret:
-                    # Detect faces in the frame
-                    faces = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml').detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-                    # Process each detected face
-                    for (x, y, w, h) in faces:
-                        # Perform emotion classification
-                        face = frame[y:y+h, x:x+w]
-                        result = DeepFace.analyze(face, enforce_detection=False)
 
-                        # Ensure that result is not an empty list
-                        if result:
-                            # Assuming the first element of the list contains the dominant emotion
-                            emotion = result[0]['dominant_emotion']
+# views.py
 
-                            # Overlay detected emotion on the frame
-                            cv2.putText(frame, emotion, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
 
-                        # Draw rectangle around the detected face
-                        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+from django.shortcuts import render, redirect
+from .models import MentalHealthStatus, User
 
-                    # Display the resulting frame
-                    img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                    img = Image.fromarray(img)
-                    img = img.resize((640, 480))  # Resize image to fit the canvas
-                    img_tk = ImageTk.PhotoImage(image=img)
-                    canvas.create_image(0, 0, anchor=tk.NW, image=img_tk)
+def add_mental_health_status(request):
+    therapists = User.objects.filter(role='THERAPIST')
 
-                    root.update()
+    if request.method == 'POST':
+        therapist_id = request.POST.get('therapist')
+        status_text = request.POST.get('status')
 
-                    # Break the loop if 'q' is pressed
-                    if cv2.waitKey(1) & 0xFF == ord('q'):
-                        break
+        if therapist_id and status_text:
+            therapist = User.objects.get(pk=therapist_id)
+            MentalHealthStatus.objects.create(user=request.user, therapist=therapist, status=status_text)
+            return redirect('home')  # Redirect to user's home page after submitting the form
 
-            # Release the capture device
-            cap.release()
+    return render(request, 'add_mental_health_status.html', {'therapists': therapists})
 
-        # Function to upload an image and detect emotion
-        def upload_image():
-            file_path = filedialog.askopenfilename()
-            if file_path:
-                frame = cv2.imread(file_path)
 
-                # Detect faces in the frame
-                faces = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml').detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-                detected_emotions = []
 
-                # Process each detected face
-                for (x, y, w, h) in faces:
-                    # Perform emotion classification
-                    face = frame[y:y+h, x:x+w]
-                    result = DeepFace.analyze(face, enforce_detection=False)
+# views.py
+from django.shortcuts import render
+from .models import MentalHealthStatus
 
-                    # Ensure that result is not an empty list
-                    if result:
-                        # Assuming the first element of the list contains the dominant emotion
-                        emotion = result[0]['dominant_emotion']
-                        detected_emotions.append(emotion)
+def therapist_mental_health_status(request):
+    if request.user.role != 'THERAPIST':
+        return redirect('home')  # Redirect to home page if the user is not a therapist
 
-                # Display detected emotions with images
-                display_emotions_with_images(detected_emotions)
+    # Get mental health statuses for all users assigned to the therapist
+    user_statuses = MentalHealthStatus.objects.filter(therapist=request.user)
 
-        # Function to display emotions using images
-        def display_emotions_with_images(detected_emotions):
-            for emotion in detected_emotions:
-                image_path = EMOJI_MAP.get(emotion)
-                if image_path:
-                    img = Image.open(image_path)
-                    img = img.resize((100, 100))  # Resize image for better visibility
-                    img_tk = ImageTk.PhotoImage(img)
-                    image_label = tk.Label(root, image=img_tk)
-                    image_label.image = img_tk  # Keep a reference to the image to prevent garbage collection
-                    image_label.pack(side=tk.RIGHT)  # Pack the label to the right side
-                else:
-                    emotions_text.insert(tk.END, f"{emotion}\n")
+    return render(request, 'therapist_mental_health_status.html', {'user_statuses': user_statuses})
 
-        # Create Tkinter window
-        root = tk.Tk()
-        root.title("Emotion Detection using Facial Expression")
-        root.configure(background="#f0f0f0")
 
-        # Heading
-        heading_label = tk.Label(root, text="Emotion Detection using Facial Expression", font=("Arial", 16, "bold"), bg="#f0f0f0")
-        heading_label.pack(pady=10)
 
-        # Create canvas to display video feed
-        canvas = tk.Canvas(root, width=640, height=480, bg="#fff")
-        canvas.pack(side=tk.LEFT)  # Pack the canvas to the left side
+# views.py
+from django.shortcuts import redirect, get_object_or_404
+from .models import MentalHealthStatus
 
-        # Button to open camera
-        camera_btn = tk.Button(root, text="Open Camera", command=open_camera, bg="#007bff", fg="white", padx=10, pady=5, font=("Arial", 12), borderwidth=0, relief="raised")
-        camera_btn.pack(pady=5)
+def delete_mental_health_status(request, status_id):
+    if request.method == 'POST':
+        status = get_object_or_404(MentalHealthStatus, pk=status_id)
+        status.delete()
+    return redirect('therapist_mental_health_status')
 
-        # Button to upload image
-        upload_btn = tk.Button(root, text="Upload Image", command=upload_image, bg="#28a745", fg="white", padx=10, pady=5, font=("Arial", 12), borderwidth=0, relief="raised")
-        upload_btn.pack(pady=5)
 
-        # Text widget to display detected emotions
-        emotions_text = tk.Text(root, height=8, width=40, bg="#f0f0f0", borderwidth=0, font=("Arial", 12))
-        emotions_text.pack(pady=5, side=tk.RIGHT)  # Pack the text widget to the right side
-        emotions_text.insert(tk.END, "Detected Emotions:\n")
-        emotions_text.config(state=tk.DISABLED)
-
-        root.mainloop()
-
-    # Run the emotion detection function
-    detect_emotion()
-
-    return render(request, 'emotion_detection.html')
 

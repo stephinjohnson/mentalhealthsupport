@@ -192,3 +192,75 @@ class Order(models.Model):
     
 
 
+# models.py
+from django.db import models
+from .models import User
+
+class MentalHealthStatus(models.Model):
+    STATUS_CHOICES = [
+        ('Feeling Anxious', 'Feeling Anxious'),
+        ('Feeling Depressed', 'Feeling Depressed'),
+        ('Feeling Stressed', 'Feeling Stressed'),
+    ]
+
+    SLEEP_QUALITY_CHOICES = [
+        ('Good', 'Good'),
+        ('Fair', 'Fair'),
+        ('Poor', 'Poor'),
+    ]
+
+    ENERGY_LEVEL_CHOICES = [
+        ('High', 'High'),
+        ('Moderate', 'Moderate'),
+        ('Low', 'Low'),
+    ]
+
+    STRESS_LEVEL_CHOICES = [
+        ('Low', 'Low'),
+        ('Moderate', 'Moderate'),
+        ('High', 'High'),
+    ]
+
+    MOOD_CHOICES = [
+        ('Happy', 'Happy'),
+        ('Neutral', 'Neutral'),
+        ('Sad', 'Sad'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='therapist_statuses')
+    status = models.CharField(max_length=255, choices=STATUS_CHOICES, default='Feeling Anxious')
+    sleep_quality = models.CharField(max_length=50, choices=SLEEP_QUALITY_CHOICES, default='Good')
+    energy_level = models.CharField(max_length=50, choices=ENERGY_LEVEL_CHOICES, default='Moderate')
+    stress_level = models.CharField(max_length=50, choices=STRESS_LEVEL_CHOICES, default='Low')
+    mood = models.CharField(max_length=50, choices=MOOD_CHOICES, default='Neutral')
+    thoughts = models.TextField(default='')
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Mental Health Status for {self.user.username}"
+
+
+
+# models.py
+from django.db import models
+from .models import User
+
+class UserAppointment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    therapist = models.ForeignKey(User, on_delete=models.CASCADE, related_name='therapist_appointments')
+    date = models.DateField()
+    time = models.TimeField()
+    notes = models.TextField()
+
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('APPROVED', 'Approved'),
+        ('CANCELLED', 'Cancelled'),
+    ]
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+
+    status_change_notification = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Appointment: {self.user.username} with {self.therapist.username} on {self.date} at {self.time}"

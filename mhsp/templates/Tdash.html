@@ -232,6 +232,21 @@
             <a href="{% url 'therapist_approve_appointment' appointment.id %}" class="btn btn-success">Approve Appointment</a>
             {% endfor %}
             <!-- Add Time Slot and View Time Slots buttons -->
+              <!-- therapist_home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Therapist Home Page</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.username }}!</h1>
+    <!-- Other content... -->
+    <a href="{% url 'therapist_mental_health_status' %}"><button>View Mental Health Status</button></a>
+</body>
+</html>
+
+
             <div class="btn-section">
               <a href="{% url 'add_time_slot' %}" class="btn btn-primary">Add Time Slot</a>
               <a href="{% url 'new_view_time_slots' %}" class="btn btn-secondary">View Time Slots</a>

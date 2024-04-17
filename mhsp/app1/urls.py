@@ -103,5 +103,9 @@ urlpatterns=[
     #path('generate_payment_request', views.generate_payment_request, name='generate_payment_request'),
     path('generate_pdf_content/', views.generate_pdf_content, name='generate_pdf_content'),
     path('send_approval_notification/', views.send_approval_notification, name='send_approval_notification'),
-    path('emotion_detection/',views.emotion_detection,name='emotion_detection'),
+    #path('emotion_detection/',views.emotion_detection,name='emotion_detection'),
+    path('appointment/history/', views.appointment_history, name='appointment_history'),
+    path('add_mental_health_status/', views.add_mental_health_status, name='add_mental_health_status'),
+    path('therapist/mental_health_status/', views.therapist_mental_health_status, name='therapist_mental_health_status'),
+    path('delete_mental_health_status/<int:status_id>/',views.delete_mental_health_status, name='delete_mental_health_status'),
 ]

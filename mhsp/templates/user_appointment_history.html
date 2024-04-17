@@ -1,0 +1,26 @@
+<!-- user_appointment_history.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Appointment History</title>
+</head>
+<body>
+    <h1>User Appointment History</h1>
+    <ul>
+    {% for appointment in appointments %}
+        <li>{{ appointment }} 
+            {% if appointment.status == 'APPROVED' %}
+                (Approved)
+            {% elif appointment.status == 'REJECTED' %}
+                (Rejected)
+            {% else %}
+                (Pending)
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>No appointments found.</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
