@@ -1518,6 +1518,7 @@ def therapist_mental_health_status(request):
 
 
 
+
 # views.py
 from django.shortcuts import redirect, get_object_or_404
 from .models import MentalHealthStatus
@@ -1527,6 +1528,7 @@ def delete_mental_health_status(request, status_id):
         status = get_object_or_404(MentalHealthStatus, pk=status_id)
         status.delete()
     return redirect('therapist_mental_health_status')
+
 
 
 

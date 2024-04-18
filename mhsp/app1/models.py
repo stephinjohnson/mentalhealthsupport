@@ -264,3 +264,10 @@ class UserAppointment(models.Model):
 
     def __str__(self):
         return f"Appointment: {self.user.username} with {self.therapist.username} on {self.date} at {self.time}"
+    
+class Prescription(models.Model):
+    appointment = models.ForeignKey(UserAppointment, on_delete=models.CASCADE, related_name='prescriptions')
+    description = models.TextField()
+
+    def __str__(self):
+        return f"Prescription for Appointment: {self.appointment.user.username} with {self.appointment.therapist.username} on {self.appointment.date}"

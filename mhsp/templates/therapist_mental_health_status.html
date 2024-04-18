@@ -1,97 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mental Health Status</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
-        form {
-            margin-top: 20px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input[type="date"],
-        input[type="time"],
-        textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #e74c3c;
-            color: #fff;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        hr {
-            border: none;
-            border-top: 1px solid #ccc;
-            margin: 10px 0;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Mental Health Status</h1>
-        <ul>
-        {% for user_status in user_statuses %}
-            <li>
-                <p>Name: {{ user_status.user.first_name }}</p>
-                <p>Status: {{ user_status.status }}</p>
-                <p>Sleep Quality: {{ user_status.sleep_quality }}</p>
-                <p>Energy Level: {{ user_status.energy_level }}</p>
-                <p>Stress Level: {{ user_status.stress_level }}</p>
-                <p>Mood: {{ user_status.mood }}</p>
-                <p>Thoughts: {{ user_status.thoughts }}</p>
-                <!-- Add delete button/link -->
-                <form method="post" action="{% url 'delete_mental_health_status' user_status.id %}">
-                    {% csrf_token %}
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-            <hr>
-        {% empty %}
-            <li>No mental health status found.</li>
-        {% endfor %}
-        </ul>
 
-           
-        </form>
-    </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+    }
+
+    .wrapper {
+      display: flex;
+      position: relative;
+    }
+
+    #sidebar {
+      height: 100vh;
+      width: 250px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #000000;
+      padding-top: 20px;
+      color: #fff;
+      transition: all 0.3s;
+      border-right: 2px solid #fff; /* Added border to separate sidebar from content */
+    }
+
+    #sidebar.active {
+      width: 60px;
+    }
+
+    #sidebar-content {
+      padding: 20px;
+    }
+
+    #sidebar-content.show-icons-only {
+      display: none;
+    }
+
+    #content {
+      flex-grow: 1;
+      padding: 15px;
+      transition: all 0.3s;
+      margin-left: 250px; /* Adjusted margin to accommodate the sidebar */
+    }
+
+    .sidebar-link {
+      padding: 10px;
+      text-decoration: none;
+      color: #fff;
+      display: block;
+      margin-bottom: 10px; /* Added margin between sidebar buttons */
+    }
+
+    .sidebar-link:hover {
+      background-color: #495057;
+    }
+
+    #footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #0c3359;
+      padding: 10px;
+      color: #fff;
+      text-align: center;
+    }
+
+    #top-right-button {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+    }
+
+    #sidebarCollapse {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    #sidebarCollapse:hover {
+      transform: scale(1.2);
+    }
+
+    #brand {
+      margin-left: 10px;
+      font-size: 1.5em;
+    }
+
+    /* New styles for profile picture */
+    #profile-picture-container {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .profile-picture-sidebar {
+      width: 40px; /* Adjust the size as needed */
+      height: 40px; /* Adjust the size as needed */
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    /* Additional styles for card design */
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+    }
+
+    .profile-picture {
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff; /* Add a border around the profile picture */
+    }
+
+    .btn-section {
+      margin-top: 20px;
+    }
+
+    .btn-section a {
+      margin-right: 10px;
+    }
+
+    /* Style for the sidebar header */
+    .sidebar-header {
+      padding: 15px;
+      text-align: center;
+      background-color: #0b0b0b;
+    }
+
+    .sidebar-header h3 {
+      margin-bottom: 0;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <div class="sidebar-header">
+        <strong><i><h3 id="brand">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MindEase</h3></i></strong>
+      </div>
+
+      <div id="sidebar-content">
+        <ul class="list-unstyled components">
+          <li>
+            <a href="/Tdash" class="sidebar-link">
+              <i class="fas fa-home"></i> <span class="sidebar-content-text">Home</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="sidebar-link">
+              <i class="fas fa-user"></i> <span class="sidebar-content-text">Profile</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="sidebar-link">
+              <i class="fas fa-cog"></i> <span class="sidebar-content-text">Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'therapist_mental_health_status' %}" class="sidebar-link">
+              <i class="fas fa-envelope"></i> <span class="sidebar-content-text">Messages</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'logout' %}" class="sidebar-link">
+              <i class="fas fa-sign-out-alt"></i> <span class="sidebar-content-text">Logout</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <button type="button" id="sidebarCollapse" class="btn btn-dark">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+
+    <!-- Page content -->
+    <body>
+        <div class="container d-flex justify-content-center align-items-center">
+            <div>
+                <h1>Mental Health Status</h1>
+                <ul>
+                    {% for user_status in user_statuses %}
+                    
+                        <p>Name: {{ user_status.user.first_name }}</p>
+                        <p>Status: {{ user_status.status }}</p>
+                        <p>Sleep Quality: {{ user_status.sleep_quality }}</p>
+                        <p>Energy Level: {{ user_status.energy_level }}</p>
+                        <p>Stress Level: {{ user_status.stress_level }}</p>
+                        <p>Mood: {{ user_status.mood }}</p>
+                        <p>Thoughts: {{ user_status.thoughts }}</p>
+                        <!-- Add delete button/link -->
+                        <form method="post" action="{% url 'delete_mental_health_status' user_status.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    
+                    <hr>
+                    {% empty %}
+                    <li>No mental health status found.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </body>
+    
+
+  <!-- Bootstrap JS and Font Awesome -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+  <script>
+    // Toggle sidebar function
+    document.getElementById('sidebarCollapse').addEventListener('click', function () {
+      const sidebar = document.getElementById('sidebar');
+      const content = document.getElementById('content');
+      const sidebarContent = document.getElementById('sidebar-content');
+
+      sidebar.classList.toggle('active');
+      content.classList.toggle('active');
+      sidebarContent.classList.toggle('show-icons-only');
+
+      // Change the icon based on sidebar state
+      const icon = document.getElementById('sidebarCollapse').querySelector('i');
+      icon.classList.toggle('fa-bars');
+      icon.classList.toggle('fa-times');
+    });
+  </script>
 </body>
+
 </html>
